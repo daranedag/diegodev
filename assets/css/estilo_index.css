@@ -1,0 +1,50 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-image: linear-gradient(
+        135deg,
+        #131313,
+        #545454,
+        #4b4b4d,
+        #0e0e0e,
+        #4c4c4f,
+        #565656,
+        #0c0b0b
+    );
+    background-size: 800%;
+    animation: f_animado 30s infinite;
+}
+#menu_inicial{
+    margin-bottom: 4%;
+}
+.sinFondo{
+    background-color: rgba(255,255,255,0%);
+    padding: 0px;
+}
+.texto{
+    color: white;
+    background-color: rgba(0,0,0,0%);
+    text-align: center;
+    margin: 0px 0;
+    font-size: 16px;
+}
+.botoncito{
+    color: white;
+    background-color: white;
+    border-radius: 30%;
+}
+
+@keyframes f_animado{
+    0%{
+        background-position: 0% 50%;
+    }
+    50%{
+        background-position: 100% 50%;
+    }
+    100%{
+        background-position: 0% 50%;
+    }
+}
