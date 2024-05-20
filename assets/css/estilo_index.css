@@ -55,3 +55,22 @@ body{
         background-position: 0% 50%;
     }
 }
+
+div.carta{
+    box-shadow: 2px 2px 1px rgb(82, 82, 82);
+}
+
+div.carta:hover{
+    background-color: rgb(82, 82, 82) !important;
+    
+    /* background-image: linear-gradient(
+        -75deg,
+        #6dc1f1,
+        #1697ad,
+        #0f0f89,
+        #0e0e0e,
+        #040459,
+        #10026b,
+        #0c0b0b
+    ) */
+}
