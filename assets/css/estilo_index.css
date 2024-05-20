@@ -20,6 +20,13 @@ body{
 #menu_inicial{
     margin-bottom: 4%;
 }
+
+.no_link{
+    text-decoration: none;
+    color: white;
+    margin-top:8%;
+}
+
 .sinFondo{
     background-color: rgba(255,255,255,0%);
     padding: 0px;
