@@ -62,15 +62,8 @@ div.carta{
 
 div.carta:hover{
     background-color: rgb(82, 82, 82) !important;
+}
+
+.cartas{
     
-    /* background-image: linear-gradient(
-        -75deg,
-        #6dc1f1,
-        #1697ad,
-        #0f0f89,
-        #0e0e0e,
-        #040459,
-        #10026b,
-        #0c0b0b
-    ) */
 }
