@@ -8,6 +8,12 @@
     text-decoration: none;
 }
 
+.disabled{
+    pointer-events: none;
+    cursor: default;
+    color: grey;
+}
+
 .card {
     border-color: white;
 }
