@@ -3,35 +3,24 @@
     padding: 0;
 }
 
-body, header, main {
+.no-link{
     color: white;
-    width: 100%;
-    height: 100vh;
-
-    background-image: linear-gradient(
-        to bottom right,
-        #000000 0%,
-        #aa0000 20%,
-        #aa00aa 40%,
-        #aaaa00 60%,
-        #00aaaa 80%,
-    );
-
-    background-size: 200% 200%;
-
-    animation: gradienteFondo 5s linear infinite alternate;
+    text-decoration: none;
 }
 
-@keyframes gradienteFondo {
-    from {
-        background-position: 0 0;
-    }
-    to {
-        background-positiom:100% 100%;
-    }
+.bordes{
+    border-color: rgba(255, 255, 255, 0.531);
 }
 
-.card-body {
-    color:white;
+.card:hover{
+    background-color: rgba(79, 72, 72, 0.524) !important;
 }
 
+.textoFecha{
+    font-size: small;
+    color: grey;
+}
+
+.textoCargo{
+    font-style: italic;
+}
