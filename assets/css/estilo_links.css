@@ -1,0 +1,16 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+.no-link{
+    color: white;
+    text-decoration: none;
+}
+
+.card {
+    border-color: white;
+}
+.card:hover{
+    background-color: rgb(24, 5, 94) !important;
+}
