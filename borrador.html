@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sophia Bennett - Product Designer</title>
+<link href="data:image/x-icon;base64," rel="icon" type="image/x-icon"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background-light": "#f8f9fa",
+                        "background-dark": "#121212",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e1e1e",
+                        "on-surface-light": "#1a1a1a",
+                        "on-surface-dark": "#e0e0e0",
+                        "on-surface-variant-light": "#6c757d",
+                        "on-surface-variant-dark": "#9e9e9e",
+                        "primary": "#6200ea",
+                        "primary-variant": "#3700b3",
+                        "accent": "#03dac6",
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'DEFAULT': '0.5rem',
+                        'lg': '0.75rem',
+                        'full': '9999px',
+                    }
+                },
+            },
+        };
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-sans text-on-surface-light dark:text-on-surface-dark transition-colors duration-300">
+<div class="flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 w-full bg-surface-light/80 dark:bg-surface-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 text-xl font-bold text-on-surface-light dark:text-on-surface-dark" href="#">
+<span class="text-primary">SB</span>
+</a>
+</div>
+<div class="flex items-center gap-4">
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-on-surface-variant-light dark:text-on-surface-variant-dark hover:text-primary dark:hover:text-primary" href="#about">About</a>
+<a class="text-sm font-medium text-on-surface-variant-light dark:text-on-surface-variant-dark hover:text-primary dark:hover:text-primary" href="#work">Work</a>
+<a class="text-sm font-medium text-on-surface-variant-light dark:text-on-surface-variant-dark hover:text-primary dark:hover:text-primary" href="#connect">Connect</a>
+</nav>
+<button class="h-10 w-10 flex items-center justify-center rounded-full text-on-surface-variant-light dark:text-on-surface-variant-dark hover:bg-gray-100 dark:hover:bg-gray-800" onclick="toggleTheme()">
+<span class="material-symbols-outlined dark:hidden">dark_mode</span>
+<span class="material-symbols-outlined hidden dark:inline">light_mode</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-cover bg-center" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBDdg6Z2vjA36gTVnDRAxpP9tkS3MUo0u8X4YJotN7U5VnjEyO53Yomw9cF0cz6NUAcdHVcU5few2dH6vhkAfCwKr2dlj0jFM35cpqXjIZqQv_fC283s8tiIgXF9GWy5x-vDN4Mjfe0KgGwfLs81nGL0I4-iaIvs52_n7Mev33oooAohQeeYY_NBzNNcVgW3A6k15v4VndOHm-1rWplRhjpQ_ppATxBn6UNu3FaWzry8qSY5FRAqtpUhXEflYUfoiN6oCR4fWyj6xOM");'></div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+<div class="max-w-3xl mx-auto text-center">
+<h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-on-surface-light dark:text-on-surface-dark">
+                    Sophia Bennett
+                </h1>
+<p class="mt-4 text-lg sm:text-xl text-on-surface-variant-light dark:text-on-surface-variant-dark">
+                    A Product Designer creating seamless and user-centered digital experiences.
+                </p>
+<div class="mt-8 flex justify-center gap-4">
+<a class="inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-primary-variant focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark" href="#connect">
+                        Get in Touch
+                    </a>
+<a class="inline-flex items-center justify-center rounded-full border border-gray-300 dark:border-gray-700 bg-transparent px-6 py-3 text-base font-medium text-on-surface-light dark:text-on-surface-dark hover:bg-gray-50 dark:hover:bg-gray-800" href="#work">
+                        View Work
+                    </a>
+</div>
+</div>
+<div class="max-w-3xl mx-auto mt-24" id="about">
+<p class="text-lg text-on-surface-light dark:text-on-surface-dark">
+                    I'm a passionate and detail-oriented product designer with over five years of experience. My work is driven by a deep understanding of user needs, which I translate into intuitive, beautiful, and effective interfaces for both web and mobile platforms. I thrive on solving complex design challenges and believe in the power of collaboration to create truly great products.
+                </p>
+</div>
+<section class="mt-24" id="work">
+<h2 class="text-3xl font-bold tracking-tight text-center text-on-surface-light dark:text-on-surface-dark">Featured Work</h2>
+<div class="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
+<div class="group">
+<div class="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC149oJ-oIy1qfGyqnaC8Zs4MxBzmR-wgYCnfH3C2ITgPRQktHxzoesJj6pOj9Y4anvKnn5834TMYViyeWv96KamPdousKblbnLzkPiowEETK_2GYt-3OiFqCrX5ElYEuUEpxhIbPfGBNzRPq5hYtHnWpKjl_TwNt-Wq1eLztZbEZRj8ghcJC5um80VYZ-RpXp_JpBN0sSwL1mM7SScMpe5hw8Lav69EKeZvUDuoMtx5IVuxwpu7FzPAZ3QjBwsC_a4ndNJwjC9Usgj");'></div>
+</div>
+<div class="mt-4">
+<h3 class="text-lg font-semibold text-on-surface-light dark:text-on-surface-dark">Project A</h3>
+<p class="mt-1 text-sm text-on-surface-variant-light dark:text-on-surface-variant-dark">UI/UX Design for a fintech startup</p>
+</div>
+</div>
+<div class="group">
+<div class="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCT_YvwDsi6eYWruKJRndXx6OoY2Xeir1ke8ATppQlUbQvxjNprBOYD6Kv04fR-LoY_GuNkdnMsQjmjQEw7RR5_oLCWpfsSDPPZ4jRxVc5HolYbUOEVSaf7o48TPKocWYvwo20cv0woFh5BqhuCbPJ7j301I-sHL-TY6fv6lvbUKM_AM7L4Nh9izToalk4840GXt_h-vgDhJjPpv9xMxq33-JebdfDOwRdb8P_NTcpOePs24L_5Djt49N--DizR8H8v_T_rK0Kx6rws");'></div>
+</div>
+<div class="mt-4">
+<h3 class="text-lg font-semibold text-on-surface-light dark:text-on-surface-dark">Project B</h3>
+<p class="mt-1 text-sm text-on-surface-variant-light dark:text-on-surface-variant-dark">Mobile app redesign for a health platform</p>
+</div>
+</div>
+<div class="group">
+<div class="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800">
+<div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-300" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBCj_zAYJuTOlqKizYg2yAvPrkR8DPrBCu3BhmLYtiNVhGVYV11kgQq9v8o9aVAdu8n9CHWf_QogFUW0vq66ckQzRtvyWCE9EAIDZW1yzbvbJPJ3AYAyYr4t-jcIq7PYCdDUxh17rZQw02aIBMWzCie_JMQufgBOL_PkpSPrSPGYX3vY10h-hjjVGLbyOYbmECVcJYak-hcB3Wfpi0vzh-vSTWe9WI_no3usNZzxJBDmy6rBiTBP6QwDIE5Jt33uuzYagJpKzHy_W33");'></div>
+</div>
+<div class="mt-4">
+<h3 class="text-lg font-semibold text-on-surface-light dark:text-on-surface-dark">Project C</h3>
+<p class="mt-1 text-sm text-on-surface-variant-light dark:text-on-surface-variant-dark">E-commerce website branding and interface</p>
+</div>
+</div>
+</div>
+</section>
+<section class="mt-24" id="connect">
+<div class="max-w-2xl mx-auto text-center">
+<h2 class="text-3xl font-bold tracking-tight text-on-surface-light dark:text-on-surface-dark">Let's Connect</h2>
+<p class="mt-4 text-lg text-on-surface-variant-light dark:text-on-surface-variant-dark">
+                        I'm always open to discussing new projects or creative ideas. Feel free to reach out.
+                    </p>
+<div class="mt-8 flex justify-center gap-6">
+<a class="text-on-surface-variant-light dark:text-on-surface-variant-dark hover:text-primary dark:hover:text-primary" href="#">
+<svg aria-hidden="true" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path clip-rule="evenodd" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zm-11 5a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1zm-1 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H7z" fill-rule="evenodd"></path></svg>
+</a>
+<a class="text-on-surface-variant-light dark:text-on-surface-variant-dark hover:text-primary dark:hover:text-primary" href="#">
+<svg aria-hidden="true" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46,6.56a8.84,8.84,0,0,0-6.32-6.32,10.66,10.66,0,0,0-1.87-.2,10.13,10.13,0,0,0-4.54,0,10.66,10.66,0,0,0-1.87.2,8.84,8.84,0,0,0-6.32,6.32,10.66,10.66,0,0,0-.2,1.87,10.13,10.13,0,0,0,0,4.54,10.66,10.66,0,0,0,.2,1.87,8.84,8.84,0,0,0,6.32,6.32,10.66,10.66,0,0,0,1.87.2,10.13,10.13,0,0,0,4.54,0,10.66,10.66,0,0,0,1.87-.2,8.84,8.84,0,0,0,6.32-6.32,10.66,10.66,0,0,0,.2-1.87,10.13,10.13,0,0,0,0-4.54A10.66,10.66,0,0,0,22.46,6.56Zm-1.8,9.75a6.6,6.6,0,0,1-3.6,3.6,8.68,8.68,0,0,1-1.5.16,8.23,8.23,0,0,1-3.69,0,8.68,8.68,0,0,1-1.5-.16,6.6,6.6,0,0,1-3.6-3.6,8.68,8.68,0,0,1-.16-1.5,8.23,8.23,0,0,1,0-3.69,8.68,8.68,0,0,1,.16-1.5,6.6,6.6,0,0,1,3.6-3.6,8.68,8.68,0,0,1,1.5-.16,8.23,8.23,0,0,1,3.69,0,8.68,8.68,0,0,1,1.5.16,6.6,6.6,0,0,1,3.6,3.6,8.68,8.68,0,0,1,.16,1.5A8.23,8.23,0,0,1,20.66,16.31Z"></path><path d="M12,7.34a4.66,4.66,0,1,0,4.66,4.66A4.66,4.66,0,0,0,12,7.34Zm0,7.72A3.06,3.06,0,1,1,15.06,12,3.06,3.06,0,0,1,12,15.06Z"></path><circle cx="16.81" cy="7.19" r="1.1"></circle></svg>
+</a>
+<a class="text-on-surface-variant-light dark:text-on-surface-variant-dark hover:text-primary dark:hover:text-primary" href="#">
+<svg aria-hidden="true" class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12,2A10,10,0,0,0,2,12c0,4.42,2.87,8.17,6.84,9.5.5.09.68-.22.68-.48s0-.89,0-1.74c-2.78.6-3.37-1.34-3.37-1.34A2.66,2.66,0,0,0,4.9,16.3c-.91-.62.07-.6.07-.6a2.1,2.1,0,0,1,1.53,1.03,2.12,2.12,0,0,0,2.91.83,2.14,2.14,0,0,1,.63-1.34C9.2,16.27,6.4,15.2,6.4,10.61a4.23,4.23,0,0,1,1.11-2.92,3.93,3.93,0,0,1,.1-2.88s1.08-.35,3.53,1.3A12.28,12.28,0,0,1,12,6.09a12.3,12.3,0,0,1,3.33.45c2.45-1.65,3.53-1.3,3.53-1.3a3.93,3.93,0,0,1,.1,2.88,4.23,4.23,0,0,1,1.11,2.92c0,4.6-2.8,5.66-5.49,6a2.53,2.53,0,0,1,.68,1.92c0,1.39,0,2.51,0,2.85s.18.58.69.48A10,10,0,0,0,22,12,10,10,0,0,0,12,2Z"></path></svg>
+</a>
+</div>
+</div>
+</section>
+</div>
+</main>
+<footer class="bg-surface-light dark:bg-surface-dark border-t border-gray-200 dark:border-gray-800">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<p class="text-center text-sm text-on-surface-variant-light dark:text-on-surface-variant-dark">
+                © 2024 Sophia Bennett. All Rights Reserved.
+            </p>
+</div>
+</footer>
+</div>
+
+</body></html>
