@@ -1,28 +1,78 @@
-const ConnectSection = () => {
-  return (
-    <section className="mt-24" id="connect">
-      <div className="max-w-2xl mx-auto text-center">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          Conectemos
-        </h2>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Siempre estoy abierto a discutir nuevos proyectos o ideas creativas. No dudes en contactarme.
-        </p>
-        <div className="mt-8 flex justify-center gap-6">
-          <a className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" href="#" aria-label="LinkedIn">
-            <svg aria-hidden="true" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
-              <path clipRule="evenodd" d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zm-11 5a1 1 0 0 1 1-1h6a1 1 0 1 1 0 2H9a1 1 0 0 1-1-1zm-1 4a1 1 0 1 0 0 2h8a1 1 0 1 0 0-2H7z" fillRule="evenodd"></path>
-            </svg>
-          </a>
-          <a className="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" href="#" aria-label="GitHub">
-            <svg aria-hidden="true" className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12,2A10,10,0,0,0,2,12c0,4.42,2.87,8.17,6.84,9.5.5.09.68-.22.68-.48s0-.89,0-1.74c-2.78.6-3.37-1.34-3.37-1.34A2.66,2.66,0,0,0,4.9,16.3c-.91-.62.07-.6.07-.6a2.1,2.1,0,0,1,1.53,1.03,2.12,2.12,0,0,0,2.91.83,2.14,2.14,0,0,1,.63-1.34C9.2,16.27,6.4,15.2,6.4,10.61a4.23,4.23,0,0,1,1.11-2.92,3.93,3.93,0,0,1,.1-2.88s1.08-.35,3.53,1.3A12.28,12.28,0,0,1,12,6.09a12.3,12.3,0,0,1,3.33.45c2.45-1.65,3.53-1.3,3.53-1.3a3.93,3.93,0,0,1,.1,2.88,4.23,4.23,0,0,1,1.11,2.92c0,4.6-2.8,5.66-5.49,6a2.53,2.53,0,0,1,.68,1.92c0,1.39,0,2.51,0,2.85s.18.58.69.48A10,10,0,0,0,22,12,10,10,0,0,0,12,2Z"></path>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
-  );
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+    EnvelopeIcon,
+    CodeBracketIcon,
+    ChatBubbleLeftRightIcon,
+    CameraIcon,
+    UserGroupIcon
+} from '@heroicons/react/24/outline';
+
+// Mapeo de iconos
+const iconMap = {
+    LinkedIn: UserGroupIcon,
+    GitHub: CodeBracketIcon,
+    Twitter: ChatBubbleLeftRightIcon,
+    Email: EnvelopeIcon,
+    Instagram: CameraIcon,
 };
+
+const redes = [
+    { nombre: "LinkedIn", enlace: "https://www.linkedin.com/in/daranedag/", color: "bg-blue-600 hover:bg-blue-700" },
+    { nombre: "Email", enlace: "mailto:daranedag@gmail.com", color: "bg-red-600 hover:bg-red-700" },
+    { nombre: "GitHub", enlace: "https://github.com/daranedag/", color: "bg-gray-800 hover:bg-gray-900" },
+    { nombre: "Twitter", enlace: "https://x.com/mr_diegui", color: "bg-sky-500 hover:bg-sky-600" },
+    { nombre: "Instagram", enlace: "https://www.instagram.com/mrdiegui/", color: "bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 hover:from-yellow-500 hover:via-pink-600 hover:to-purple-700" },
+];
+
+const ConnectCard = ({ nombre, link, color }) => {
+    const Icon = iconMap[nombre];
+
+    return (
+        <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group block no-underline"
+        >
+            <div className="relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-sm hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                <div className={`${color} w-full h-20 flex items-center justify-center transition-all duration-300`}>
+                    {Icon && <Icon className="w-10 h-10 text-white" />}
+                </div>
+                <div className="p-3">
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        {nombre}
+                    </h3>
+                </div>
+            </div>
+        </a>
+    );
+}
+
+const ConnectSection = () => {
+    return (
+        <section id="ConnectSection" className="mt-24 scroll-mt-20">
+            <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+                    Conectemos
+                </h2>
+                <p className="mt-4 text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
+                    Siempre estoy dispuesto a nuevas oportunidades y colaboraciones.
+                    No dudes en contactarme!
+                </p>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-5xl mx-auto">
+                {redes.map((red, index) => (
+                    <ConnectCard
+                        key={index}
+                        nombre={red.nombre}
+                        link={red.enlace}
+                        color={red.color}
+                    />
+                ))}
+            </div>
+        </section>
+    );
+}
 
 export default ConnectSection;

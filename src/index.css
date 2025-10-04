@@ -4,3 +4,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Estilos personalizados - Deben ir después de las directivas de Tailwind */
+html {
+    scroll-behavior: smooth;
+}
+
+.milogo {
+    height: 4rem;
+    width: auto;
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+}
+
+.milogo:hover {
+    opacity: 0.8;
+}
+
+.perfil {
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}
