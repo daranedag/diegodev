@@ -16,3 +16,11 @@
 .milogo:hover {
     opacity: 0.8;
 }
+
+.perfil {
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+}

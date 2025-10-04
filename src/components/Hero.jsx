@@ -1,11 +1,14 @@
 const Hero = () => {
     return (
         <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                Diego - DieGui DeV
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-gray-800 dark:text-gray-100">
+                Diego Araneda
             </h1>
+            <h4 className="text-sm sm:text-sm md:text-xl tracking-tight text-gray-500 dark:text-gray-700">
+                DieGui DeV
+            </h4>
             <p className="mt-4 text-lg sm:text-xl text-gray-600 dark:text-gray-400">
-                Un programador curioso y multifacético que le gusta compartir de lo aprendido.
+                Innovar con código, colaborar con honestidad.
             </p>
             <div className="mt-8 flex justify-center gap-4">
                 <a
