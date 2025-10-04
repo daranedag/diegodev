@@ -51,7 +51,7 @@ const ConnectCard = ({ nombre, link, color }) => {
 
 const ConnectSection = () => {
     return (
-        <section className="mt-24">
+        <section id="ConnectSection" className="mt-24 scroll-mt-20">
             <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                     Conectemos

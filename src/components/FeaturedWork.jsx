@@ -23,8 +23,14 @@ const ProjectCard = ({ title, description, gradient, link }) => {
 const FeaturedWork = () => {
     const projects = [
         {
+            title: 'Backend Idea Garden',
+            description: 'Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU.',
+            gradient: 'from-purple-700 to-blue-500',
+            link: 'https://www.idea-garden.xyz/',
+        },
+        {
             title: 'Chilcos',
-            description: 'Sitio web para un Colegio Waldorf en Valdivia, Chile',
+            description: 'Sitio web para Colegio Waldorf en Valdivia, Chile',
             gradient: 'from-purple-500 to-purple-700',
             link: 'https://www.chilcos.org',
         },
@@ -33,13 +39,7 @@ const FeaturedWork = () => {
             description: 'Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile',
             gradient: 'from-blue-500 to-purple-600',
             link: 'https://www.observalosrios.cl',
-        },
-        {
-            title: 'Backend Idea Garden',
-            description: 'Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU.',
-            gradient: 'from-purple-700 to-blue-500',
-            link: 'https://www.idea-garden.xyz/',
-        },
+        }
     ];
 
     return (

@@ -5,10 +5,10 @@ import LogoDark from '../../assets/img/logoNegro.png';
 import FotoProfile from '../../assets/img/perfilNuevo.png';
 
 const misLinks = [
-    { nombre: 'Bio', ruta: '#' },
-    { nombre: 'CV', ruta: '#' },
-    { nombre: 'Portafolio', ruta: '#' },
-    { nombre: 'Blog', ruta: '#' }
+    // { nombre: 'Bio', ruta: '#' },
+    // { nombre: 'CV', ruta: '#' },
+    // { nombre: 'Portafolio', ruta: '#' },
+    // { nombre: 'Blog', ruta: '#' }
 ]
 
 const Header = ({ isDark, toggleTheme }) => {
