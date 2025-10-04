@@ -6,6 +6,10 @@
 @tailwind utilities;
 
 /* Estilos personalizados - Deben ir después de las directivas de Tailwind */
+html {
+    scroll-behavior: smooth;
+}
+
 .milogo {
     height: 4rem;
     width: auto;
