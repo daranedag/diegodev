@@ -1,52 +1,104 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import LogoLight from '../../assets/img/logoBlanco.png';
+import LogoDark from '../../assets/img/logoNegro.png';
+import FotoProfile from '../../assets/img/perfilNuevo.png';
+
+const misLinks = [
+    // { nombre: 'Bio', ruta: '#' },
+    // { nombre: 'CV', ruta: '#' },
+    // { nombre: 'Portafolio', ruta: '#' },
+    // { nombre: 'Blog', ruta: '#' }
+]
 
 const Header = ({ isDark, toggleTheme }) => {
-  return (
-    <header className="sticky top-0 z-10 w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center gap-4">
-            <a className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-gray-100" href="#">
-              <span className="text-purple-600 dark:text-purple-400">DieGui DeV</span>
-            </a>
-          </div>
-          <div className="flex items-center gap-4">
-            <nav className="hidden md:flex items-center gap-6">
-              <a className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" href="./pages/bio.html">Bio</a>
-              <a className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" href="./pages/portafolio.html">Portafolio</a>
-              <a className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" href="./pages/hobbies.html">Hobbies</a>
-              <a className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" href="./pages/links.html">Links</a>
-              <a className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 opacity-50 cursor-not-allowed" href="#">Blog</a>
-            </nav>
-            <button 
-              className="h-10 w-10 flex items-center justify-center rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 border border-gray-300 dark:border-gray-600" 
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              title={`Cambiar a modo ${isDark ? 'claro' : 'oscuro'}`}
-            >
-              {isDark ? (
-                // Sol para cuando está en modo oscuro (mostrar sol para cambiar a claro)
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              ) : (
-                // Luna para cuando está en modo claro (mostrar luna para cambiar a oscuro)
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-              )}
-            </button>
-            <div className="h-10 w-10 rounded-full bg-cover bg-center" style={{backgroundImage: 'url("./assets/img/perfilNuevo.png")'}}></div>
-          </div>
-        </div>
-      </div>
-    </header>
-  );
+    return (
+        <header className="sticky top-3 z-10 w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex h-16 items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <a
+                            className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-gray-100"
+                            href="#"
+                        >
+                            <span className="text-purple-600 dark:text-purple-400">
+                                <img
+                                    src={isDark ? LogoLight : LogoDark}
+                                    alt="Logo"
+                                    className="milogo"
+                                />
+                            </span>
+                        </a>
+                    </div>
+                    <div className="flex items-center gap-4">
+                        <nav className="md:flex items-center gap-6">
+                            {misLinks.map((link) => (
+                                <Link
+                                    key={link.nombre}
+                                    className="text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-purple-300 dark:hover:text-purple-400"
+                                    to={link.ruta}
+                                >
+                                    {link.nombre}
+                                </Link>
+                            ))}
+                            <span className="text-purple-600 dark:text-purple-400">
+                                <img
+                                    src={FotoProfile}
+                                    alt="Perfil"
+                                    className="perfil"
+                                />
+                            </span>
+                        </nav>
+                        <button
+                            className="relative h-10 w-10 flex items-center justify-center rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 border border-gray-300 dark:border-gray-600"
+                            onClick={toggleTheme}
+                            aria-label="Toggle theme"
+                            title={`Cambiar a modo ${isDark ? 'claro' : 'oscuro'}`}
+                        >
+                            {isDark ? (
+                                // Sol - cuando está en modo oscuro, muestra el sol para cambiar a claro
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-5 h-5"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+                                    />
+                                </svg>
+                            ) : (
+                                // Luna - cuando está en modo claro, muestra la luna para cambiar a oscuro
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="w-5 h-5"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+                                    />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+    );
 };
 
 Header.propTypes = {
-  isDark: PropTypes.bool.isRequired,
-  toggleTheme: PropTypes.func.isRequired,
+    isDark: PropTypes.bool.isRequired,
+    toggleTheme: PropTypes.func.isRequired,
 };
 
 export default Header;
