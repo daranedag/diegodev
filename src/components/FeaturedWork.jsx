@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const ProjectCard = ({ title, description, gradient, link }) => {
     return (
@@ -21,22 +22,23 @@ const ProjectCard = ({ title, description, gradient, link }) => {
 };
 
 const FeaturedWork = () => {
+    const { t } = useTranslation();
     const projects = [
         {
-            title: 'Backend Idea Garden',
-            description: 'Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU.',
+            title: t('work.backendIdeaGarden.title'),
+            description: t('work.backendIdeaGarden.description'),
             gradient: 'from-purple-700 to-blue-500',
             link: 'https://www.idea-garden.xyz/',
         },
         {
-            title: 'Chilcos',
-            description: 'Sitio web para Colegio Waldorf en Valdivia, Chile',
+            title: t('work.chilcos.title'),
+            description: t('work.chilcos.description'),
             gradient: 'from-purple-500 to-purple-700',
             link: 'https://www.chilcos.org',
         },
         {
-            title: 'Observa Los Ríos',
-            description: 'Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile',
+            title: t('work.observaLosRios.title'),
+            description: t('work.observaLosRios.description'),
             gradient: 'from-blue-500 to-purple-600',
             link: 'https://www.observalosrios.cl',
         }
@@ -45,7 +47,7 @@ const FeaturedWork = () => {
     return (
         <section className="mt-24" id="work">
             <h2 className="text-3xl font-bold tracking-tight text-center text-gray-900 dark:text-gray-100">
-                Trabajo Destacado
+                {t('work.title')}
             </h2>
             <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
                 {projects.map((project, index) => (

@@ -1,0 +1,44 @@
+{
+    "hero": {
+        "name": "Diego Araneda",
+        "tagline": "DieGui DeV",
+        "slogan": "Innovate with code, collaborate with honesty.",
+        "connect": "Connect",
+        "portfolio": "View Portfolio"
+    },
+    "work": {
+        "title": "Featured Work",
+        "backendIdeaGarden": {
+            "title": "Backend Idea Garden",
+            "description": "Backend for iOS/Android mobile applications of a US-based startup."
+        },
+        "chilcos": {
+            "title": "Chilcos",
+            "description": "Website for Waldorf School in Valdivia, Chile."
+        },
+        "observaLosRios": {
+            "title": "Observa Los Ríos",
+            "description": "Public policy monitoring platform in the Los Ríos region, Chile."
+        }
+    },
+    "home": {
+        "about": "Computer Science Engineer with over ten years of experience creating innovative digital solutions. My approach combines the logic of code with a human perspective, always seeking to improve user experience and product quality. I believe the best technology emerges from collaborative work, honest communication, and a constant desire to learn and improve.",
+        "disclaimer": "This presentation will surely change at some point..."
+    },
+    "connect": {
+        "title": "Let's Connect",
+        "description": "I'm always open to new opportunities and collaborations.<br/>Feel free to reach out!"
+    },
+    "footer": {
+        "copyright": "© 2025 DieGui DeV. All rights reserved."
+    },
+    "header": {
+        "bio": "Bio",
+        "cv": "Resume",
+        "portfolio": "Portfolio",
+        "blog": "Blog",
+        "themeToggle": "Switch to {{mode}} mode",
+        "light": "light",
+        "dark": "dark"
+    }
+}
