@@ -1,17 +1,26 @@
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { LanguageIcon } from '@heroicons/react/24/outline';
 import LogoLight from '../../assets/img/logoBlanco.png';
 import LogoDark from '../../assets/img/logoNegro.png';
 import FotoProfile from '../../assets/img/perfilNuevo.png';
 
 const misLinks = [
-    // { nombre: 'Bio', ruta: '#' },
+    { nombre: 'Bio', ruta: '../pages/Bio.jsx' },
     // { nombre: 'CV', ruta: '#' },
     // { nombre: 'Portafolio', ruta: '#' },
     // { nombre: 'Blog', ruta: '#' }
 ]
 
 const Header = ({ isDark, toggleTheme }) => {
+    const { t, i18n } = useTranslation();
+
+    const toggleLanguage = () => {
+        const newLang = i18n.language === 'es' ? 'en' : 'es';
+        i18n.changeLanguage(newLang);
+    };
+
     return (
         <header className="sticky top-3 z-10 w-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,11 +58,26 @@ const Header = ({ isDark, toggleTheme }) => {
                                 />
                             </span>
                         </nav>
+
+                        {/* Botón de cambio de idioma */}
+                        <button
+                            className="relative h-10 w-10 flex items-center justify-center rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 border border-gray-300 dark:border-gray-600"
+                            onClick={toggleLanguage}
+                            aria-label="Change language"
+                            title={`Switch to ${i18n.language === 'es' ? 'English' : 'Español'}`}
+                        >
+                            <LanguageIcon className="w-5 h-5" />
+                            <span className="text-xs font-semibold absolute -bottom-1">
+                                {i18n.language === 'es' ? 'en' : 'es'}
+                            </span>
+                        </button>
+
+                        {/* Botón de cambio de tema */}
                         <button
                             className="relative h-10 w-10 flex items-center justify-center rounded-full text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 border border-gray-300 dark:border-gray-600"
                             onClick={toggleTheme}
                             aria-label="Toggle theme"
-                            title={`Cambiar a modo ${isDark ? 'claro' : 'oscuro'}`}
+                            title={t('header.themeToggle', { mode: isDark ? t('header.light') : t('header.dark') })}
                         >
                             {isDark ? (
                                 // Sol - cuando está en modo oscuro, muestra el sol para cambiar a claro

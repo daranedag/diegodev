@@ -1,0 +1,44 @@
+{
+    "hero": {
+        "name": "Diego Araneda",
+        "tagline": "DieGui DeV",
+        "slogan": "Innovar con código, colaborar con honestidad.",
+        "connect": "Conectar",
+        "portfolio": "Ver Portafolio"
+    },
+    "work": {
+        "title": "Trabajos Destacados",
+        "backendIdeaGarden": {
+            "title": "Backend Idea Garden",
+            "description": "Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU."
+        },
+        "chilcos": {
+            "title": "Chilcos",
+            "description": "Sitio web para Colegio Waldorf en Valdivia, Chile."
+        },
+        "observaLosRios": {
+            "title": "Observa Los Ríos",
+            "description": "Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile."
+        }
+    },
+    "home": {
+        "about": "Ingeniero Civil en Informática con más de diez años de experiencia en la creación de soluciones digitales innovadoras. Mi enfoque combina la lógica del código con una mirada humana, buscando siempre mejorar la experiencia del usuario y la calidad del producto. Creo que la mejor tecnología surge del trabajo colaborativo, la comunicación honesta y el deseo constante de aprender y mejorar.",
+        "disclaimer": "Esta presentación seguro cambiará en algún momento..."
+    },
+    "connect": {
+        "title": "Conectemos",
+        "description": "Siempre estoy dispuesto a nuevas oportunidades y colaboraciones.<br/>No dudes en contactarme!"
+    },
+    "footer": {
+        "copyright": "© 2025 DieGui DeV. Todos los derechos reservados."
+    },
+    "header": {
+        "bio": "Bio",
+        "cv": "CV",
+        "portfolio": "Portafolio",
+        "blog": "Blog",
+        "themeToggle": "Cambiar a modo {{mode}}",
+        "light": "claro",
+        "dark": "oscuro"
+    }
+}
