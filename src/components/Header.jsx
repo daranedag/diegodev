@@ -26,9 +26,9 @@ const Header = ({ isDark, toggleTheme }) => {
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <a
+                        <Link
                             className="flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-gray-100"
-                            href="#"
+                            to="/"
                         >
                             <span className="text-purple-600 dark:text-purple-400">
                                 <img
@@ -37,7 +37,7 @@ const Header = ({ isDark, toggleTheme }) => {
                                     className="milogo"
                                 />
                             </span>
-                        </a>
+                        </Link>
                     </div>
                     <div className="flex items-center gap-4">
                         <nav className="md:flex items-center gap-6">

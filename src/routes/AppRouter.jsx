@@ -7,7 +7,7 @@ const AppRouter = ({ isDark, toggleTheme }) => {
     return (
         <Routes>
             <Route path="/" element={<Home isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/Bio.jsx" element={<Bio />} />
+            <Route path="/pages/Bio.jsx" element={<Bio isDark={isDark} toggleTheme={toggleTheme} />} />
             {/* Agrega más rutas según sea necesario */}
             <Route path="*" element={<div>404 Not Found</div>} />
         </Routes>
