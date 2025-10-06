@@ -75,43 +75,51 @@
         },
         "experience": {
             "job1": {
-                "position": "Desarrollador Full Stack",
-                "company": "Freelance / Proyectos Personales",
-                "period": "2015 - Presente",
+                "position": "Desarrollador Backend",
+                "company": "Idea Garden LLC",
+                "period": "Nov 2024 - Presente",
                 "details": [
-                    "Desarrollo de aplicaciones web y móviles utilizando tecnologías modernas como React, Node.js y bases de datos SQL/NoSQL.",
-                    "Colaboración con clientes para entender sus necesidades y traducirlas en soluciones técnicas efectivas.",
-                    "Implementación de prácticas de desarrollo ágil y metodologías Scrum para mejorar la eficiencia del equipo."
+                    "Desarrollo de backend en Node.js para aplicaciones de diferente indoles: laboral, situacional. Manejo de arquitecturas cloud con GCP y Firebase."
                 ]
             },
             "job2": {
-                "position": "Desarrollador Web Junior",
-                "company": "Tech Solutions Ltda.",
-                "period": "2014 - 2015",
+                "position": "Desarrollador Fullstack",
+                "company": "Centro de Estudios Regionales - UACh.",
+                "period": "May 2025 - Nov 2025",
                 "details": [
-                    "Participación en el desarrollo de sitios web corporativos y aplicaciones internas.",
-                    "Mantenimiento y actualización de sistemas existentes, asegurando su funcionalidad y seguridad.",
-                    "Colaboración con diseñadores y otros desarrolladores para crear experiencias de usuario atractivas."
+                    "Desarrollo de plataforma web React + TailwindCSS, Backend en Node.js y base de datos PostgreSQL para monitoreo de iniciativas en planes sectoriales de la región de los Ríos"
                 ]
             },
             "job3": {
-                "position": "Desarrollador Full Stack",
-                "company": "Freelance / Proyectos Personales",
-                "period": "2015 - Presente",
+                "position": "Desarrollador Full Stack Laravel",
+                "company": "Workmate",
+                "period": "Jun 2024 - Oct 2024",
                 "details": [
-                    "Desarrollo de aplicaciones web y móviles utilizando tecnologías modernas como React, Node.js y bases de datos SQL/NoSQL.",
-                    "Colaboración con clientes para entender sus necesidades y traducirlas en soluciones técnicas efectivas.",
-                    "Implementación de prácticas de desarrollo ágil y metodologías Scrum para mejorar la eficiencia del equipo."
+                    "Soporte y desarrollo en Laravel 4 y 5, manejo de MySQL y MongoDB, y programación en Javascript y PHP. Soporte N2 y desarrollo de funcionalidades según requerimientos de clientes internos."
                 ]
             },
             "job4": {
-                "position": "Desarrollador Web Junior",
-                "company": "Tech Solutions Ltda.",
-                "period": "2014 - 2015",
+                "position": "Analista de Sistemas",
+                "company": "Dedalus Ltda. para GTD Telsur",
+                "period": "Feb 2021 - May 2024",
                 "details": [
-                    "Participación en el desarrollo de sitios web corporativos y aplicaciones internas.",
-                    "Mantenimiento y actualización de sistemas existentes, asegurando su funcionalidad y seguridad.",
-                    "Colaboración con diseñadores y otros desarrolladores para crear experiencias de usuario atractivas."
+                    "Gestión y actualización de sistemas legados, desarrollo en PHP, PL/SQL, y Javascript, integración de nuevas soluciones y apoyo en implementación de GitHub para control de versiones."
+                ]
+            },
+            "job5": {
+                "position": "Ingeniero de Desarrollo de Software",
+                "company": "SimpliRoute",
+                "period": "Feb 2020 - Nov 2020",
+                "details": [
+                    "Mantenimiento y desarrollo en plataforma de enrutamiento con arquitecturas cloud (GCP y AWS), desarrollo en Python (Django, Falcon), Angular, React, y configuración de Firebase para proyectos web."
+                ]
+            },
+            "job6": {
+                "position": "Ingeniero de Software",
+                "company": "SoluNova",
+                "period": "Feb 2019 - Dic 2019",
+                "details": [
+                    "Desarrollo de sistemas de información integrando hardware para fisiología y rendimiento de gamers, con un enfoque en neurociencia y uso de Django, Flask, y React."
                 ]
             }
         },
@@ -119,8 +127,11 @@
             "title": "Habilidades Técnicas"
         },
         "achievements": {
-            "achievement1": "Desarrollo y lanzamiento de una nueva plataforma de comercio electrónico que aumentó las ventas en un 20%.",
-            "achievement2": "Recibí el premio 'Empleado del Año' por desempeño y contribuciones sobresalientes."
+            "achievement1": "Fullstack Javascript Bootcamp - Academia Desafío Latam.",
+            "achievement2": "Webinar sobre Marketing Digital (Socialite), Redacción Creativa para Emprendedores (Domestika), Estrategias de Instagram para el Desarrollo de Marcas (Domestika).",
+            "achievement3": "Graduado de Coaching de Liderazgo en Be Great Chile (2019).",
+            "achievement4": "Taller de Responsabilidad Social: Se centra en enseñar cómo utilizar los conocimientos adquiridos para el bien de la comunidad en la que estamos insertos.",
+            "achievement5": "Seminario de Microsoft: La Importancia de Innovar Discutió la creación de tecnología de acuerdo con las necesidades detectadas y cómo llevar estas ideas a la vida en el país."
         }
     }
 }
