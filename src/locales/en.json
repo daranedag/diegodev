@@ -49,5 +49,81 @@
         "journey": "My journey in the tech world began over a decade ago, driven by a passion for solving complex problems and creating solutions that make a difference. Over the years, I've had the opportunity to work on diverse projects, from startups to companies of various sizes. I've collaborated on some large multidisciplinary projects and also on small self-managed projects. All of this has allowed me to develop a broad and adaptable perspective to the different contexts and clients I've had and also in the good treatment and good relationship I've had with them.",
         "interests": "Beyond code, I am passionate about music, dance, travel, and video games. I love getting to know new places and cultures, understanding how things work to learn from them and see how I can apply it in my daily life. I also enjoy good food and the company of friends, sharing ideas and experiences, as I believe these moments enrich everyone's life and inspire me to be more creative not only in my work but in my life.",
         "degree": "Computer Science Engineer"
+    },
+    "cv": {
+        "title": "My Resume",
+        "download": "Download CV (PDF)",
+        "resumenTitle": "Summary",
+        "restumenText": "Computer Science Engineer with {{ageExperience}} ten years of experience in creating innovative digital solutions. My approach combines the logic of code with a human perspective, always seeking to improve user experience and product quality. I believe that the best technology arises from collaborative work, honest communication, and a constant desire to learn and improve.",
+        "educationTitle": "Education",
+        "experienceTitle": "Work Experience",
+        "skillsTitle": "Technical Skills",
+        "education": {
+            "university": {
+                "degree": "Computer Science Engineer",
+                "institution": "Universidad Austral de Chile",
+                "location": "Valdivia, Chile",
+                "period": "2008 - 2014"
+            },
+            "highschool": {
+                "degree": "Primary and Secondary Education",
+                "institution": "German Institute of Valdivia",
+                "location": "Valdivia, Chile",
+                "period": "1995 - 2006"
+            }
+        },
+        "experience": {
+            "job1": {
+                "position": "Full Stack Developer",
+                "company": "Tech Solutions Inc.",
+                "location": "Remote",
+                "period": "2020 - Present",
+                "responsibilities": [
+                    "Developed and maintained web applications using React and Node.js.",
+                    "Collaborated with cross-functional teams to define, design, and ship new features.",
+                    "Optimized applications for maximum speed and scalability."
+                ]
+            },
+            "job2": {
+                "position": "Frontend Developer",
+                "company": "Creative Web Agency",
+                "location": "Santiago, Chile",
+                "period": "2016 - 2020",
+                "responsibilities": [
+                    "Implemented responsive web designs using HTML, CSS, and JavaScript.",
+                    "Worked closely with designers to translate designs into functional web pages.",
+                    "Ensured cross-browser compatibility and optimized performance."
+                ]
+            },
+            "job3": {
+                "position": "Full Stack Developer",
+                "company": "Tech Solutions Inc.",
+                "location": "Remote",
+                "period": "2020 - Present",
+                "responsibilities": [
+                    "Developed and maintained web applications using React and Node.js.",
+                    "Collaborated with cross-functional teams to define, design, and ship new features.",
+                    "Optimized applications for maximum speed and scalability."
+                ]
+            },
+            "job4": {
+                "position": "Frontend Developer",
+                "company": "Creative Web Agency",
+                "location": "Santiago, Chile",
+                "period": "2016 - 2020",
+                "responsibilities": [
+                    "Implemented responsive web designs using HTML, CSS, and JavaScript.",
+                    "Worked closely with designers to translate designs into functional web pages.",
+                    "Ensured cross-browser compatibility and optimized performance."
+                ]
+            }
+        },
+        "skills": {
+            "title": "Technical Skills"
+        },
+        "achievements": {
+            "achievement1": "Development and launch of a new e-commerce platform that increased sales by 20%.",
+            "achievement2": "Received the 'Employee of the Year' award for outstanding performance and contributions."
+        }
     }
 }
