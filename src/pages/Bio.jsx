@@ -53,13 +53,13 @@ const Bio = ({ isDark, toggleTheme }) => {
                 <main className="flex-1">
                     <div className="container mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 lg:py-20">
                         <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-16">
-                            <div className="flex flex-col items-center text-center md:items-start md:text-left">
+                            <div className="flex flex-col items-center text-center">
                                 <div className="relative mb-4 h-40 w-40 flex-shrink-0">
                                     <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-full w-full" style={{ backgroundImage: `url(${FotoProfile})` }}></div>
                                 </div>
                                 <h1 className="text-3xl font-bold tracking-tight text-[var(--foreground)] sm:text-4xl">Diego Araneda</h1>
                                 <p className="mt-2 text-lg text-[var(--foreground-muted)]">{t('bio.degree')}</p>
-                                <p className="mt-1 text-sm text-[var(--foreground-muted)] flex items-center justify-center md:justify-start gap-2">
+                                <p className="mt-1 text-sm text-[var(--foreground-muted)] flex items-center justify-center gap-2">
                                     <span>Valdivia, </span>
                                     <ReactCountryFlag
                                         countryCode="CL"
@@ -72,7 +72,7 @@ const Bio = ({ isDark, toggleTheme }) => {
                                     />
                                 </p>
                                 <span className="mt-4 inline-block h-1 w-12 rounded bg-purple-600"></span>
-                                <div className="mt-6 flex gap-4">
+                                <div className="mt-6 flex gap-4 justify-center">
                                     <a
                                         className="text-[var(--foreground-muted)] hover:text-[var(--primary)] transition-colors"
                                         href="https://www.linkedin.com/in/daranedag/"
