@@ -52,7 +52,8 @@
     },
     "cv": {
         "title": "Currículum Vitae",
-        "download": "Descargar CV (PDF)",
+        "download": "Descargar",
+        "preview": "Ver PDF",
         "resumenTitle": "Resumen",
         "restumenText": "Ingeniero Civil en Informática con más de {{ageExperience}} años de experiencia en la creación de soluciones digitales innovadoras. Mi enfoque combina la lógica del código con una mirada humana, buscando siempre mejorar la experiencia del usuario y la calidad del producto. Creo que la mejor tecnología surge del trabajo colaborativo, la comunicación honesta y el deseo constante de aprender y mejorar.",
         "educationTitle": "Educación",

@@ -52,7 +52,8 @@
     },
     "cv": {
         "title": "My Resume",
-        "download": "Download CV (PDF)",
+        "download": "Download",
+        "preview": "View PDF",
         "resumenTitle": "Summary",
         "restumenText": "Computer Science Engineer with {{ageExperience}} ten years of experience in creating innovative digital solutions. My approach combines the logic of code with a human perspective, always seeking to improve user experience and product quality. I believe that the best technology arises from collaborative work, honest communication, and a constant desire to learn and improve.",
         "educationTitle": "Education",

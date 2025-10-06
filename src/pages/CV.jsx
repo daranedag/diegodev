@@ -26,6 +26,7 @@ const CV = ({ isDark, toggleTheme }) => {
         let originalMaxHeight = null;
         let originalOverflow = null;
         let originalHeaderDisplay = null;
+        let wasDarkMode = false;
 
         if (scrollContainer) {
             originalMaxHeight = scrollContainer.style.maxHeight;
@@ -40,6 +41,12 @@ const CV = ({ isDark, toggleTheme }) => {
             originalHeaderDisplay = pdfHeader.style.display;
             // Mostrar el encabezado solo para el PDF
             pdfHeader.style.display = 'block';
+        }
+
+        // Forzar modo claro temporalmente si está en modo oscuro
+        if (isDark) {
+            wasDarkMode = true;
+            document.documentElement.classList.remove('dark');
         }
 
         const opt = {
@@ -64,14 +71,109 @@ const CV = ({ isDark, toggleTheme }) => {
             }
         };
 
-        // Generar PDF y restaurar estilos después
-        html2pdf().set(opt).from(element).save().then(() => {
+        // Generar PDF y abrirlo en nueva pestaña
+        html2pdf().set(opt).from(element).outputPdf('blob').then((blob) => {
+            // Restaurar estilos
             if (scrollContainer) {
                 scrollContainer.style.maxHeight = originalMaxHeight;
                 scrollContainer.style.overflow = originalOverflow;
             }
             if (pdfHeader) {
                 pdfHeader.style.display = originalHeaderDisplay;
+            }
+            // Restaurar modo oscuro si estaba activado
+            if (wasDarkMode) {
+                document.documentElement.classList.add('dark');
+            }
+
+            // Crear un nuevo blob con tipo MIME específico
+            const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+            const url = URL.createObjectURL(pdfBlob);
+
+            // Abrir en nueva pestaña
+            const newWindow = window.open(url, '_blank');
+
+            // Intentar establecer el título de la nueva pestaña (funciona en algunos navegadores)
+            if (newWindow) {
+                newWindow.document.title = 'CV_Diego_Araneda.pdf';
+            }
+
+            // Liberar la URL después de un tiempo
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        });
+    };
+
+    const handleDownloadPDFDirect = () => {
+        const element = cvRef.current;
+
+        // Buscar el div con scroll de la sección de Experiencia
+        const scrollContainer = element.querySelector('.overflow-y-auto');
+
+        // Buscar el encabezado del PDF
+        const pdfHeader = element.querySelector('#pdf-header');
+
+        // Guardar estilos originales
+        let originalMaxHeight = null;
+        let originalOverflow = null;
+        let originalHeaderDisplay = null;
+        let wasDarkMode = false;
+
+        if (scrollContainer) {
+            originalMaxHeight = scrollContainer.style.maxHeight;
+            originalOverflow = scrollContainer.style.overflow;
+
+            // Remover temporalmente el scroll y altura máxima
+            scrollContainer.style.maxHeight = 'none';
+            scrollContainer.style.overflow = 'visible';
+        }
+
+        if (pdfHeader) {
+            originalHeaderDisplay = pdfHeader.style.display;
+            // Mostrar el encabezado solo para el PDF
+            pdfHeader.style.display = 'block';
+        }
+
+        // Forzar modo claro temporalmente si está en modo oscuro
+        if (isDark) {
+            wasDarkMode = true;
+            document.documentElement.classList.remove('dark');
+        }
+
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: 'CV_Diego_Araneda.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait'
+            },
+            pagebreak: {
+                mode: ['avoid-all', 'css', 'legacy'],
+                before: '.page-break-before',
+                after: '.page-break-after',
+                avoid: '.avoid-page-break'
+            }
+        };
+
+        // Descargar PDF directamente
+        html2pdf().set(opt).from(element).save().then(() => {
+            // Restaurar estilos
+            if (scrollContainer) {
+                scrollContainer.style.maxHeight = originalMaxHeight;
+                scrollContainer.style.overflow = originalOverflow;
+            }
+            if (pdfHeader) {
+                pdfHeader.style.display = originalHeaderDisplay;
+            }
+            // Restaurar modo oscuro si estaba activado
+            if (wasDarkMode) {
+                document.documentElement.classList.add('dark');
             }
         });
     };
@@ -100,13 +202,24 @@ const CV = ({ isDark, toggleTheme }) => {
                     <div className="max-w-4xl mx-auto">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-12">
                             <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white">{t('cv.title')}</h2>
-                            <button
-                                onClick={handleDownloadPDF}
-                                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 dark:focus:ring-offset-background-dark transition-all"
-                            >
-                                <span className="material-symbols-outlined text-base">download</span>
-                                PDF
-                            </button>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleDownloadPDF}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all"
+                                    title="Vista previa del PDF en nueva pestaña"
+                                >
+                                    <span className="material-symbols-outlined text-base">visibility</span>
+                                    <span className="hidden sm:inline">{t('cv.preview')}</span>
+                                </button>
+                                <button
+                                    onClick={handleDownloadPDFDirect}
+                                    className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 transition-all"
+                                    title="Descargar PDF directamente"
+                                >
+                                    <span className="material-symbols-outlined text-base">download</span>
+                                    <span className="hidden sm:inline">{t('cv.download')}</span>
+                                </button>
+                            </div>
                         </div>
                         <div ref={cvRef}>
                             {/* Encabezado solo visible en PDF */}
