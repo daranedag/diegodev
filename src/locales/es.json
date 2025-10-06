@@ -134,5 +134,11 @@
             "achievement4": "Taller de Responsabilidad Social: Se centra en enseñar cómo utilizar los conocimientos adquiridos para el bien de la comunidad en la que estamos insertos.",
             "achievement5": "Seminario de Microsoft: La Importancia de Innovar Discutió la creación de tecnología de acuerdo con las necesidades detectadas y cómo llevar estas ideas a la vida en el país."
         }
+    },
+    "notfound": {
+        "title": "Página No Encontrada",
+        "message": "Lo sentimos, la página que buscas no existe.",
+        "disclaimer": "Y tal vez nunca exista aqui, ni en ningún universo paralelo...",
+        "home": "Volver al Inicio"
     }
 }
