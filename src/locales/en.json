@@ -134,5 +134,11 @@
             "achievement4": "Social Responsibility Workshop: Focuses on teaching how to use the knowledge acquired for the good of the community in which we are inserted.",
             "achievement5": "Microsoft Seminar: The Importance of Innovating Discussed the creation of technology according to detected needs and how to bring these ideas to life in the country."
         }
+    },
+    "notfound": {
+        "title": "Page Not Found",
+        "message": "Sorry, the page you are looking for does not exist.",
+        "disclaimer": "And it may never exist here, nor in any parallel universe...",
+        "home": "Return to Home"
     }
 }
