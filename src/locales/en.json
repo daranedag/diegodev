@@ -1,0 +1,53 @@
+{
+    "hero": {
+        "name": "Diego Araneda",
+        "tagline": "DieGui DeV",
+        "slogan": "Innovate with code, collaborate with honesty.",
+        "connect": "Connect",
+        "portfolio": "View Portfolio"
+    },
+    "work": {
+        "title": "Featured Work",
+        "backendIdeaGarden": {
+            "title": "Backend Idea Garden",
+            "description": "Backend for iOS/Android mobile applications of a US-based startup."
+        },
+        "chilcos": {
+            "title": "Chilcos",
+            "description": "Website for Waldorf School in Valdivia, Chile."
+        },
+        "observaLosRios": {
+            "title": "Observa Los Ríos",
+            "description": "Public policy monitoring platform in the Los Ríos region, Chile."
+        }
+    },
+    "home": {
+        "about": "Computer Science Engineer with over ten years of experience creating innovative digital solutions. My approach combines the logic of code with a human perspective, always seeking to improve user experience and product quality. I believe the best technology emerges from collaborative work, honest communication, and a constant desire to learn and improve.",
+        "disclaimer": "This presentation will surely change at some point..."
+    },
+    "connect": {
+        "title": "Let's Connect",
+        "description": "I'm always open to new opportunities and collaborations.<br/>Feel free to reach out!"
+    },
+    "footer": {
+        "copyright": "© 2025 DieGui DeV. All rights reserved."
+    },
+    "header": {
+        "bio": "Bio",
+        "cv": "Resume",
+        "portfolio": "Portfolio",
+        "blog": "Blog",
+        "themeToggle": "Switch to {{mode}} mode",
+        "light": "light",
+        "dark": "dark"
+    },
+    "bio": {
+        "aboutTitle": "About Me",
+        "journeyTitle": "My Journey",
+        "interestsTitle": "My Interests",
+        "about": "I am {{age}} years old and have learned in these {{ageExperience}} years of experience to create innovative digital solutions within the possibilities of each client. My approach not only considers logic but also the perspective of those who use my solutions, which is why I focus on improving user experience and product quality. Alongside this, I believe in collaborative work, honest communication, and a constant desire to learn, apply, teach what I've learned, and if possible, improve it.",
+        "journey": "My journey in the tech world began over a decade ago, driven by a passion for solving complex problems and creating solutions that make a difference. Over the years, I've had the opportunity to work on diverse projects, from startups to companies of various sizes. I've collaborated on some large multidisciplinary projects and also on small self-managed projects. All of this has allowed me to develop a broad and adaptable perspective to the different contexts and clients I've had and also in the good treatment and good relationship I've had with them.",
+        "interests": "Beyond code, I am passionate about music, dance, travel, and video games. I love getting to know new places and cultures, understanding how things work to learn from them and see how I can apply it in my daily life. I also enjoy good food and the company of friends, sharing ideas and experiences, as I believe these moments enrich everyone's life and inspire me to be more creative not only in my work but in my life.",
+        "degree": "Computer Science Engineer"
+    }
+}
