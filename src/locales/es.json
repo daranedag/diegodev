@@ -49,5 +49,78 @@
         "journey": "Mi viaje en el mundo de la tecnología comenzó hace más de una década, impulsado por resolver problemas complejos y crear soluciones que marquen la diferencia. A lo largo de los años, he tenido la oportunidad de trabajar en diversos proyectos, desde startups hasta empresas de variados tamaños. He colaborado en algunos grandes proyectos multidisciplinarios y también en proyectos pequeños y autogestionados. Todo lo anterior me ha permitido desarrollar una perspectiva amplia y adaptable a los diferentes contextos y clientes que he tenido y también en el buen trato y buena relación que he tenido con ellos.",
         "interests": "Más allá del código, me apasiona la música, el baile, los viajes y los videojuegos. Me encanta conocer nuevos lugares y culturas, el conocer cómo funcionan las cosas para aprender de ellas y así ver cómo puedo aplicarlo en mi vida diaria. También disfruto de la buena comida y la compañía de amigos, compartir ideas y experiencias, ya que creo que estos momentos enriquecen la vida de todos y me inspiran a ser más creativo no solo en mi trabajo sino en mi vida.",
         "degree": "Ingeniero Civil en Informática"
+    },
+    "cv": {
+        "title": "Currículum Vitae",
+        "download": "Descargar CV (PDF)",
+        "resumenTitle": "Resumen",
+        "restumenText": "Ingeniero Civil en Informática con más de {{ageExperience}} años de experiencia en la creación de soluciones digitales innovadoras. Mi enfoque combina la lógica del código con una mirada humana, buscando siempre mejorar la experiencia del usuario y la calidad del producto. Creo que la mejor tecnología surge del trabajo colaborativo, la comunicación honesta y el deseo constante de aprender y mejorar.",
+        "educationTitle": "Educación",
+        "experienceTitle": "Experiencia Laboral",
+        "skillsTitle": "Habilidades Técnicas",
+        "achievementsTitle": "Logros y Certificaciones",
+        "education": {
+            "university": {
+                "degree": "Ingeniero Civil en Informática",
+                "institution": "Universidad Austral de Chile",
+                "location": "Valdivia, Chile",
+                "period": "2007 - 2015"
+            },
+            "highschool": {
+                "degree": "Enseñanza Básica y Media",
+                "institution": "Instituto Alemán de Valdivia",
+                "location": "Valdivia, Chile",
+                "period": "1995 - 2006"
+            }
+        },
+        "experience": {
+            "job1": {
+                "position": "Desarrollador Full Stack",
+                "company": "Freelance / Proyectos Personales",
+                "period": "2015 - Presente",
+                "details": [
+                    "Desarrollo de aplicaciones web y móviles utilizando tecnologías modernas como React, Node.js y bases de datos SQL/NoSQL.",
+                    "Colaboración con clientes para entender sus necesidades y traducirlas en soluciones técnicas efectivas.",
+                    "Implementación de prácticas de desarrollo ágil y metodologías Scrum para mejorar la eficiencia del equipo."
+                ]
+            },
+            "job2": {
+                "position": "Desarrollador Web Junior",
+                "company": "Tech Solutions Ltda.",
+                "period": "2014 - 2015",
+                "details": [
+                    "Participación en el desarrollo de sitios web corporativos y aplicaciones internas.",
+                    "Mantenimiento y actualización de sistemas existentes, asegurando su funcionalidad y seguridad.",
+                    "Colaboración con diseñadores y otros desarrolladores para crear experiencias de usuario atractivas."
+                ]
+            },
+            "job3": {
+                "position": "Desarrollador Full Stack",
+                "company": "Freelance / Proyectos Personales",
+                "period": "2015 - Presente",
+                "details": [
+                    "Desarrollo de aplicaciones web y móviles utilizando tecnologías modernas como React, Node.js y bases de datos SQL/NoSQL.",
+                    "Colaboración con clientes para entender sus necesidades y traducirlas en soluciones técnicas efectivas.",
+                    "Implementación de prácticas de desarrollo ágil y metodologías Scrum para mejorar la eficiencia del equipo."
+                ]
+            },
+            "job4": {
+                "position": "Desarrollador Web Junior",
+                "company": "Tech Solutions Ltda.",
+                "period": "2014 - 2015",
+                "details": [
+                    "Participación en el desarrollo de sitios web corporativos y aplicaciones internas.",
+                    "Mantenimiento y actualización de sistemas existentes, asegurando su funcionalidad y seguridad.",
+                    "Colaboración con diseñadores y otros desarrolladores para crear experiencias de usuario atractivas."
+                ]
+            }
+        },
+        "skills": {
+            "title": "Habilidades Técnicas"
+        },
+        "achievements": {
+            "achievement1": "Desarrollo y lanzamiento de una nueva plataforma de comercio electrónico que aumentó las ventas en un 20%.",
+            "achievement2": "Recibí el premio 'Empleado del Año' por desempeño y contribuciones sobresalientes."
+        }
     }
 }
