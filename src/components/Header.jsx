@@ -9,7 +9,7 @@ import FotoProfile from '../../assets/img/perfilNuevo.png';
 
 const misLinks = [
     { nombre: 'bio', ruta: '../pages/Bio.jsx' },
-    // { nombre: 'cv', ruta: '#' },
+    { nombre: 'cv', ruta: '../pages/CV.jsx' },
     // { nombre: 'portfolio', ruta: '#' },
     // { nombre: 'blog', ruta: '#' }
 ]

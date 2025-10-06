@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Header from '../components/Header';
-import Hero from '../components/Hero';
-import FeaturedWork from '../components/FeaturedWork';
-import ConnectSection from '../components/ConnectSection';
+import Hero from '../components/Home/Hero';
+import FeaturedWork from '../components/Home/FeaturedWork';
+import ConnectSection from '../components/Home/ConnectSection';
 import Footer from '../components/Footer';
 import PropTypes from 'prop-types';
 

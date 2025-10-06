@@ -49,5 +49,89 @@
         "journey": "Mi viaje en el mundo de la tecnología comenzó hace más de una década, impulsado por resolver problemas complejos y crear soluciones que marquen la diferencia. A lo largo de los años, he tenido la oportunidad de trabajar en diversos proyectos, desde startups hasta empresas de variados tamaños. He colaborado en algunos grandes proyectos multidisciplinarios y también en proyectos pequeños y autogestionados. Todo lo anterior me ha permitido desarrollar una perspectiva amplia y adaptable a los diferentes contextos y clientes que he tenido y también en el buen trato y buena relación que he tenido con ellos.",
         "interests": "Más allá del código, me apasiona la música, el baile, los viajes y los videojuegos. Me encanta conocer nuevos lugares y culturas, el conocer cómo funcionan las cosas para aprender de ellas y así ver cómo puedo aplicarlo en mi vida diaria. También disfruto de la buena comida y la compañía de amigos, compartir ideas y experiencias, ya que creo que estos momentos enriquecen la vida de todos y me inspiran a ser más creativo no solo en mi trabajo sino en mi vida.",
         "degree": "Ingeniero Civil en Informática"
+    },
+    "cv": {
+        "title": "Currículum Vitae",
+        "download": "Descargar CV (PDF)",
+        "resumenTitle": "Resumen",
+        "restumenText": "Ingeniero Civil en Informática con más de {{ageExperience}} años de experiencia en la creación de soluciones digitales innovadoras. Mi enfoque combina la lógica del código con una mirada humana, buscando siempre mejorar la experiencia del usuario y la calidad del producto. Creo que la mejor tecnología surge del trabajo colaborativo, la comunicación honesta y el deseo constante de aprender y mejorar.",
+        "educationTitle": "Educación",
+        "experienceTitle": "Experiencia Laboral",
+        "skillsTitle": "Habilidades Técnicas",
+        "achievementsTitle": "Logros y Certificaciones",
+        "education": {
+            "university": {
+                "degree": "Ingeniero Civil en Informática",
+                "institution": "Universidad Austral de Chile",
+                "location": "Valdivia, Chile",
+                "period": "2007 - 2015"
+            },
+            "highschool": {
+                "degree": "Enseñanza Básica y Media",
+                "institution": "Instituto Alemán de Valdivia",
+                "location": "Valdivia, Chile",
+                "period": "1995 - 2006"
+            }
+        },
+        "experience": {
+            "job1": {
+                "position": "Desarrollador Backend",
+                "company": "Idea Garden LLC",
+                "period": "Nov 2024 - Presente",
+                "details": [
+                    "Desarrollo de backend en Node.js para aplicaciones de diferente indoles: laboral, situacional. Manejo de arquitecturas cloud con GCP y Firebase."
+                ]
+            },
+            "job2": {
+                "position": "Desarrollador Fullstack",
+                "company": "Centro de Estudios Regionales - UACh.",
+                "period": "May 2025 - Nov 2025",
+                "details": [
+                    "Desarrollo de plataforma web React + TailwindCSS, Backend en Node.js y base de datos PostgreSQL para monitoreo de iniciativas en planes sectoriales de la región de los Ríos"
+                ]
+            },
+            "job3": {
+                "position": "Desarrollador Full Stack Laravel",
+                "company": "Workmate",
+                "period": "Jun 2024 - Oct 2024",
+                "details": [
+                    "Soporte y desarrollo en Laravel 4 y 5, manejo de MySQL y MongoDB, y programación en Javascript y PHP. Soporte N2 y desarrollo de funcionalidades según requerimientos de clientes internos."
+                ]
+            },
+            "job4": {
+                "position": "Analista de Sistemas",
+                "company": "Dedalus Ltda. para GTD Telsur",
+                "period": "Feb 2021 - May 2024",
+                "details": [
+                    "Gestión y actualización de sistemas legados, desarrollo en PHP, PL/SQL, y Javascript, integración de nuevas soluciones y apoyo en implementación de GitHub para control de versiones."
+                ]
+            },
+            "job5": {
+                "position": "Ingeniero de Desarrollo de Software",
+                "company": "SimpliRoute",
+                "period": "Feb 2020 - Nov 2020",
+                "details": [
+                    "Mantenimiento y desarrollo en plataforma de enrutamiento con arquitecturas cloud (GCP y AWS), desarrollo en Python (Django, Falcon), Angular, React, y configuración de Firebase para proyectos web."
+                ]
+            },
+            "job6": {
+                "position": "Ingeniero de Software",
+                "company": "SoluNova",
+                "period": "Feb 2019 - Dic 2019",
+                "details": [
+                    "Desarrollo de sistemas de información integrando hardware para fisiología y rendimiento de gamers, con un enfoque en neurociencia y uso de Django, Flask, y React."
+                ]
+            }
+        },
+        "skills": {
+            "title": "Habilidades Técnicas"
+        },
+        "achievements": {
+            "achievement1": "Fullstack Javascript Bootcamp - Academia Desafío Latam.",
+            "achievement2": "Webinar sobre Marketing Digital (Socialite), Redacción Creativa para Emprendedores (Domestika), Estrategias de Instagram para el Desarrollo de Marcas (Domestika).",
+            "achievement3": "Graduado de Coaching de Liderazgo en Be Great Chile (2019).",
+            "achievement4": "Taller de Responsabilidad Social: Se centra en enseñar cómo utilizar los conocimientos adquiridos para el bien de la comunidad en la que estamos insertos.",
+            "achievement5": "Seminario de Microsoft: La Importancia de Innovar Discutió la creación de tecnología de acuerdo con las necesidades detectadas y cómo llevar estas ideas a la vida en el país."
+        }
     }
 }

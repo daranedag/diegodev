@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import fotoChilcos from '../../assets/img/chilcos.png';
-import fotoIdeaGarden from '../../assets/img/ideaGarden.png';
-import fotoObserva from '../../assets/img/observa.png';
+import fotoChilcos from '../../../assets/img/chilcos.png';
+import fotoIdeaGarden from '../../../assets/img/ideaGarden.png';
+import fotoObserva from '../../../assets/img/observa.png';
 
 const ProjectCard = ({ title, description, link, img, gradient }) => {
     return (
