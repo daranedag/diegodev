@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCountryFlag from 'react-country-flag';
 import {
@@ -13,9 +13,37 @@ import Footer from '../components/Footer';
 import PropTypes from 'prop-types';
 import FotoProfile from '../../assets/img/perfilNuevo.png';
 
-
 const Bio = ({ isDark, toggleTheme }) => {
     const { t } = useTranslation();
+
+    // Calcular edad dinámicamente basado en fecha de nacimiento
+    const age = useMemo(() => {
+        const birthDate = new Date(1989, 1, 6); // Mes 1 = Febrero (0-indexed)
+        const today = new Date();
+        let calculatedAge = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        // Ajustar si aún no ha cumplido años este año
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            calculatedAge--;
+        }
+
+        return calculatedAge;
+    }, []);
+
+    const ageExperience = useMemo(() => {
+        const startDate = new Date(2015, 3, 14); // Mes 0 = Enero (0-indexed)
+        const today = new Date();
+        let calculatedExperience = today.getFullYear() - startDate.getFullYear();
+        const monthDiff = today.getMonth() - startDate.getMonth();
+
+        // Ajustar si aún no ha cumplido años este año
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < startDate.getDate())) {
+            calculatedExperience--;
+        }
+
+        return calculatedExperience;
+    }, []);
 
     return (
         <>
@@ -30,7 +58,7 @@ const Bio = ({ isDark, toggleTheme }) => {
                                     <div className="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-full w-full" style={{ backgroundImage: `url(${FotoProfile})` }}></div>
                                 </div>
                                 <h1 className="text-3xl font-bold tracking-tight text-[var(--foreground)] sm:text-4xl">Diego Araneda</h1>
-                                <p className="mt-2 text-lg text-[var(--foreground-muted)]">Ingeniero Civil en Informática</p>
+                                <p className="mt-2 text-lg text-[var(--foreground-muted)]">{t('bio.degree')}</p>
                                 <p className="mt-1 text-sm text-[var(--foreground-muted)] flex items-center justify-center md:justify-start gap-2">
                                     <span>Valdivia, </span>
                                     <ReactCountryFlag
@@ -94,21 +122,21 @@ const Bio = ({ isDark, toggleTheme }) => {
                             </div>
                             <div className="col-span-1 space-y-8 md:col-span-2">
                                 <div className="space-y-4">
-                                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">About Me</h2>
-                                    <p className="text-lg text-[var(--foreground-muted)] leading-relaxed">
-                                        I'm a product designer with over 5 years of experience in creating user-centered designs for web and mobile applications. My passion lies in solving complex problems and crafting intuitive, visually appealing interfaces that enhance user experience. I believe in a collaborative design process, working closely with cross-functional teams to bring innovative ideas to life.
+                                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">{t('bio.aboutTitle')}</h2>
+                                    <p className="text-lg text-[var(--foreground-muted)] leading-relaxed text-justify">
+                                        {t('bio.about', { age, ageExperience })}
                                     </p>
                                 </div>
                                 <div className="space-y-4">
-                                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">Professional Journey</h2>
-                                    <p className="text-lg text-[var(--foreground-muted)] leading-relaxed">
-                                        My career began at a small startup where I honed my skills in UI/UX design, working on a variety of projects from concept to launch. I then moved to a larger tech company, where I specialized in interaction design and contributed to the development of a flagship product used by millions of users. Throughout my journey, I've embraced challenges, continuously learned, and adapted to the ever-evolving landscape of design.
+                                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">{t('bio.journeyTitle')}</h2>
+                                    <p className="text-lg text-[var(--foreground-muted)] leading-relaxed text-justify">
+                                        {t('bio.journey', { ageExperience })}
                                     </p>
                                 </div>
                                 <div className="space-y-4">
-                                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">Personal Interests</h2>
-                                    <p className="text-lg text-[var(--foreground-muted)] leading-relaxed">
-                                        Beyond design, I'm an avid traveler, always seeking new experiences and perspectives. I enjoy photography, capturing moments and stories through the lens. I also have a keen interest in sustainable living and exploring ways to integrate eco-friendly practices into my daily life. These interests fuel my creativity and inspire my design work.
+                                    <h2 className="text-2xl font-semibold tracking-tight text-[var(--foreground)]">{t('bio.interestsTitle')}</h2>
+                                    <p className="text-lg text-[var(--foreground-muted)] leading-relaxed text-justify">
+                                        {t('bio.interests')}
                                     </p>
                                 </div>
                             </div>
