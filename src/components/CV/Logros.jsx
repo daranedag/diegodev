@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 const Logros = () => {
     const { t } = useTranslation();
+    const achievementsId = ['achievement1', 'achievement2', 'achievement3', 'achievement4', 'achievement5'];
     return (
         <section>
             <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
@@ -10,9 +11,11 @@ const Logros = () => {
                 {t('cv.achievementsTitle')}
             </h3>
             <ul className="space-y-3 list-disc list-inside text-slate-600 dark:text-slate-400 text-sm pl-2">
-                <li>{t('cv.achievements.achievement1')}</li>
-                <li>{t('cv.achievements.achievement2')}</li>
+                {achievementsId.map((achId) => (
+                    <li key={achId}>{t(`cv.achievements.${achId}`)}</li>
+                ))}
             </ul>
+            <br />
         </section>
     );
 }

@@ -58,6 +58,7 @@
         "educationTitle": "Education",
         "experienceTitle": "Work Experience",
         "skillsTitle": "Technical Skills",
+        "achievementsTitle": "Achievements and Certifications",
         "education": {
             "university": {
                 "degree": "Computer Science Engineer",
@@ -74,47 +75,51 @@
         },
         "experience": {
             "job1": {
-                "position": "Full Stack Developer",
-                "company": "Tech Solutions Inc.",
-                "location": "Remote",
-                "period": "2020 - Present",
-                "responsibilities": [
-                    "Developed and maintained web applications using React and Node.js.",
-                    "Collaborated with cross-functional teams to define, design, and ship new features.",
-                    "Optimized applications for maximum speed and scalability."
+                "position": "Backend Developer",
+                "company": "Idea Garden LLC",
+                "period": "Nov 2024 - Present",
+                "details": [
+                    "Backend development in Node.js for various applications: work-related, situational. Management of cloud architectures with GCP and Firebase."
                 ]
             },
             "job2": {
-                "position": "Frontend Developer",
-                "company": "Creative Web Agency",
-                "location": "Santiago, Chile",
-                "period": "2016 - 2020",
-                "responsibilities": [
-                    "Implemented responsive web designs using HTML, CSS, and JavaScript.",
-                    "Worked closely with designers to translate designs into functional web pages.",
-                    "Ensured cross-browser compatibility and optimized performance."
+                "position": "Fullstack Developer",
+                "company": "Centro de Estudios Regionales - UACh.",
+                "period": "May 2025 - Nov 2025",
+                "details": [
+                    "Web platform development with React + TailwindCSS, Backend in Node.js, and PostgreSQL database for monitoring initiatives in sectoral plans of the Los Ríos region."
                 ]
             },
             "job3": {
-                "position": "Full Stack Developer",
-                "company": "Tech Solutions Inc.",
-                "location": "Remote",
-                "period": "2020 - Present",
-                "responsibilities": [
-                    "Developed and maintained web applications using React and Node.js.",
-                    "Collaborated with cross-functional teams to define, design, and ship new features.",
-                    "Optimized applications for maximum speed and scalability."
+                "position": "Full Stack Laravel Developer",
+                "company": "Workmate",
+                "period": "Jun 2024 - Oct 2024",
+                "details": [
+                    "Support and development in Laravel 4 and 5, management of MySQL and MongoDB, and programming in Javascript and PHP. N2 support and development of functionalities according to internal client requirements."
                 ]
             },
             "job4": {
-                "position": "Frontend Developer",
-                "company": "Creative Web Agency",
-                "location": "Santiago, Chile",
-                "period": "2016 - 2020",
-                "responsibilities": [
-                    "Implemented responsive web designs using HTML, CSS, and JavaScript.",
-                    "Worked closely with designers to translate designs into functional web pages.",
-                    "Ensured cross-browser compatibility and optimized performance."
+                "position": "Systems Analyst",
+                "company": "Dedalus Ltda. para GTD Telsur",
+                "period": "Feb 2021 - May 2024",
+                "details": [
+                    "Management and updating of legacy systems, development in PHP, PL/SQL, and Javascript, integration of new solutions, and support in the implementation of GitHub for version control."
+                ]
+            },
+            "job5": {
+                "position": "Software Development Engineer",
+                "company": "SimpliRoute",
+                "period": "Feb 2020 - Nov 2020",
+                "details": [
+                    "Maintenance and development of a routing platform with cloud architectures (GCP and AWS), development in Python (Django, Falcon), Angular, React, and Firebase configuration for web projects."
+                ]
+            },
+            "job6": {
+                "position": "Software Engineer",
+                "company": "SoluNova",
+                "period": "Feb 2019 - Dec 2019",
+                "details": [
+                    "Development of information systems integrating hardware for physiology and performance of gamers, with a focus on neuroscience and use of Django, Flask, and React."
                 ]
             }
         },
@@ -122,8 +127,11 @@
             "title": "Technical Skills"
         },
         "achievements": {
-            "achievement1": "Development and launch of a new e-commerce platform that increased sales by 20%.",
-            "achievement2": "Received the 'Employee of the Year' award for outstanding performance and contributions."
+            "achievement1": "Fullstack Javascript Bootcamp - Desafío Latam Academy.",
+            "achievement2": "Webinar on Digital Marketing (Socialite), Creative Copywriting for Entrepreneurs (Domestika), Instagram Strategies for Brand Development (Domestika).",
+            "achievement3": "Graduated from Leadership Coaching at Be Great Chile (2019).",
+            "achievement4": "Social Responsibility Workshop: Focuses on teaching how to use the knowledge acquired for the good of the community in which we are inserted.",
+            "achievement5": "Microsoft Seminar: The Importance of Innovating Discussed the creation of technology according to detected needs and how to bring these ideas to life in the country."
         }
     }
 }
