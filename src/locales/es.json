@@ -1,0 +1,53 @@
+{
+    "hero": {
+        "name": "Diego Araneda",
+        "tagline": "DieGui DeV",
+        "slogan": "Innovar con código, colaborar con honestidad.",
+        "connect": "Conectar",
+        "portfolio": "Ver Portafolio"
+    },
+    "work": {
+        "title": "Trabajos Destacados",
+        "backendIdeaGarden": {
+            "title": "Backend Idea Garden",
+            "description": "Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU."
+        },
+        "chilcos": {
+            "title": "Chilcos",
+            "description": "Sitio web para Colegio Waldorf en Valdivia, Chile."
+        },
+        "observaLosRios": {
+            "title": "Observa Los Ríos",
+            "description": "Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile."
+        }
+    },
+    "home": {
+        "about": "Ingeniero Civil en Informática con más de diez años de experiencia en la creación de soluciones digitales innovadoras. Mi enfoque combina la lógica del código con una mirada humana, buscando siempre mejorar la experiencia del usuario y la calidad del producto. Creo que la mejor tecnología surge del trabajo colaborativo, la comunicación honesta y el deseo constante de aprender y mejorar.",
+        "disclaimer": "Esta presentación seguro cambiará en algún momento..."
+    },
+    "connect": {
+        "title": "Conectemos",
+        "description": "Siempre estoy dispuesto a nuevas oportunidades y colaboraciones.<br/>No dudes en contactarme!"
+    },
+    "footer": {
+        "copyright": "© 2025 DieGui DeV. Todos los derechos reservados."
+    },
+    "header": {
+        "bio": "Bio",
+        "cv": "CV",
+        "portfolio": "Portafolio",
+        "blog": "Blog",
+        "themeToggle": "Cambiar a modo {{mode}}",
+        "light": "claro",
+        "dark": "oscuro"
+    },
+    "bio": {
+        "aboutTitle": "Sobre mí",
+        "journeyTitle": "Mi Trayectoria",
+        "interestsTitle": "Mis Intereses",
+        "about": "Tengo {{age}} años y he aprendido en estos {{ageExperience}} años de experiencia a crear soluciones digitales innovadoras dentro de las posibilidades de cada cliente. Mi enfoque no solo considera la lógica, sino que además la perspectiva de quien utiliza mis soluciones, por ello me centro en mejorar la experiencia del usuario y la calidad del producto. Junto a esto, soy un creyente del trabajo colaborativo, comunicación honesta y constante deseo de aprender, aplicar, enseñar lo aprendido y si es posible, mejorarlo",
+        "journey": "Mi viaje en el mundo de la tecnología comenzó hace más de una década, impulsado por resolver problemas complejos y crear soluciones que marquen la diferencia. A lo largo de los años, he tenido la oportunidad de trabajar en diversos proyectos, desde startups hasta empresas de variados tamaños. He colaborado en algunos grandes proyectos multidisciplinarios y también en proyectos pequeños y autogestionados. Todo lo anterior me ha permitido desarrollar una perspectiva amplia y adaptable a los diferentes contextos y clientes que he tenido y también en el buen trato y buena relación que he tenido con ellos.",
+        "interests": "Más allá del código, me apasiona la música, el baile, los viajes y los videojuegos. Me encanta conocer nuevos lugares y culturas, el conocer cómo funcionan las cosas para aprender de ellas y así ver cómo puedo aplicarlo en mi vida diaria. También disfruto de la buena comida y la compañía de amigos, compartir ideas y experiencias, ya que creo que estos momentos enriquecen la vida de todos y me inspiran a ser más creativo no solo en mi trabajo sino en mi vida.",
+        "degree": "Ingeniero Civil en Informática"
+    }
+}

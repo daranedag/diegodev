@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 import {
     EnvelopeIcon,
     CodeBracketIcon,
@@ -50,15 +51,16 @@ const ConnectCard = ({ nombre, link, color }) => {
 }
 
 const ConnectSection = () => {
+    const { t } = useTranslation();
+
     return (
         <section id="ConnectSection" className="mt-24 scroll-mt-20">
             <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-                    Conectemos
+                    {t('connect.title')}
                 </h2>
                 <p className="mt-4 text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-                    Siempre estoy dispuesto a nuevas oportunidades y colaboraciones.
-                    No dudes en contactarme!
+                    <Trans i18nKey="connect.description" components={{ br: <br /> }} />
                 </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 max-w-5xl mx-auto">
