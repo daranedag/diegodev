@@ -49,5 +49,89 @@
         "journey": "My journey in the tech world began over a decade ago, driven by a passion for solving complex problems and creating solutions that make a difference. Over the years, I've had the opportunity to work on diverse projects, from startups to companies of various sizes. I've collaborated on some large multidisciplinary projects and also on small self-managed projects. All of this has allowed me to develop a broad and adaptable perspective to the different contexts and clients I've had and also in the good treatment and good relationship I've had with them.",
         "interests": "Beyond code, I am passionate about music, dance, travel, and video games. I love getting to know new places and cultures, understanding how things work to learn from them and see how I can apply it in my daily life. I also enjoy good food and the company of friends, sharing ideas and experiences, as I believe these moments enrich everyone's life and inspire me to be more creative not only in my work but in my life.",
         "degree": "Computer Science Engineer"
+    },
+    "cv": {
+        "title": "My Resume",
+        "download": "Download CV (PDF)",
+        "resumenTitle": "Summary",
+        "restumenText": "Computer Science Engineer with {{ageExperience}} ten years of experience in creating innovative digital solutions. My approach combines the logic of code with a human perspective, always seeking to improve user experience and product quality. I believe that the best technology arises from collaborative work, honest communication, and a constant desire to learn and improve.",
+        "educationTitle": "Education",
+        "experienceTitle": "Work Experience",
+        "skillsTitle": "Technical Skills",
+        "achievementsTitle": "Achievements and Certifications",
+        "education": {
+            "university": {
+                "degree": "Computer Science Engineer",
+                "institution": "Universidad Austral de Chile",
+                "location": "Valdivia, Chile",
+                "period": "2008 - 2014"
+            },
+            "highschool": {
+                "degree": "Primary and Secondary Education",
+                "institution": "German Institute of Valdivia",
+                "location": "Valdivia, Chile",
+                "period": "1995 - 2006"
+            }
+        },
+        "experience": {
+            "job1": {
+                "position": "Backend Developer",
+                "company": "Idea Garden LLC",
+                "period": "Nov 2024 - Present",
+                "details": [
+                    "Backend development in Node.js for various applications: work-related, situational. Management of cloud architectures with GCP and Firebase."
+                ]
+            },
+            "job2": {
+                "position": "Fullstack Developer",
+                "company": "Centro de Estudios Regionales - UACh.",
+                "period": "May 2025 - Nov 2025",
+                "details": [
+                    "Web platform development with React + TailwindCSS, Backend in Node.js, and PostgreSQL database for monitoring initiatives in sectoral plans of the Los Ríos region."
+                ]
+            },
+            "job3": {
+                "position": "Full Stack Laravel Developer",
+                "company": "Workmate",
+                "period": "Jun 2024 - Oct 2024",
+                "details": [
+                    "Support and development in Laravel 4 and 5, management of MySQL and MongoDB, and programming in Javascript and PHP. N2 support and development of functionalities according to internal client requirements."
+                ]
+            },
+            "job4": {
+                "position": "Systems Analyst",
+                "company": "Dedalus Ltda. para GTD Telsur",
+                "period": "Feb 2021 - May 2024",
+                "details": [
+                    "Management and updating of legacy systems, development in PHP, PL/SQL, and Javascript, integration of new solutions, and support in the implementation of GitHub for version control."
+                ]
+            },
+            "job5": {
+                "position": "Software Development Engineer",
+                "company": "SimpliRoute",
+                "period": "Feb 2020 - Nov 2020",
+                "details": [
+                    "Maintenance and development of a routing platform with cloud architectures (GCP and AWS), development in Python (Django, Falcon), Angular, React, and Firebase configuration for web projects."
+                ]
+            },
+            "job6": {
+                "position": "Software Engineer",
+                "company": "SoluNova",
+                "period": "Feb 2019 - Dec 2019",
+                "details": [
+                    "Development of information systems integrating hardware for physiology and performance of gamers, with a focus on neuroscience and use of Django, Flask, and React."
+                ]
+            }
+        },
+        "skills": {
+            "title": "Technical Skills"
+        },
+        "achievements": {
+            "achievement1": "Fullstack Javascript Bootcamp - Desafío Latam Academy.",
+            "achievement2": "Webinar on Digital Marketing (Socialite), Creative Copywriting for Entrepreneurs (Domestika), Instagram Strategies for Brand Development (Domestika).",
+            "achievement3": "Graduated from Leadership Coaching at Be Great Chile (2019).",
+            "achievement4": "Social Responsibility Workshop: Focuses on teaching how to use the knowledge acquired for the good of the community in which we are inserted.",
+            "achievement5": "Microsoft Seminar: The Importance of Innovating Discussed the creation of technology according to detected needs and how to bring these ideas to life in the country."
+        }
     }
 }
