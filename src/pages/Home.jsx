@@ -30,6 +30,7 @@ const Home = ({ isDark, toggleTheme }) => {
                         <ConnectSection />
                     </div>
                 </main>
+
                 <Footer />
             </div>
         </>

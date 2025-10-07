@@ -140,5 +140,29 @@
         "message": "Lo sentimos, la página que buscas no existe.",
         "disclaimer": "Y tal vez nunca exista aqui, ni en ningún universo paralelo...",
         "home": "Volver al Inicio"
+    },
+    "portfolio": {
+        "title": "Portafolio",
+        "description": "Aquí hay una selección de algunos de mis proyectos recientes. Para conocer más detalles, puedes hacer click en cada proyecto.",
+        "project1": {
+            "title": "Diseño Eco-Friendly de Empaques",
+            "description": "Diseño de empaques sostenibles para una marca de productos orgánicos.",
+            "link": "https://example.com/project1"
+        },
+        "project2": {
+            "title": "Aplicación Móvil para un Estilo de Vida Sostenible",
+            "description": "Una aplicación móvil para promover hábitos ecológicos.",
+            "link": "https://example.com/project2"
+        },
+        "project3": {
+            "title": "Rediseño de Website para Negocio Local",
+            "description": "Rediseño de la presencia en línea de un negocio local.",
+            "link": "https://example.com/project3"
+        },
+        "project4": {
+            "title": "Instalación de Arte Interactiva",
+            "description": "Una pieza de arte interactiva centrada en la concienciación ambiental.",
+            "link": "https://example.com/project4"
+        }
     }
 }
