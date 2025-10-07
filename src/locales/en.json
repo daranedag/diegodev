@@ -145,24 +145,44 @@
         "title": "Portfolio",
         "description": "Here is a selection of some of my recent projects. To learn more details, you can click on each project.",
         "project1": {
-            "title": "Eco-Friendly Packaging Design",
-            "description": "Design of sustainable packaging for a brand of organic products.",
-            "link": "https://example.com/project1"
+            "title": "Idea Garden Backend",
+            "description": "Backend for iOS/Android mobile applications for a US-based startup.",
+            "detailedDescription": "Complete backend development for cross-platform mobile applications using Node.js and cloud architecture. The project includes integration with GCP and Firebase services for real-time data management, user authentication, and push notifications. Implementation of scalable RESTful APIs and role-based permissions system.",
+            "githubLink": "",
+            "productionLink": "https://www.idea-garden.xyz/",
+            "technologies": [
+                "Node.js",
+                "Firebase",
+                "GCP",
+                "Express",
+                "MongoDB"
+            ]
         },
         "project2": {
-            "title": "Mobile App for Sustainable Living",
-            "description": "A mobile application to promote eco-friendly habits.",
-            "link": "https://example.com/project2"
+            "title": "Chilcos - Waldorf School",
+            "description": "Website for Waldorf School in Valdivia, Chile.",
+            "detailedDescription": "Design and development of institutional website for a school with Waldorf pedagogy. Includes content management system for news and events, photo gallery, information about educational methodology, and contact form. Responsive design and SEO optimized.",
+            "githubLink": "",
+            "productionLink": "https://www.chilcos.org",
+            "technologies": [
+                "React",
+                "Tailwind CSS",
+                "Vercel"
+            ]
         },
         "project3": {
-            "title": "Website Redesign for Local Business",
-            "description": "Redesign of the online presence of a local business.",
-            "link": "https://example.com/project3"
-        },
-        "project4": {
-            "title": "Interactive Art Installation",
-            "description": "An interactive art piece focused on environmental awareness.",
-            "link": "https://example.com/project4"
+            "title": "Observa Los Ríos",
+            "description": "Public policy monitoring platform in Los Ríos region, Chile.",
+            "detailedDescription": "Web platform developed for the Regional Studies Center of Universidad Austral de Chile. Allows monitoring and tracking of initiatives in sectoral plans of the Los Ríos region. Includes data visualization system, dynamic reports, and management of public policy compliance indicators.",
+            "githubLink": "",
+            "productionLink": "https://www.observalosrios.cl",
+            "technologies": [
+                "React",
+                "Node.js",
+                "PostgreSQL",
+                "Tailwind CSS",
+                "Chart.js"
+            ]
         }
     }
 }

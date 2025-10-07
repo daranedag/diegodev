@@ -145,24 +145,46 @@
         "title": "Portafolio",
         "description": "Aquí hay una selección de algunos de mis proyectos recientes. Para conocer más detalles, puedes hacer click en cada proyecto.",
         "project1": {
-            "title": "Diseño Eco-Friendly de Empaques",
-            "description": "Diseño de empaques sostenibles para una marca de productos orgánicos.",
-            "link": "https://example.com/project1"
+            "title": "Backend Idea Garden",
+            "description": "Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU.",
+            "detailedDescription": "Desarrollo completo del backend para aplicaciones móviles multiplataforma utilizando Node.js y arquitectura cloud. El proyecto incluye integración con servicios de GCP y Firebase para gestión de datos en tiempo real, autenticación de usuarios y notificaciones push. Implementación de APIs RESTful escalables y sistema de permisos basado en roles.",
+            "githubLink": "",
+            "productionLink": "https://www.idea-garden.xyz/",
+            "technologies": [
+                "Node.js",
+                "Firebase",
+                "GCP",
+                "Express",
+                "PostgreSQL",
+                "Javascript"
+            ]
         },
         "project2": {
-            "title": "Aplicación Móvil para un Estilo de Vida Sostenible",
-            "description": "Una aplicación móvil para promover hábitos ecológicos.",
-            "link": "https://example.com/project2"
+            "title": "Chilcos - Colegio Waldorf",
+            "description": "Sitio web para Colegio Waldorf en Valdivia, Chile.",
+            "detailedDescription": "Diseño y desarrollo de sitio web institucional para colegio con pedagogía Waldorf. Incluye sistema de gestión de contenidos para noticias y eventos, galería de fotos, información sobre metodología educativa y formulario de contacto. Diseño responsive y optimizado para SEO.",
+            "githubLink": "",
+            "productionLink": "https://www.chilcos.org",
+            "technologies": [
+                "HTML",
+                "Custom CSS",
+                "Javascript"
+            ]
         },
         "project3": {
-            "title": "Rediseño de Website para Negocio Local",
-            "description": "Rediseño de la presencia en línea de un negocio local.",
-            "link": "https://example.com/project3"
-        },
-        "project4": {
-            "title": "Instalación de Arte Interactiva",
-            "description": "Una pieza de arte interactiva centrada en la concienciación ambiental.",
-            "link": "https://example.com/project4"
+            "title": "Observa Los Ríos",
+            "description": "Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile.",
+            "detailedDescription": "Plataforma web desarrollada para el Centro de Estudios Regionales de la Universidad Austral de Chile. Permite el monitoreo y seguimiento de iniciativas en planes sectoriales de la región de Los Ríos. Incluye sistema de visualización de datos, reportes dinámicos y gestión de indicadores de cumplimiento de políticas públicas.",
+            "githubLink": "",
+            "productionLink": "https://www.observalosrios.cl",
+            "technologies": [
+                "React",
+                "Node.js",
+                "PostgreSQL",
+                "Tailwind CSS",
+                "Python Jupyter",
+                "Javascript"
+            ]
         }
     }
 }
