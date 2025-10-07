@@ -140,5 +140,29 @@
         "message": "Sorry, the page you are looking for does not exist.",
         "disclaimer": "And it may never exist here, nor in any parallel universe...",
         "home": "Return to Home"
+    },
+    "portfolio": {
+        "title": "Portfolio",
+        "description": "Here is a selection of some of my recent projects. To learn more details, you can click on each project.",
+        "project1": {
+            "title": "Eco-Friendly Packaging Design",
+            "description": "Design of sustainable packaging for a brand of organic products.",
+            "link": "https://example.com/project1"
+        },
+        "project2": {
+            "title": "Mobile App for Sustainable Living",
+            "description": "A mobile application to promote eco-friendly habits.",
+            "link": "https://example.com/project2"
+        },
+        "project3": {
+            "title": "Website Redesign for Local Business",
+            "description": "Redesign of the online presence of a local business.",
+            "link": "https://example.com/project3"
+        },
+        "project4": {
+            "title": "Interactive Art Installation",
+            "description": "An interactive art piece focused on environmental awareness.",
+            "link": "https://example.com/project4"
+        }
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 const NotFound = ({ isDark, toggleTheme }) => {
     const { t } = useTranslation();
@@ -35,4 +36,8 @@ const NotFound = ({ isDark, toggleTheme }) => {
         </div>
     );
 }
+NotFound.propTypes = {
+    isDark: PropTypes.bool.isRequired,
+    toggleTheme: PropTypes.func.isRequired,
+};
 export default NotFound;
