@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -36,8 +36,13 @@ const BlogPost = ({ isDark, toggleTheme }) => {
 
             // Obtener posts relacionados
             if (postData) {
-                const related = await BlogService.getRelatedPosts(postData.id, i18n.language);
-                setRelatedPosts(related);
+                try {
+                    const related = await BlogService.getRelatedPosts(postData.id, i18n.language);
+                    setRelatedPosts(related);
+                } catch (relatedError) {
+                    // No es un error crítico, continuamos sin posts relacionados
+                    console.warn('Error obteniendo posts relacionados:', relatedError);
+                }
             }
 
             setError(null);
@@ -67,7 +72,7 @@ const BlogPost = ({ isDark, toggleTheme }) => {
     }
 
     if (error || !post) {
-        return <Navigate to="/blog" replace />;
+        return <Navigate to="/pages/Blog.jsx" replace />;
     }
 
     const postTranslation = post.blog_post_translations?.[0];
@@ -169,9 +174,9 @@ const BlogPost = ({ isDark, toggleTheme }) => {
                                             )}
                                             <div className="p-4">
                                                 <h3 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                                                    <a href={`/blog/${relatedPost.slug}`}>
+                                                    <Link to={`/pages/blog/${relatedPost.slug}`}>
                                                         {relatedPost.blog_post_translations?.[0]?.title}
-                                                    </a>
+                                                    </Link>
                                                 </h3>
                                                 {relatedPost.blog_post_translations?.[0]?.excerpt && (
                                                     <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">

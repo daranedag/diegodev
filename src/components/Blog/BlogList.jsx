@@ -78,6 +78,12 @@ const BlogList = ({ currentLanguage = 'es' }) => {
                 <p className="text-gray-600 dark:text-gray-400">
                     No hay posts de blog disponibles aún.
                 </p>
+                <button
+                    onClick={fetchPosts}
+                    className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                >
+                    Recargar
+                </button>
             </div>
         );
     }
@@ -92,11 +98,11 @@ const BlogList = ({ currentLanguage = 'es' }) => {
                         className="group bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden"
                     >
                         {/* Imagen de portada */}
-                        {post.cover_image_url && (
+                        {(post.cover_image_url || post.image) && (
                             <div className="aspect-video overflow-hidden">
                                 <img
-                                    src={post.cover_image_url}
-                                    alt={post.blog_post_translations?.[0]?.title}
+                                    src={post.cover_image_url || post.image}
+                                    alt={post.blog_post_translations?.[0]?.title || post.title || 'Post image'}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                 />
                             </div>
@@ -106,8 +112,8 @@ const BlogList = ({ currentLanguage = 'es' }) => {
                         <div className="p-6">
                             {/* Fecha y tiempo de lectura */}
                             <div className="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-3">
-                                <time dateTime={post.published_at}>
-                                    {formatDate(post.published_at)}
+                                <time dateTime={post.published_at || post.created_at}>
+                                    {formatDate(post.published_at || post.created_at)}
                                 </time>
                                 {post.reading_time_minutes && (
                                     <span>
@@ -116,21 +122,21 @@ const BlogList = ({ currentLanguage = 'es' }) => {
                                 )}
                             </div>
 
-                            {/* Título */}
+                            {/* Título - Adaptable a diferentes estructuras */}
                             <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                                <Link to={`/blog/${post.slug}`}>
-                                    {post.blog_post_translations?.[0]?.title}
+                                <Link to={`/pages/blog/${post.slug}`}>
+                                    {post.blog_post_translations?.[0]?.title || post.title || 'Sin título'}
                                 </Link>
                             </h2>
 
-                            {/* Excerpt */}
-                            {post.blog_post_translations?.[0]?.excerpt && (
+                            {/* Excerpt - Adaptable a diferentes estructuras */}
+                            {(post.blog_post_translations?.[0]?.excerpt || post.excerpt || post.description) && (
                                 <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
-                                    {post.blog_post_translations[0].excerpt}
+                                    {post.blog_post_translations?.[0]?.excerpt || post.excerpt || post.description}
                                 </p>
                             )}
 
-                            {/* Tags */}
+                            {/* Tags - Solo si existen */}
                             {post.blog_post_tags && post.blog_post_tags.length > 0 && (
                                 <div className="flex flex-wrap gap-2 mb-4">
                                     {post.blog_post_tags.slice(0, 3).map((tagRelation, index) => (
@@ -138,7 +144,7 @@ const BlogList = ({ currentLanguage = 'es' }) => {
                                             key={index}
                                             className="inline-block px-3 py-1 text-xs font-medium bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full"
                                         >
-                                            {tagRelation.blog_tags?.blog_tag_translations?.[0]?.name}
+                                            {tagRelation.blog_tags?.blog_tag_translations?.[0]?.name || `Tag ${index + 1}`}
                                         </span>
                                     ))}
                                 </div>
@@ -146,7 +152,7 @@ const BlogList = ({ currentLanguage = 'es' }) => {
 
                             {/* Enlace para leer más */}
                             <Link
-                                to={`/pages/Blog/${post.slug}`}
+                                to={`/pages/blog/${post.slug}`}
                                 className="inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium"
                             >
                                 Leer más
