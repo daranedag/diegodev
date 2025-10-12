@@ -16,7 +16,7 @@ const AppRouter = ({ isDark, toggleTheme }) => {
             <Route path="/pages/CV.jsx" element={<CV isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="/pages/Portfolio.jsx" element={<Portfolio isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="/pages/Blog.jsx" element={<Blog isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/Blog/:slug" element={<BlogPost isDark={isDark} toggleTheme={toggleTheme} />} />
+            <Route path="/pages/blog/:slug" element={<BlogPost isDark={isDark} toggleTheme={toggleTheme} />} />
             {/* Agrega más rutas según sea necesario */}
             <Route path="*" element={<NotFound isDark={isDark} toggleTheme={toggleTheme} />} />
         </Routes>
