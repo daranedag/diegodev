@@ -204,103 +204,104 @@ INSERT INTO blog_post_translations (post_id, language_code, title, excerpt, cont
     ('550e8400-e29b-41d4-a716-446655440020', 'es', 
      '¡Bienvenidos a mi blog!', 
      'Este es mi primer post donde comparto mis pensamientos sobre desarrollo web y tecnología.',
-     '# ¡Bienvenidos a mi blog!
+     '<h1>¡Bienvenidos a mi blog!</h1>
 
-¡Hola a todos! Me complace dar la bienvenida a mi nuevo blog, un espacio donde compartiré mis experiencias, aprendizajes y reflexiones sobre el mundo del desarrollo web y la tecnología.
+<p>¡Hola a todos! Me complace dar la bienvenida a mi nuevo blog, un espacio donde compartiré mis experiencias, aprendizajes y reflexiones sobre el mundo del desarrollo web y la tecnología.</p>
 
-## ¿Qué encontrarás aquí?
+<h2>¿Qué encontrarás aquí?</h2>
 
-En este blog escribiré sobre:
+<p>En este blog escribiré sobre:</p>
 
-- **Desarrollo Frontend**: Tips, trucos y mejores prácticas con React, Vue, y otras tecnologías modernas
-- **Backend Development**: Explorando Node.js, APIs, bases de datos y arquitecturas escalables
-- **Herramientas y Productividad**: Revisiones de herramientas que uso en mi día a día
-- **Reflexiones Técnicas**: Análisis profundos sobre decisiones de arquitectura y diseño
+<ul>
+<li><strong>Desarrollo Frontend</strong>: Tips, trucos y mejores prácticas con React, Vue, y otras tecnologías modernas</li>
+<li><strong>Backend Development</strong>: Explorando Node.js, APIs, bases de datos y arquitecturas escalables</li>
+<li><strong>Herramientas y Productividad</strong>: Revisiones de herramientas que uso en mi día a día</li>
+<li><strong>Reflexiones Técnicas</strong>: Análisis profundos sobre decisiones de arquitectura y diseño</li>
+</ul>
 
-## Mi enfoque
+<h2>Mi enfoque</h2>
 
-Creo firmemente que la mejor manera de aprender es enseñando y compartiendo conocimiento. Por eso, cada post estará escrito desde la experiencia práctica, con ejemplos reales y casos de uso que he enfrentado en proyectos reales.
+<p>Creo firmemente que la mejor manera de aprender es enseñando y compartiendo conocimiento. Por eso, cada post estará escrito desde la experiencia práctica, con ejemplos reales y casos de uso que he enfrentado en proyectos reales.</p>
 
-## ¿Qué viene?
+<h2>¿Qué viene?</h2>
 
-En los próximos posts estaremos explorando:
+<p>En los próximos posts estaremos explorando:</p>
 
-1. Configuración de Supabase con React
-2. Mejores prácticas en Tailwind CSS
-3. Optimización de performance en aplicaciones web
-4. Y mucho más...
+<ol>
+<li>Configuración de Supabase con React</li>
+<li>Mejores prácticas en Tailwind CSS</li>
+<li>Optimización de performance en aplicaciones web</li>
+<li>Y mucho más...</li>
+</ol>
 
-¡Espero que este contenido sea útil para tu crecimiento como desarrollador/a!
+<p>¡Espero que este contenido sea útil para tu crecimiento como desarrollador/a!</p>
 
----
+<hr>
 
-*¿Tienes algún tema específico que te gustaría que cubra? ¡Déjame un comentario!*',
+<p><em>¿Tienes algún tema específico que te gustaría que cubra? ¡Déjame un comentario!</em></p>',
      'Mi primer post en el blog donde doy la bienvenida y explico qué tipo de contenido compartir.'),
 
     ('550e8400-e29b-41d4-a716-446655440021', 'es',
      'Cómo configurar Supabase con React paso a paso',
      'Tutorial completo para integrar Supabase en tu aplicación React, desde la configuración inicial hasta la implementación de autenticación.',
-     '# Cómo configurar Supabase con React paso a paso
+     '<h1>Cómo configurar Supabase con React paso a paso</h1>
 
-Supabase se ha convertido en una de las alternativas más populares a Firebase, especialmente para desarrolladores que prefieren trabajar con PostgreSQL. En este tutorial te mostraré cómo integrar Supabase en tu aplicación React.
+<p>Supabase se ha convertido en una de las alternativas más populares a Firebase, especialmente para desarrolladores que prefieren trabajar con PostgreSQL. En este tutorial te mostraré cómo integrar Supabase en tu aplicación React.</p>
 
-## ¿Qué es Supabase?
+<h2>¿Qué es Supabase?</h2>
 
-Supabase es una plataforma de Backend-as-a-Service (BaaS) que proporciona:
+<p>Supabase es una plataforma de Backend-as-a-Service (BaaS) que proporciona:</p>
 
-- Base de datos PostgreSQL
-- Autenticación
-- APIs automáticas
-- Realtime subscriptions
-- Storage para archivos
-- Edge Functions
+<ul>
+<li>Base de datos PostgreSQL</li>
+<li>Autenticación</li>
+<li>APIs automáticas</li>
+<li>Realtime subscriptions</li>
+<li>Storage para archivos</li>
+<li>Edge Functions</li>
+</ul>
 
-## Configuración inicial
+<h2>Configuración inicial</h2>
 
-### 1. Crear un proyecto en Supabase
+<h3>1. Crear un proyecto en Supabase</h3>
 
-Primero, ve a [supabase.com](https://supabase.com) y crea una cuenta. Luego:
+<p>Primero, ve a <a href="https://supabase.com" target="_blank">supabase.com</a> y crea una cuenta. Luego:</p>
 
-1. Click en "New Project"
-2. Elige tu organización
-3. Asigna un nombre a tu proyecto
-4. Selecciona una región cercana
-5. Crea una contraseña segura para la base de datos
+<ol>
+<li>Click en "New Project"</li>
+<li>Elige tu organización</li>
+<li>Asigna un nombre a tu proyecto</li>
+<li>Selecciona una región cercana</li>
+<li>Crea una contraseña segura para la base de datos</li>
+</ol>
 
-### 2. Instalar el cliente de Supabase
+<h3>2. Instalar el cliente de Supabase</h3>
 
-```bash
-npm install @supabase/supabase-js
-```
+<pre><code>npm install @supabase/supabase-js</code></pre>
 
-### 3. Configurar las variables de entorno
+<h3>3. Configurar las variables de entorno</h3>
 
-Crea un archivo `.env` en la raíz de tu proyecto:
+<p>Crea un archivo <code>.env</code> en la raíz de tu proyecto:</p>
 
-```env
-REACT_APP_SUPABASE_URL=tu_supabase_url
-REACT_APP_SUPABASE_ANON_KEY=tu_anon_key
-```
+<pre><code>REACT_APP_SUPABASE_URL=tu_supabase_url
+REACT_APP_SUPABASE_ANON_KEY=tu_anon_key</code></pre>
 
-### 4. Crear el cliente de Supabase
+<h3>4. Crear el cliente de Supabase</h3>
 
-Crea un archivo `src/lib/supabase.js`:
+<p>Crea un archivo <code>src/lib/supabase.js</code>:</p>
 
-```javascript
-import { createClient } from "@supabase/supabase-js"
+<pre><code>import { createClient } from "@supabase/supabase-js"
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL
 const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-```
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)</code></pre>
 
-## Creando tu primera tabla
+<h2>Creando tu primera tabla</h2>
 
-En el SQL Editor de Supabase, ejecuta:
+<p>En el SQL Editor de Supabase, ejecuta:</p>
 
-```sql
-CREATE TABLE posts (
+<pre><code>CREATE TABLE posts (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
   title TEXT NOT NULL,
   content TEXT,
@@ -312,15 +313,13 @@ ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
 
 -- Política para lectura pública
 CREATE POLICY "Posts are publicly readable" ON posts
-  FOR SELECT USING (true);
-```
+  FOR SELECT USING (true);</code></pre>
 
-## Implementando operaciones CRUD
+<h2>Implementando operaciones CRUD</h2>
 
-### Leer datos
+<h3>Leer datos</h3>
 
-```javascript
-import { supabase } from "./lib/supabase"
+<pre><code>import { supabase } from "./lib/supabase"
 
 const fetchPosts = async () => {
   const { data, error } = await supabase
@@ -330,13 +329,11 @@ const fetchPosts = async () => {
   
   if (error) console.error("Error:", error)
   return data
-}
-```
+}</code></pre>
 
-### Insertar datos
+<h3>Insertar datos</h3>
 
-```javascript
-const createPost = async (title, content) => {
+<pre><code>const createPost = async (title, content) => {
   const { data, error } = await supabase
     .from("posts")
     .insert({ title, content })
@@ -344,14 +341,13 @@ const createPost = async (title, content) => {
   
   if (error) console.error("Error:", error)
   return data
-}
-```
+}</code></pre>
 
-## Conclusión
+<h2>Conclusión</h2>
 
-Supabase ofrece una experiencia de desarrollo excelente con React. Su API intuitiva y la potencia de PostgreSQL lo convierten en una opción ideal para proyectos modernos.
+<p>Supabase ofrece una experiencia de desarrollo excelente con React. Su API intuitiva y la potencia de PostgreSQL lo convierten en una opción ideal para proyectos modernos.</p>
 
-En el próximo post exploraremos la autenticación con Supabase. ¡No te lo pierdas!',
+<p>En el próximo post exploraremos la autenticación con Supabase. ¡No te lo pierdas!</p>',
      'Tutorial paso a paso para configurar Supabase con React, incluyendo configuración inicial y operaciones CRUD básicas.');
 
 -- Traducciones de posts en inglés
@@ -359,37 +355,41 @@ INSERT INTO blog_post_translations (post_id, language_code, title, excerpt, cont
     ('550e8400-e29b-41d4-a716-446655440020', 'en', 
      'Welcome to my blog!', 
      'This is my first post where I share my thoughts on web development and technology.',
-     '# Welcome to my blog!
+     '<h1>Welcome to my blog!</h1>
 
-Hello everyone! I''m excited to welcome you to my new blog, a space where I''ll share my experiences, learnings, and reflections about the world of web development and technology.
+<p>Hello everyone! I''m excited to welcome you to my new blog, a space where I''ll share my experiences, learnings, and reflections about the world of web development and technology.</p>
 
-## What will you find here?
+<h2>What will you find here?</h2>
 
-In this blog I''ll write about:
+<p>In this blog I''ll write about:</p>
 
-- **Frontend Development**: Tips, tricks, and best practices with React, Vue, and other modern technologies
-- **Backend Development**: Exploring Node.js, APIs, databases, and scalable architectures
-- **Tools and Productivity**: Reviews of tools I use in my daily work
-- **Technical Reflections**: Deep analysis of architecture and design decisions
+<ul>
+<li><strong>Frontend Development</strong>: Tips, tricks, and best practices with React, Vue, and other modern technologies</li>
+<li><strong>Backend Development</strong>: Exploring Node.js, APIs, databases, and scalable architectures</li>
+<li><strong>Tools and Productivity</strong>: Reviews of tools I use in my daily work</li>
+<li><strong>Technical Reflections</strong>: Deep analysis of architecture and design decisions</li>
+</ul>
 
-## My approach
+<h2>My approach</h2>
 
-I firmly believe that the best way to learn is by teaching and sharing knowledge. That''s why each post will be written from practical experience, with real examples and use cases I''ve faced in real projects.
+<p>I firmly believe that the best way to learn is by teaching and sharing knowledge. That''s why each post will be written from practical experience, with real examples and use cases I''ve faced in real projects.</p>
 
-## What''s coming?
+<h2>What''s coming?</h2>
 
-In upcoming posts we''ll be exploring:
+<p>In upcoming posts we''ll be exploring:</p>
 
-1. Setting up Supabase with React
-2. Best practices in Tailwind CSS
-3. Performance optimization in web applications
-4. And much more...
+<ol>
+<li>Setting up Supabase with React</li>
+<li>Best practices in Tailwind CSS</li>
+<li>Performance optimization in web applications</li>
+<li>And much more...</li>
+</ol>
 
-I hope this content will be useful for your growth as a developer!
+<p>I hope this content will be useful for your growth as a developer!</p>
 
----
+<hr>
 
-*Do you have any specific topic you''d like me to cover? Leave me a comment!*',
+<p><em>Do you have any specific topic you''d like me to cover? Leave me a comment!</em></p>',
      'My first blog post where I welcome readers and explain what type of content I''ll be sharing.'),
 
     ('550e8400-e29b-41d4-a716-446655440021', 'en',
