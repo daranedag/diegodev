@@ -186,5 +186,20 @@
                 "Javascript"
             ]
         }
+    },
+    "blog": {
+        "title": "Blog",
+        "description": "Pensamientos, ideas y reflexiones sobre desarrollo, tecnología y más.",
+        "readMore": "Leer más",
+        "minRead": "min lectura",
+        "views": "vistas",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "relatedPosts": "Posts relacionados",
+        "noPosts": "No hay posts de blog disponibles aún.",
+        "tryAgain": "Intentar de nuevo",
+        "errors": {
+            "fetchPosts": "Error cargando los posts del blog"
+        }
     }
 }

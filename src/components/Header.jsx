@@ -11,7 +11,7 @@ const misLinks = [
     { nombre: 'bio', ruta: '../pages/Bio.jsx' },
     { nombre: 'cv', ruta: '../pages/CV.jsx' },
     { nombre: 'portfolio', ruta: '../pages/Portfolio.jsx' },
-    // { nombre: 'blog', ruta: '#' }
+    { nombre: 'blog', ruta: '../pages/Blog.jsx' }
 ]
 
 const Header = ({ isDark, toggleTheme }) => {
