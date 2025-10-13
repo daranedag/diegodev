@@ -184,5 +184,20 @@
                 "Chart.js"
             ]
         }
+    },
+    "blog": {
+        "title": "Blog",
+        "description": "Thoughts, ideas, and insights about development, technology, and more.",
+        "readMore": "Read more",
+        "minRead": "min read",
+        "views": "views",
+        "previous": "Previous",
+        "next": "Next",
+        "relatedPosts": "Related posts",
+        "noPosts": "No blog posts available yet.",
+        "tryAgain": "Try again",
+        "errors": {
+            "fetchPosts": "Error loading blog posts"
+        }
     }
 }
