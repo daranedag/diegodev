@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
+import DOMPurify from 'dompurify';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BlogService from '../services/BlogService';
 import PropTypes from 'prop-types';
-import 'highlight.js/styles/github-dark.css';
 
 const BlogPost = ({ isDark, toggleTheme }) => {
     const { slug } = useParams();
@@ -142,14 +139,15 @@ const BlogPost = ({ isDark, toggleTheme }) => {
                         </header>
 
                         {/* Contenido del post */}
-                        <div className="prose prose-lg dark:prose-invert max-w-none markdown-content">
-                            <ReactMarkdown
-                                remarkPlugins={[remarkGfm]}
-                                rehypePlugins={[rehypeHighlight]}
-                            >
-                                {postTranslation?.content || ''}
-                            </ReactMarkdown>
-                        </div>
+                        <div
+                            className="prose prose-lg dark:prose-invert max-w-none blog-content"
+                            dangerouslySetInnerHTML={{
+                                __html: DOMPurify.sanitize(postTranslation?.content || '', {
+                                    ADD_TAGS: ['iframe'],
+                                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+                                })
+                            }}
+                        />
 
                         {/* Posts relacionados */}
                         {relatedPosts.length > 0 && (
