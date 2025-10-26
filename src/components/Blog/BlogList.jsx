@@ -76,13 +76,13 @@ const BlogList = ({ currentLanguage = 'es' }) => {
         return (
             <div className="text-center py-12">
                 <p className="text-gray-600 dark:text-gray-400">
-                    No hay posts de blog disponibles aún.
+                    {t('blog.noPosts')}
                 </p>
                 <button
                     onClick={fetchPosts}
                     className="mt-4 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
                 >
-                    Recargar
+                    {t('blog.reload')}
                 </button>
             </div>
         );
