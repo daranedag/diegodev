@@ -200,6 +200,7 @@
         "tryAgain": "Intentar de nuevo",
         "errors": {
             "fetchPosts": "Error cargando los posts del blog"
-        }
+        },
+        "reload": "Recargar"
     }
 }

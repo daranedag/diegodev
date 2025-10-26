@@ -198,6 +198,7 @@
         "tryAgain": "Try again",
         "errors": {
             "fetchPosts": "Error loading blog posts"
-        }
+        },
+        "reload": "Reload"
     }
 }
