@@ -30,7 +30,7 @@
         "description": "Siempre estoy dispuesto a nuevas oportunidades y colaboraciones.<br/>No dudes en contactarme!"
     },
     "footer": {
-        "copyright": "© 2025 DieGui DeV. Todos los derechos reservados."
+        "copyright": "© {{year}} DieGui DeV. Todos los derechos reservados."
     },
     "header": {
         "bio": "Bio",
