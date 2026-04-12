@@ -6,6 +6,8 @@ import { useState } from 'react';
 import LogoLight from '../../assets/img/logoBlanco.png';
 import LogoDark from '../../assets/img/logoNegro.png';
 import FotoProfile from '../../assets/img/perfilNuevo.png';
+import AuthButton from './Auth/AuthButton';
+import { useAuth } from '../context/AuthContext';
 
 const misLinks = [
     { nombre: 'bio', ruta: '../pages/Bio.jsx' },
@@ -16,6 +18,7 @@ const misLinks = [
 
 const Header = ({ isDark, toggleTheme }) => {
     const { t, i18n } = useTranslation();
+    const { user } = useAuth();
     const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -77,6 +80,19 @@ const Header = ({ isDark, toggleTheme }) => {
                                 </span>
                             )}
                         </nav>
+
+                        {/* Kanban link (solo si autenticado) */}
+                        {user && (
+                            <Link
+                                to="/kanban"
+                                className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+                            >
+                                Kanban
+                            </Link>
+                        )}
+
+                        {/* Auth button */}
+                        <AuthButton />
 
                         {/* Botón de cambio de idioma */}
                         <button
@@ -226,6 +242,18 @@ const Header = ({ isDark, toggleTheme }) => {
                                     <span className="text-sm text-gray-600 dark:text-gray-400">Diego Araneda</span>
                                 </div>
                             )}
+                            {user && (
+                                <Link
+                                    to="/kanban"
+                                    className="text-base font-medium text-purple-600 dark:text-purple-400 px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                    onClick={closeMenu}
+                                >
+                                    Kanban
+                                </Link>
+                            )}
+                            <div className="px-2">
+                                <AuthButton />
+                            </div>
                         </div>
                     </nav>
                 )}
