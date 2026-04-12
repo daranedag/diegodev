@@ -30,7 +30,7 @@
         "description": "I'm always open to new opportunities and collaborations.<br/>Feel free to reach out!"
     },
     "footer": {
-        "copyright": "© 2025 DieGui DeV. All rights reserved."
+        "copyright": "© {{year}} DieGui DeV. All rights reserved."
     },
     "header": {
         "bio": "Bio",
