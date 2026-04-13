@@ -200,5 +200,57 @@
             "fetchPosts": "Error loading blog posts"
         },
         "reload": "Reload"
+    },
+    "places": {
+        "navLink": "Places",
+        "title": "My Places",
+        "subtitle": "Save restaurants, bars and cafes you visit, with items you tried.",
+        "addPlace": "Add place",
+        "editPlace": "Edit place",
+        "empty": "You haven't saved any place yet.",
+        "loading": "Loading...",
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "delete": "Delete",
+        "website": "Website",
+        "itemCount_one": "{{count}} item",
+        "itemCount_other": "{{count}} items",
+        "types": {
+            "restaurant": "Restaurant",
+            "bar": "Bar",
+            "cafe": "Café",
+            "otro": "Other"
+        },
+        "form": {
+            "name": "Name",
+            "namePlaceholder": "e.g. The Good Place",
+            "type": "Type",
+            "googleMapsUrl": "Google Maps link",
+            "phone": "Phone",
+            "instagram": "Instagram",
+            "website": "Website",
+            "notes": "Notes",
+            "notesPlaceholder": "Vibe, recommendations, etc."
+        },
+        "items": {
+            "title": "Consumed items",
+            "add": "Add item",
+            "empty": "No items added yet. Add the first one!",
+            "editItem": "Edit item",
+            "newItem": "New item",
+            "visitedOn": "Visited on",
+            "addedOn": "Added on",
+            "form": {
+                "name": "Item name",
+                "namePlaceholder": "e.g. Margherita pizza",
+                "price": "Price",
+                "pricePlaceholder": "e.g. $12.99",
+                "visitedDate": "Visit date",
+                "notes": "Notes",
+                "notesPlaceholder": "It was delicious, I'd order again..."
+            }
+        }
     }
 }

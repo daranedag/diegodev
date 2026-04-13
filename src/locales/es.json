@@ -202,5 +202,57 @@
             "fetchPosts": "Error cargando los posts del blog"
         },
         "reload": "Recargar"
+    },
+    "places": {
+        "navLink": "Lugares",
+        "title": "Mis Lugares",
+        "subtitle": "Guarda restaurantes, bares y cafés que visites, con los items que probaste.",
+        "addPlace": "Agregar lugar",
+        "editPlace": "Editar lugar",
+        "empty": "Todavía no guardaste ningún lugar.",
+        "loading": "Cargando...",
+        "save": "Guardar",
+        "saving": "Guardando...",
+        "cancel": "Cancelar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "website": "Sitio web",
+        "itemCount_one": "{{count}} item",
+        "itemCount_other": "{{count}} items",
+        "types": {
+            "restaurant": "Restaurant",
+            "bar": "Bar",
+            "cafe": "Café",
+            "otro": "Otro"
+        },
+        "form": {
+            "name": "Nombre",
+            "namePlaceholder": "Ej: La Divina Comida",
+            "type": "Tipo",
+            "googleMapsUrl": "Link de Google Maps",
+            "phone": "Teléfono",
+            "instagram": "Instagram",
+            "website": "Sitio web",
+            "notes": "Notas",
+            "notesPlaceholder": "Ambiente, recomendaciones, etc."
+        },
+        "items": {
+            "title": "Items consumidos",
+            "add": "Agregar item",
+            "empty": "No agregaste ningún item todavía. ¡Agregá el primero!",
+            "editItem": "Editar item",
+            "newItem": "Nuevo item",
+            "visitedOn": "Visitado el",
+            "addedOn": "Agregado el",
+            "form": {
+                "name": "Nombre del item",
+                "namePlaceholder": "Ej: Milanesa napolitana",
+                "price": "Precio",
+                "pricePlaceholder": "Ej: $2500",
+                "visitedDate": "Fecha de visita",
+                "notes": "Notas",
+                "notesPlaceholder": "Estaba muy rico, pediría de nuevo..."
+            }
+        }
     }
 }

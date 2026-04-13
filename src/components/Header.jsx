@@ -81,14 +81,22 @@ const Header = ({ isDark, toggleTheme }) => {
                             )}
                         </nav>
 
-                        {/* Kanban link (solo si autenticado) */}
+                        {/* Links privados (solo si autenticado) */}
                         {user && (
-                            <Link
-                                to="/kanban"
-                                className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
-                            >
-                                Kanban
-                            </Link>
+                            <>
+                                <Link
+                                    to="/kanban"
+                                    className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+                                >
+                                    Kanban
+                                </Link>
+                                <Link
+                                    to="/places"
+                                    className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+                                >
+                                    {t('places.navLink')}
+                                </Link>
+                            </>
                         )}
 
                         {/* Auth button */}
@@ -243,13 +251,22 @@ const Header = ({ isDark, toggleTheme }) => {
                                 </div>
                             )}
                             {user && (
-                                <Link
-                                    to="/kanban"
-                                    className="text-base font-medium text-purple-600 dark:text-purple-400 px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                    onClick={closeMenu}
-                                >
-                                    Kanban
-                                </Link>
+                                <>
+                                    <Link
+                                        to="/kanban"
+                                        className="text-base font-medium text-purple-600 dark:text-purple-400 px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        onClick={closeMenu}
+                                    >
+                                        Kanban
+                                    </Link>
+                                    <Link
+                                        to="/places"
+                                        className="text-base font-medium text-purple-600 dark:text-purple-400 px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        onClick={closeMenu}
+                                    >
+                                        {t('places.navLink')}
+                                    </Link>
+                                </>
                             )}
                             <div className="px-2">
                                 <AuthButton />
