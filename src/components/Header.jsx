@@ -96,6 +96,12 @@ const Header = ({ isDark, toggleTheme }) => {
                                 >
                                     {t('places.navLink')}
                                 </Link>
+                                <Link
+                                    to="/mtg"
+                                    className="text-sm font-medium text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+                                >
+                                    {t('mtg.navLink')}
+                                </Link>
                             </>
                         )}
 
@@ -265,6 +271,13 @@ const Header = ({ isDark, toggleTheme }) => {
                                         onClick={closeMenu}
                                     >
                                         {t('places.navLink')}
+                                    </Link>
+                                    <Link
+                                        to="/mtg"
+                                        className="text-base font-medium text-purple-600 dark:text-purple-400 px-2 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                        onClick={closeMenu}
+                                    >
+                                        {t('mtg.navLink')}
                                     </Link>
                                 </>
                             )}

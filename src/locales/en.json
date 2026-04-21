@@ -252,5 +252,69 @@
                 "notesPlaceholder": "It was delicious, I'd order again..."
             }
         }
+    },
+    "mtg": {
+        "navLink": "MTG Agent",
+        "title": "MTG Agent",
+        "subtitle": "Analyze and improve your competitive Magic: The Gathering decks",
+        "loading": "Loading...",
+        "dataNotAvailable": "Card database not yet populated. Run the ingestion pipeline to enable full analysis.",
+        "deckInput": {
+            "title": "Your Deck",
+            "deckName": "Deck name (optional)",
+            "deckNamePlaceholder": "e.g. Modern Burn",
+            "format": "Format",
+            "selectFormat": "Select a format",
+            "decklist": "Decklist",
+            "decklistPlaceholder": "Paste your deck in Arena or plain text format:\n\n4 Lightning Bolt\n4 Goblin Guide\n4 Monastery Swiftspear\n...\n\nSideboard\n4 Skullcrack\n3 Shattering Spree",
+            "analyze": "Analyze deck",
+            "analyzing": "Analyzing...",
+            "errors": {
+                "emptyDecklist": "The decklist cannot be empty.",
+                "noFormat": "Please select a format to continue.",
+                "analyzeFailed": "Failed to analyze the deck. Please try again."
+            }
+        },
+        "analysis": {
+            "title": "Analysis Result",
+            "archetype": "Archetype",
+            "strategy": "Strategy",
+            "tier": "Tier",
+            "confidence": "Confidence",
+            "strengths": "Strengths",
+            "weaknesses": "Weaknesses",
+            "recommendations": "Recommendations",
+            "addToMain": "main deck",
+            "addToSide": "sideboard",
+            "mainCount": "Main",
+            "sideCount": "Side",
+            "avgCmc": "Avg CMC",
+            "legalStatus": "Legal",
+            "legal": "Yes",
+            "notLegal": "No",
+            "illegalCards": "Illegal cards",
+            "noResult": "Paste a decklist and click \"Analyze deck\" to get started.",
+            "similarDecks": "Similar meta decks",
+            "analysisNotes": "Analysis notes"
+        },
+        "history": {
+            "title": "Analysis History",
+            "empty": "You don't have any saved analyses yet.",
+            "viewResult": "View result"
+        },
+        "formats": {
+            "standard": "Standard",
+            "modern": "Modern",
+            "pauper": "Pauper"
+        },
+        "strategies": {
+            "aggro": "Aggro",
+            "midrange": "Midrange",
+            "control": "Control",
+            "combo": "Combo",
+            "tempo": "Tempo",
+            "prison": "Prison",
+            "ramp": "Ramp"
+        }
     }
 }
