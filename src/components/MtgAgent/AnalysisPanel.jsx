@@ -143,6 +143,8 @@ export default function AnalysisPanel({ result, loading }) {
         deck_stats,
         analysis_notes,
         data_available,
+        llm_used,
+        llm_raw,
     } = result;
 
     return (
@@ -322,6 +324,29 @@ export default function AnalysisPanel({ result, loading }) {
                     </p>
                 </div>
             )}
+
+            {/* Debug panel */}
+            <details className="rounded-lg border border-dashed border-gray-300 dark:border-gray-600">
+                <summary className="cursor-pointer px-3 py-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 select-none flex items-center gap-2">
+                    <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${llm_used ? 'bg-green-400' : 'bg-yellow-400'}`} />
+                    Debug — LLM: {llm_used ? 'activo' : 'fallback (reglas)'}
+                </summary>
+                <div className="px-3 pb-3 space-y-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="font-medium">llm_used:</span> {String(llm_used ?? false)}
+                    </p>
+                    {llm_raw ? (
+                        <div>
+                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">llm_raw (respuesta JSON del modelo):</p>
+                            <pre className="text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/60 rounded p-2 whitespace-pre-wrap break-words max-h-64 overflow-y-auto font-mono leading-relaxed">
+                                {llm_raw}
+                            </pre>
+                        </div>
+                    ) : (
+                        <p className="text-xs text-gray-400 dark:text-gray-500 italic">Sin respuesta cruda del LLM.</p>
+                    )}
+                </div>
+            </details>
         </div>
     );
 }
