@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -21,23 +22,53 @@ const STRATEGY_CLASSES = {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function StatCell({ label, value }) {
+function InfoTooltip({ text, align = 'center' }) {
+    const posClass =
+        align === 'left'
+            ? 'left-0 -translate-x-0'
+            : align === 'right'
+                ? 'right-0 translate-x-0'
+                : 'left-1/2 -translate-x-1/2';
+    return (
+        <span className="relative group inline-flex items-center ml-1 align-middle">
+            <span className="w-3.5 h-3.5 rounded-full border border-gray-400 dark:border-gray-500 text-gray-400 dark:text-gray-500 text-[9px] flex items-center justify-center cursor-default select-none leading-none">
+                i
+            </span>
+            <span className={`absolute bottom-full mb-2 w-48 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg px-2.5 py-1.5 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-20 text-left leading-snug shadow-xl whitespace-normal ${posClass}`}>
+                {text}
+                <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-700" />
+            </span>
+        </span>
+    );
+}
+
+InfoTooltip.propTypes = { text: PropTypes.string.isRequired, align: PropTypes.oneOf(['left', 'center', 'right']) };
+
+function StatCell({ label, value, tooltip, tooltipAlign }) {
     return (
         <div className="text-center">
-            <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight">{label}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight flex items-center justify-center">
+                {label}
+                {tooltip && <InfoTooltip text={tooltip} align={tooltipAlign} />}
+            </p>
             <p className="text-sm font-semibold text-gray-900 dark:text-white">{value}</p>
         </div>
     );
 }
 
-StatCell.propTypes = { label: PropTypes.string.isRequired, value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired };
+StatCell.propTypes = {
+    label: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    tooltip: PropTypes.string,
+    tooltipAlign: PropTypes.oneOf(['left', 'center', 'right']),
+};
 
 function RecommendationItem({ rec, t }) {
     const isAdd = rec.action === 'add';
     return (
         <div className={`flex items-start gap-3 p-3 rounded-lg border ${isAdd
-                ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
-                : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
+            ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
+            : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
             }`}>
             <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${isAdd ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
                 }`}>
@@ -69,6 +100,7 @@ RecommendationItem.propTypes = {
 
 export default function AnalysisPanel({ result, loading }) {
     const { t } = useTranslation();
+    const [decklistOpen, setDecklistOpen] = useState(false);
 
     if (loading) {
         return (
@@ -98,6 +130,8 @@ export default function AnalysisPanel({ result, loading }) {
     }
 
     const {
+        deck_name,
+        raw_decklist,
         archetype_detected,
         strategy_detected,
         tier_detected,
@@ -112,10 +146,37 @@ export default function AnalysisPanel({ result, loading }) {
     } = result;
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm space-y-5 overflow-y-auto">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t('mtg.analysis.title')}
-            </h2>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm space-y-5">
+            {/* Title row: label + deck name + optional collapsible decklist toggle */}
+            <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {t('mtg.analysis.title')}
+                    </h2>
+                    {deck_name && (
+                        <p className="text-sm text-purple-600 dark:text-purple-400 font-medium truncate mt-0.5">
+                            {deck_name}
+                        </p>
+                    )}
+                </div>
+                {raw_decklist && (
+                    <button
+                        onClick={() => setDecklistOpen((o) => !o)}
+                        className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1 transition-colors"
+                    >
+                        {decklistOpen ? t('mtg.analysis.decklistHide') : t('mtg.analysis.decklistShow')}
+                    </button>
+                )}
+            </div>
+
+            {/* Collapsible decklist */}
+            {raw_decklist && decklistOpen && (
+                <div className="rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/40 p-3">
+                    <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words leading-relaxed font-mono max-h-48 overflow-y-auto">
+                        {raw_decklist.trim()}
+                    </pre>
+                </div>
+            )}
 
             {/* Archetype + badges */}
             <div className="flex flex-wrap items-center gap-2">
@@ -148,15 +209,19 @@ export default function AnalysisPanel({ result, loading }) {
             {/* Deck stats */}
             {deck_stats && (
                 <div className="grid grid-cols-4 gap-2 p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                    <StatCell label={t('mtg.analysis.mainCount')} value={deck_stats.main_count} />
-                    <StatCell label={t('mtg.analysis.sideCount')} value={deck_stats.sideboard_count} />
+                    <StatCell label={t('mtg.analysis.mainCount')} value={deck_stats.main_count} tooltip={t('mtg.analysis.mainCountTooltip')} tooltipAlign="left" />
+                    <StatCell label={t('mtg.analysis.sideCount')} value={deck_stats.sideboard_count} tooltip={t('mtg.analysis.sideCountTooltip')} tooltipAlign="center" />
                     <StatCell
                         label={t('mtg.analysis.avgCmc')}
                         value={deck_stats.avg_cmc != null ? deck_stats.avg_cmc.toFixed(1) : '—'}
+                        tooltip={t('mtg.analysis.avgCmcTooltip')}
+                        tooltipAlign="center"
                     />
                     <StatCell
                         label={t('mtg.analysis.legalStatus')}
                         value={deck_stats.is_legal ? t('mtg.analysis.legal') : t('mtg.analysis.notLegal')}
+                        tooltip={t('mtg.analysis.legalStatusTooltip')}
+                        tooltipAlign="right"
                     />
                 </div>
             )}

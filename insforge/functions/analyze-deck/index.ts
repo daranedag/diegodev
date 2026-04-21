@@ -160,32 +160,32 @@ function deriveInsights(
 
     if (avgCmc !== null) {
         if (avgCmc < 1.6) {
-            s.push("Very low mana curve — fast and resilient to mana disruption");
-            w.push("Limited late-game reach and card advantage");
+            s.push("Curva de maná muy baja — rápida y resistente a la disrupción de maná");
+            w.push("Alcance tardío y ventaja de cartas limitados");
         } else if (avgCmc < 2.5) {
-            s.push("Efficient mana curve — good balance of speed and threat density");
+            s.push("Curva de maná eficiente — buen equilibrio entre velocidad y densidad de amenazas");
         } else if (avgCmc < 3.5) {
-            s.push("Mid-range curve — solid in fair matchups");
-            w.push("May struggle to stabilize in time against fast aggro");
+            s.push("Curva de rango medio — sólida en partidas equilibradas");
+            w.push("Puede tener dificultades para estabilizarse a tiempo contra mazos aggro rápidos");
         } else {
-            s.push("High-powered top-end threats that take over the late game");
-            w.push("Vulnerable to early pressure before casting key spells");
+            s.push("Amenazas de alto costo que dominan el juego tardío");
+            w.push("Vulnerable a la presión temprana antes de poder lanzar las cartas clave");
         }
     }
 
-    if (colorCount === 1) s.push("Mono-color manabase — maximally consistent");
-    if (colorCount >= 3) w.push("3+ color manabase — higher variance from mana issues");
+    if (colorCount === 1) s.push("Base de maná monocolor — máxima consistencia");
+    if (colorCount >= 3) w.push("Base de maná de 3 o más colores — mayor varianza por problemas de maná");
 
     if (strategy === "combo") {
-        s.push("High ceiling when the combo assembles");
-        w.push("Vulnerable to interaction and hand disruption");
+        s.push("Gran potencial cuando el combo se ensambla");
+        w.push("Vulnerable a la interacción y la disrupción de la mano");
     }
     if (strategy === "control") {
-        s.push("Strong in attrition-based long games");
-        w.push("Can struggle against multiple simultaneous threats");
+        s.push("Sólido en partidas largas de desgaste");
+        w.push("Puede tener dificultades ante múltiples amenazas simultáneas");
     }
 
-    if (sideCount < 10) w.push("Thin sideboard limits flexibility in best-of-three");
+    if (sideCount < 10) w.push("Sideboard escaso que limita la flexibilidad en el mejor de tres");
 
     return { strengths: s, weaknesses: w };
 }
@@ -331,10 +331,10 @@ export default async function (req: Request) {
             recommendations.push({
                 action: "add",
                 section: "sideboard",
-                card_name: "Format-appropriate hate pieces",
+                card_name: "Cartas de hostigamiento apropiadas para el formato",
                 quantity_suggested: Math.min(15 - sideCount, 15),
                 reason:
-                    "Your sideboard has fewer than 10 cards. A full 15-card sideboard maximizes flexibility in best-of-three.",
+                    "Tu sideboard tiene menos de 10 cartas. Un sideboard completo de 15 cartas maximiza la flexibilidad en el mejor de tres.",
                 priority: 1,
             });
         }
@@ -343,13 +343,13 @@ export default async function (req: Request) {
         let analysisNotes: string;
         if (!dataAvailable) {
             analysisNotes = dbError
-                ? `DB query error: ${dbError}`
-                : "Card database not yet populated. Run the ingestion pipeline (Scryfall/MTGJSON) to enable full archetype detection and card-level recommendations.";
+                ? `Error en la consulta a la base de datos: ${dbError}`
+                : "La base de datos de cartas aún no está poblada. Ejecuta el proceso de ingesta (Scryfall/MTGJSON) para habilitar la detección de arquetipos y las recomendaciones específicas.";
         } else if (!archetype) {
             analysisNotes =
-                "No known archetype matched with high confidence. Your deck may be a hybrid or a brew — keep refining!";
+                "Ningún arquetipo conocido coincidió con alta confianza. Tu mazo puede ser un híbrido o una construcción propia — ¡sigue refinándolo!";
         } else {
-            analysisNotes = `Matched to ${archetype.name} with ${Math.round(confidence * 100)}% key-card overlap.`;
+            analysisNotes = `Coincidencia con ${archetype.name}: ${Math.round(confidence * 100)}% de superposición en cartas clave.`;
         }
 
         const response: AnalysisResponse = {

@@ -209,7 +209,7 @@
         "subtitle": "Guarda restaurantes, bares y cafés que visites, con los items que probaste.",
         "addPlace": "Agregar lugar",
         "editPlace": "Editar lugar",
-        "empty": "Todavía no guardaste ningún lugar.",
+        "empty": "Todavía no tienes lugares guardados.",
         "loading": "Cargando...",
         "save": "Guardar",
         "saving": "Guardando...",
@@ -239,7 +239,7 @@
         "items": {
             "title": "Items consumidos",
             "add": "Agregar item",
-            "empty": "No agregaste ningún item todavía. ¡Agregá el primero!",
+            "empty": "Aún no has agregado ningún item. ¡Agrega el primero!",
             "editItem": "Editar item",
             "newItem": "Nuevo item",
             "visitedOn": "Visitado el",
@@ -258,23 +258,23 @@
     "mtg": {
         "navLink": "MTG Agent",
         "title": "MTG Agent",
-        "subtitle": "Analizá y mejorá tus mazos competitivos de Magic: The Gathering",
+        "subtitle": "Analiza y mejora tus mazos competitivos de Magic: The Gathering",
         "loading": "Cargando...",
-        "dataNotAvailable": "Base de datos de cartas no disponible aún. Ejecutá el pipeline de ingestión para habilitar el análisis completo.",
+        "dataNotAvailable": "Base de datos de cartas no disponible aún. Ejecuta el pipeline de ingesta para habilitar el análisis completo.",
         "deckInput": {
             "title": "Tu Mazo",
             "deckName": "Nombre del mazo (opcional)",
             "deckNamePlaceholder": "Ej: Burn Moderno",
             "format": "Formato",
-            "selectFormat": "Seleccioná un formato",
+            "selectFormat": "Selecciona un formato",
             "decklist": "Lista del mazo",
-            "decklistPlaceholder": "Pegá tu mazo en formato Arena o texto plano:\n\n4 Lightning Bolt\n4 Goblin Guide\n4 Monastery Swiftspear\n...\n\nSideboard\n4 Skullcrack\n3 Shattering Spree",
+            "decklistPlaceholder": "Pega tu mazo en formato Arena o texto plano:\n\n4 Lightning Bolt\n4 Goblin Guide\n4 Monastery Swiftspear\n...\n\nSideboard\n4 Skullcrack\n3 Shattering Spree",
             "analyze": "Analizar mazo",
             "analyzing": "Analizando...",
             "errors": {
                 "emptyDecklist": "La lista del mazo no puede estar vacía.",
-                "noFormat": "Seleccioná un formato para continuar.",
-                "analyzeFailed": "Error al analizar el mazo. Intentá de nuevo."
+                "noFormat": "Selecciona un formato para continuar.",
+                "analyzeFailed": "Error al analizar el mazo. Intenta de nuevo."
             }
         },
         "analysis": {
@@ -289,19 +289,25 @@
             "addToMain": "mazo principal",
             "addToSide": "sideboard",
             "mainCount": "Main",
+            "mainCountTooltip": "Número de cartas en el mazo principal. El mínimo reglamentario es 60.",
             "sideCount": "Side",
+            "sideCountTooltip": "Número de cartas en el sideboard. El máximo permitido es 15.",
             "avgCmc": "CMC prom.",
+            "avgCmcTooltip": "Costo de maná convertido promedio del mazo principal. Indica la velocidad general del mazo.",
             "legalStatus": "Legal",
+            "legalStatusTooltip": "Indica si el mazo cumple con los requisitos de tamaño del formato seleccionado.",
             "legal": "Sí",
             "notLegal": "No",
             "illegalCards": "Cartas no legales",
-            "noResult": "Ingresá un mazo y hacé clic en \"Analizar mazo\" para comenzar.",
+            "noResult": "Ingresa un mazo y haz clic en \"Analizar mazo\" para comenzar.",
+            "decklistShow": "Ver lista",
+            "decklistHide": "Ocultar lista",
             "similarDecks": "Mazos meta similares",
             "analysisNotes": "Notas del análisis"
         },
         "history": {
             "title": "Historial de análisis",
-            "empty": "Todavía no tenés análisis guardados.",
+            "empty": "Todavía no tienes análisis guardados.",
             "viewResult": "Ver resultado"
         },
         "formats": {
