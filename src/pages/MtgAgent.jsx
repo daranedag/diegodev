@@ -47,10 +47,12 @@ export default function MtgAgent({ isDark, toggleTheme }) {
         setAnalysisError(null);
         try {
             const result = await MtgAgentService.analyzeDecklist(rawDecklist, formatSlug, deckName);
-            setAnalysisResult(result);
+            // Embed the raw decklist so it's available in the panel and persisted in analysis_data
+            const enrichedResult = { ...result, raw_decklist: rawDecklist };
+            setAnalysisResult(enrichedResult);
             // Persist the run in the background; refresh history when done
             if (user) {
-                MtgAgentService.saveAnalysisRun(user.id, formatSlug, result)
+                MtgAgentService.saveAnalysisRun(user.id, formatSlug, enrichedResult)
                     .then(() => loadHistory())
                     .catch(console.error);
             }

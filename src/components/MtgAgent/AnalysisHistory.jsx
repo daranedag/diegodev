@@ -51,17 +51,17 @@ export default function AnalysisHistory({ history, loading, onSelect }) {
                                 )}
                             </div>
 
-                            {/* Deck name or archetype */}
-                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-                                {run.mtg_user_decks?.name || run.archetype_detected || '—'}
-                            </p>
-
-                            {/* Secondary label */}
-                            {run.archetype_detected && run.mtg_user_decks?.name && (
-                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                    {run.archetype_detected}
+                            {/* Deck name */}
+                            {(run.mtg_user_decks?.name || run.analysis_data?.deck_name) && (
+                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 truncate mb-0.5">
+                                    {run.mtg_user_decks?.name || run.analysis_data?.deck_name}
                                 </p>
                             )}
+
+                            {/* Archetype or fallback */}
+                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                                {run.archetype_detected || '—'}
+                            </p>
 
                             {/* Confidence + date */}
                             <div className="flex items-center justify-between mt-2">
