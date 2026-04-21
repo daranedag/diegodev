@@ -254,5 +254,69 @@
                 "notesPlaceholder": "Estaba muy rico, pediría de nuevo..."
             }
         }
+    },
+    "mtg": {
+        "navLink": "MTG Agent",
+        "title": "MTG Agent",
+        "subtitle": "Analizá y mejorá tus mazos competitivos de Magic: The Gathering",
+        "loading": "Cargando...",
+        "dataNotAvailable": "Base de datos de cartas no disponible aún. Ejecutá el pipeline de ingestión para habilitar el análisis completo.",
+        "deckInput": {
+            "title": "Tu Mazo",
+            "deckName": "Nombre del mazo (opcional)",
+            "deckNamePlaceholder": "Ej: Burn Moderno",
+            "format": "Formato",
+            "selectFormat": "Seleccioná un formato",
+            "decklist": "Lista del mazo",
+            "decklistPlaceholder": "Pegá tu mazo en formato Arena o texto plano:\n\n4 Lightning Bolt\n4 Goblin Guide\n4 Monastery Swiftspear\n...\n\nSideboard\n4 Skullcrack\n3 Shattering Spree",
+            "analyze": "Analizar mazo",
+            "analyzing": "Analizando...",
+            "errors": {
+                "emptyDecklist": "La lista del mazo no puede estar vacía.",
+                "noFormat": "Seleccioná un formato para continuar.",
+                "analyzeFailed": "Error al analizar el mazo. Intentá de nuevo."
+            }
+        },
+        "analysis": {
+            "title": "Resultado del análisis",
+            "archetype": "Arquetipo",
+            "strategy": "Estrategia",
+            "tier": "Tier",
+            "confidence": "Confianza",
+            "strengths": "Fortalezas",
+            "weaknesses": "Debilidades",
+            "recommendations": "Recomendaciones",
+            "addToMain": "mazo principal",
+            "addToSide": "sideboard",
+            "mainCount": "Main",
+            "sideCount": "Side",
+            "avgCmc": "CMC prom.",
+            "legalStatus": "Legal",
+            "legal": "Sí",
+            "notLegal": "No",
+            "illegalCards": "Cartas no legales",
+            "noResult": "Ingresá un mazo y hacé clic en \"Analizar mazo\" para comenzar.",
+            "similarDecks": "Mazos meta similares",
+            "analysisNotes": "Notas del análisis"
+        },
+        "history": {
+            "title": "Historial de análisis",
+            "empty": "Todavía no tenés análisis guardados.",
+            "viewResult": "Ver resultado"
+        },
+        "formats": {
+            "standard": "Standard",
+            "modern": "Modern",
+            "pauper": "Pauper"
+        },
+        "strategies": {
+            "aggro": "Aggro",
+            "midrange": "Midrange",
+            "control": "Control",
+            "combo": "Combo",
+            "tempo": "Tempo",
+            "prison": "Prison",
+            "ramp": "Ramp"
+        }
     }
 }
