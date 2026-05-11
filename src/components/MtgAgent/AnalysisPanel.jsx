@@ -22,6 +22,74 @@ const STRATEGY_CLASSES = {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
+function normalizeCardName(name) {
+    return name.toLowerCase().trim();
+}
+
+function parseDecklistForComparison(rawDecklist) {
+    const sections = { main: new Map(), sideboard: new Map() };
+    let section = 'main';
+
+    for (const line of rawDecklist.split('\n')) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (/^(sideboard|side board|sb:|side\s*:?)/i.test(trimmed)) {
+            section = 'sideboard';
+            continue;
+        }
+        if (/^(deck|mainboard|main deck)$/i.test(trimmed)) {
+            section = 'main';
+            continue;
+        }
+
+        const match = trimmed.match(/^(\d+)[x]?\s+(.+?)(?:\s+\([^)]{2,8}\)\s+\S+.*)?$/i);
+        if (!match) continue;
+
+        const quantity = Number(match[1]);
+        const name = match[2].trim();
+        const key = normalizeCardName(name);
+        const current = sections[section].get(key) ?? { name, quantity: 0 };
+        current.quantity += quantity;
+        sections[section].set(key, current);
+    }
+
+    return sections;
+}
+
+function formatDeckSections(sections) {
+    const formatSection = (cards) => [...cards.values()]
+        .filter((card) => card.quantity > 0)
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((card) => `${card.quantity} ${card.name}`);
+
+    const mainLines = formatSection(sections.main);
+    const sideLines = formatSection(sections.sideboard);
+
+    return [
+        ...mainLines,
+        ...(sideLines.length ? ['', 'Sideboard', ...sideLines] : []),
+    ].join('\n');
+}
+
+function buildSuggestedDecklist(rawDecklist, recommendations = []) {
+    const sections = parseDecklistForComparison(rawDecklist);
+
+    for (const rec of recommendations.filter((r) => r.verified !== false)) {
+        const section = rec.section === 'sideboard' ? 'sideboard' : 'main';
+        const cards = sections[section];
+        const key = normalizeCardName(rec.card_name);
+        const current = cards.get(key) ?? { name: rec.card_name, quantity: 0 };
+        const quantity = Math.max(Math.round(rec.quantity_suggested ?? 0), 0);
+
+        if (rec.action === 'add') current.quantity += quantity;
+        if (rec.action === 'remove') current.quantity = Math.max(current.quantity - quantity, 0);
+
+        cards.set(key, current);
+    }
+
+    return formatDeckSections(sections);
+}
+
 function InfoTooltip({ text, align = 'center' }) {
     const posClass =
         align === 'left'
@@ -69,9 +137,9 @@ function RecommendationItem({ rec, t }) {
         <div className={`flex items-start gap-3 p-3 rounded-lg border ${isAdd
             ? 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20'
             : 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20'
-            }`}>
+        }`}>
             <span className={`flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold ${isAdd ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-                }`}>
+            }`}>
                 {isAdd ? '+' : '−'}
             </span>
             <div className="flex-1 min-w-0">
@@ -80,11 +148,22 @@ function RecommendationItem({ rec, t }) {
                         {rec.quantity_suggested}× {rec.card_name}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
-                        ({isAdd ? t('mtg.analysis.addToMain') : t('mtg.analysis.addToSide')})
+                        ({rec.section === 'main' ? t('mtg.analysis.addToMain') : t('mtg.analysis.addToSide')})
+                    </span>
+                    <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${rec.verified === false
+                        ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300'
+                        : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                    }`}>
+                        {rec.verified === false
+                            ? t('mtg.analysis.unverified', 'No verificada')
+                            : t('mtg.analysis.verified', 'Verificada')}
                     </span>
                 </div>
                 {rec.reason && (
                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{rec.reason}</p>
+                )}
+                {rec.verification_note && (
+                    <p className="text-xs text-gray-500 dark:text-gray-500 mt-0.5">{rec.verification_note}</p>
                 )}
             </div>
         </div>
@@ -101,6 +180,7 @@ RecommendationItem.propTypes = {
 export default function AnalysisPanel({ result, loading }) {
     const { t } = useTranslation();
     const [decklistOpen, setDecklistOpen] = useState(false);
+    const [comparisonOpen, setComparisonOpen] = useState(false);
 
     if (loading) {
         return (
@@ -143,9 +223,14 @@ export default function AnalysisPanel({ result, loading }) {
         deck_stats,
         analysis_notes,
         data_available,
+        cache_hit,
         llm_used,
         llm_raw,
     } = result;
+    const suggestedDecklist = raw_decklist
+        ? buildSuggestedDecklist(raw_decklist, recommendations ?? [])
+        : '';
+    const showDebug = import.meta.env.DEV;
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 shadow-sm space-y-5">
@@ -160,14 +245,31 @@ export default function AnalysisPanel({ result, loading }) {
                             {deck_name}
                         </p>
                     )}
+                    {cache_hit && (
+                        <p className="text-xs text-green-600 dark:text-green-400 mt-0.5">
+                            {t('mtg.analysis.cacheHit', 'Resultado recuperado desde cache')}
+                        </p>
+                    )}
                 </div>
                 {raw_decklist && (
-                    <button
-                        onClick={() => setDecklistOpen((o) => !o)}
-                        className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1 transition-colors"
-                    >
-                        {decklistOpen ? t('mtg.analysis.decklistHide') : t('mtg.analysis.decklistShow')}
-                    </button>
+                    <div className="flex flex-wrap justify-end gap-2">
+                        {recommendations?.length > 0 && (
+                            <button
+                                onClick={() => setComparisonOpen((o) => !o)}
+                                className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1 transition-colors"
+                            >
+                                {comparisonOpen
+                                    ? t('mtg.analysis.compareHide', 'Ocultar comparacion')
+                                    : t('mtg.analysis.compareShow', 'Comparar listas')}
+                            </button>
+                        )}
+                        <button
+                            onClick={() => setDecklistOpen((o) => !o)}
+                            className="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 border border-gray-200 dark:border-gray-600 rounded-lg px-2.5 py-1 transition-colors"
+                        >
+                            {decklistOpen ? t('mtg.analysis.decklistHide') : t('mtg.analysis.decklistShow')}
+                        </button>
+                    </div>
                 )}
             </div>
 
@@ -177,6 +279,28 @@ export default function AnalysisPanel({ result, loading }) {
                     <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words leading-relaxed font-mono max-h-48 overflow-y-auto">
                         {raw_decklist.trim()}
                     </pre>
+                </div>
+            )}
+
+            {/* Current vs suggested decklist */}
+            {raw_decklist && comparisonOpen && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/40 p-3">
+                        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+                            {t('mtg.analysis.currentList', 'Lista actual')}
+                        </p>
+                        <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words leading-relaxed font-mono max-h-72 overflow-y-auto">
+                            {raw_decklist.trim()}
+                        </pre>
+                    </div>
+                    <div className="rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20 p-3">
+                        <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2">
+                            {t('mtg.analysis.suggestedList', 'Lista sugerida')}
+                        </p>
+                        <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words leading-relaxed font-mono max-h-72 overflow-y-auto">
+                            {suggestedDecklist || raw_decklist.trim()}
+                        </pre>
+                    </div>
                 </div>
             )}
 
@@ -237,6 +361,29 @@ export default function AnalysisPanel({ result, loading }) {
                     <p className="text-sm text-red-600 dark:text-red-400">
                         {deck_stats.illegal_cards.join(', ')}
                     </p>
+                </div>
+            )}
+
+            {/* Legality issues */}
+            {deck_stats?.legality_issues?.length > 0 && (
+                <div className="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                    <p className="text-sm font-medium text-red-700 dark:text-red-300">
+                        {t('mtg.analysis.legalityIssues', 'Problemas de legalidad')}:
+                    </p>
+                    <ul className="mt-1 space-y-1">
+                        {deck_stats.legality_issues.map((issue, i) => (
+                            <li key={i} className="text-sm text-red-600 dark:text-red-400">
+                                {issue}
+                            </li>
+                        ))}
+                    </ul>
+                    {deck_stats.copy_violations?.length > 0 && (
+                        <p className="text-sm text-red-600 dark:text-red-400 mt-2">
+                            {deck_stats.copy_violations
+                                .map((v) => `${v.card_name}: ${v.count}/${v.max_allowed}`)
+                                .join(', ')}
+                        </p>
+                    )}
                 </div>
             )}
 
@@ -303,13 +450,28 @@ export default function AnalysisPanel({ result, loading }) {
                     <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         {t('mtg.analysis.similarDecks')}
                     </h3>
-                    <div className="space-y-1">
+                    <div className="space-y-2">
                         {similar_meta_decks.map((d, i) => (
-                            <div key={i} className="flex justify-between items-center text-sm">
-                                <span className="text-gray-700 dark:text-gray-300">{d.name}</span>
-                                <span className="text-gray-500 dark:text-gray-400">
-                                    {Math.round(d.similarity * 100)}%
-                                </span>
+                            <div key={i} className="rounded-lg bg-gray-50 dark:bg-gray-700/40 p-3 text-sm">
+                                <div className="flex justify-between items-start gap-3">
+                                    <div className="min-w-0">
+                                        <p className="font-medium text-gray-800 dark:text-gray-200 truncate">
+                                            {d.name}
+                                        </p>
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                                            {d.archetype}
+                                            {d.source ? ` · ${d.source}` : ''}
+                                        </p>
+                                    </div>
+                                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                        {Math.round(d.similarity * 100)}%
+                                    </span>
+                                </div>
+                                {d.missing_main_cards?.length > 0 && (
+                                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                                        {t('mtg.analysis.missingFromMeta', 'Faltan del meta')}: {d.missing_main_cards.join(', ')}
+                                    </p>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -326,27 +488,29 @@ export default function AnalysisPanel({ result, loading }) {
             )}
 
             {/* Debug panel */}
-            <details className="rounded-lg border border-dashed border-gray-300 dark:border-gray-600">
-                <summary className="cursor-pointer px-3 py-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 select-none flex items-center gap-2">
-                    <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${llm_used ? 'bg-green-400' : 'bg-yellow-400'}`} />
-                    Debug — LLM: {llm_used ? 'activo' : 'fallback (reglas)'}
-                </summary>
-                <div className="px-3 pb-3 space-y-2">
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                        <span className="font-medium">llm_used:</span> {String(llm_used ?? false)}
-                    </p>
-                    {llm_raw ? (
-                        <div>
-                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">llm_raw (respuesta JSON del modelo):</p>
-                            <pre className="text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/60 rounded p-2 whitespace-pre-wrap break-words max-h-64 overflow-y-auto font-mono leading-relaxed">
-                                {llm_raw}
-                            </pre>
-                        </div>
-                    ) : (
-                        <p className="text-xs text-gray-400 dark:text-gray-500 italic">Sin respuesta cruda del LLM.</p>
-                    )}
-                </div>
-            </details>
+            {showDebug && (
+                <details className="rounded-lg border border-dashed border-gray-300 dark:border-gray-600">
+                    <summary className="cursor-pointer px-3 py-2 text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 select-none flex items-center gap-2">
+                        <span className={`inline-block w-2 h-2 rounded-full flex-shrink-0 ${llm_used ? 'bg-green-400' : 'bg-yellow-400'}`} />
+                        Debug - LLM: {llm_used ? 'activo' : 'fallback (reglas)'}
+                    </summary>
+                    <div className="px-3 pb-3 space-y-2">
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                            <span className="font-medium">llm_used:</span> {String(llm_used ?? false)}
+                        </p>
+                        {llm_raw ? (
+                            <div>
+                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">llm_raw (respuesta JSON del modelo):</p>
+                                <pre className="text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/60 rounded p-2 whitespace-pre-wrap break-words max-h-64 overflow-y-auto font-mono leading-relaxed">
+                                    {llm_raw}
+                                </pre>
+                            </div>
+                        ) : (
+                            <p className="text-xs text-gray-400 dark:text-gray-500 italic">Sin respuesta cruda del LLM.</p>
+                        )}
+                    </div>
+                </details>
+            )}
         </div>
     );
 }

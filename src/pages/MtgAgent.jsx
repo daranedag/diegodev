@@ -46,9 +46,21 @@ export default function MtgAgent({ isDark, toggleTheme }) {
         setIsAnalyzing(true);
         setAnalysisError(null);
         try {
+            const deckHash = await MtgAgentService.getDeckHash(rawDecklist, formatSlug);
+            const cachedRun = await MtgAgentService.getCachedAnalysisRun(deckHash, user.id);
+            if (cachedRun?.analysis_data) {
+                setAnalysisResult({
+                    ...cachedRun.analysis_data,
+                    raw_decklist: rawDecklist,
+                    deck_hash: deckHash,
+                    cache_hit: true,
+                });
+                return;
+            }
+
             const result = await MtgAgentService.analyzeDecklist(rawDecklist, formatSlug, deckName);
             // Embed the raw decklist so it's available in the panel and persisted in analysis_data
-            const enrichedResult = { ...result, raw_decklist: rawDecklist };
+            const enrichedResult = { ...result, raw_decklist: rawDecklist, deck_hash: result.deck_hash ?? deckHash };
             setAnalysisResult(enrichedResult);
             // Persist the run in the background; refresh history when done
             if (user) {
