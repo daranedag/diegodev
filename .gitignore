@@ -41,4 +41,5 @@ CNAME
 .trae
 .windsurf
 
-migration
+migration/*
+!migration/mtg-meta-decks-seed.sql
