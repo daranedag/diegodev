@@ -56,38 +56,60 @@ function parseDecklistForComparison(rawDecklist) {
     return sections;
 }
 
-function formatDeckSections(sections) {
-    const formatSection = (cards) => [...cards.values()]
-        .filter((card) => card.quantity > 0)
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((card) => `${card.quantity} ${card.name}`);
-
-    const mainLines = formatSection(sections.main);
-    const sideLines = formatSection(sections.sideboard);
-
-    return [
-        ...mainLines,
-        ...(sideLines.length ? ['', 'Sideboard', ...sideLines] : []),
-    ].join('\n');
+function cloneDeckSections(sections) {
+    return {
+        main: new Map([...sections.main.entries()].map(([key, card]) => [key, { ...card }])),
+        sideboard: new Map([...sections.sideboard.entries()].map(([key, card]) => [key, { ...card }])),
+    };
 }
 
-function buildSuggestedDecklist(rawDecklist, recommendations = []) {
-    const sections = parseDecklistForComparison(rawDecklist);
+function countSection(cards) {
+    return [...cards.values()].reduce((sum, card) => sum + Math.max(card.quantity, 0), 0);
+}
+
+function sectionRows(cards) {
+    return [...cards.values()]
+        .filter((card) => card.quantity > 0)
+        .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function buildDeckComparison(rawDecklist, recommendations = []) {
+    const current = parseDecklistForComparison(rawDecklist);
+    const suggested = cloneDeckSections(current);
+    const changes = { main: new Map(), sideboard: new Map() };
 
     for (const rec of recommendations.filter((r) => r.verified !== false)) {
         const section = rec.section === 'sideboard' ? 'sideboard' : 'main';
-        const cards = sections[section];
+        const cards = suggested[section];
+        const sectionChanges = changes[section];
         const key = normalizeCardName(rec.card_name);
         const current = cards.get(key) ?? { name: rec.card_name, quantity: 0 };
         const quantity = Math.max(Math.round(rec.quantity_suggested ?? 0), 0);
+        const change = sectionChanges.get(key) ?? { added: 0, removed: 0 };
 
-        if (rec.action === 'add') current.quantity += quantity;
-        if (rec.action === 'remove') current.quantity = Math.max(current.quantity - quantity, 0);
+        if (rec.action === 'add') {
+            current.quantity += quantity;
+            change.added += quantity;
+        }
+        if (rec.action === 'remove') {
+            const removed = Math.min(current.quantity, quantity);
+            current.quantity = Math.max(current.quantity - quantity, 0);
+            change.removed += removed;
+        }
 
         cards.set(key, current);
+        sectionChanges.set(key, change);
     }
 
-    return formatDeckSections(sections);
+    return {
+        current,
+        suggested,
+        changes,
+        currentMainCount: countSection(current.main),
+        currentSideCount: countSection(current.sideboard),
+        suggestedMainCount: countSection(suggested.main),
+        suggestedSideCount: countSection(suggested.sideboard),
+    };
 }
 
 function InfoTooltip({ text, align = 'center' }) {
@@ -129,6 +151,127 @@ StatCell.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     tooltip: PropTypes.string,
     tooltipAlign: PropTypes.oneOf(['left', 'center', 'right']),
+};
+
+function MetaMetricChip({ label, value, tooltip }) {
+    return (
+        <span className="inline-flex items-center rounded-full bg-white px-2 py-0.5 text-[11px] font-medium text-gray-600 ring-1 ring-gray-200 dark:bg-gray-800/70 dark:text-gray-300 dark:ring-gray-600">
+            <span className="mr-1 text-gray-500 dark:text-gray-400">{label}</span>
+            <span className="font-semibold text-gray-800 dark:text-gray-100">{value}</span>
+            <InfoTooltip text={tooltip} align="center" />
+        </span>
+    );
+}
+
+MetaMetricChip.propTypes = {
+    label: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    tooltip: PropTypes.string.isRequired,
+};
+
+function DeckComparisonList({ sections, changes, t }) {
+    const renderSection = (sectionKey, label) => {
+        const rows = sectionRows(sections[sectionKey]);
+        const count = countSection(sections[sectionKey]);
+        if (rows.length === 0) return null;
+
+        return (
+            <div className="space-y-1">
+                <div className="flex items-center justify-between gap-2 pb-1 border-b border-gray-200 dark:border-gray-600">
+                    <p className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                        {label}
+                    </p>
+                    <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400">
+                        {count} {t('mtg.analysis.cardsCount', 'cartas')}
+                    </span>
+                </div>
+                <div className="space-y-0.5">
+                    {rows.map((card) => {
+                        const change = changes?.[sectionKey]?.get(normalizeCardName(card.name));
+                        return (
+                            <div key={card.name} className="flex items-center justify-between gap-2 text-xs font-mono text-gray-700 dark:text-gray-300">
+                                <span className="min-w-0 break-words">
+                                    {card.quantity} {card.name}
+                                </span>
+                                {(change?.added > 0 || change?.removed > 0) && (
+                                    <span className="flex-shrink-0 flex items-center gap-1 font-sans">
+                                        {change.added > 0 && (
+                                            <span className="rounded bg-green-100 px-1.5 py-0.5 text-[10px] font-semibold text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                                                +{change.added}
+                                            </span>
+                                        )}
+                                        {change.removed > 0 && (
+                                            <span className="rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-semibold text-red-700 dark:bg-red-900/30 dark:text-red-300">
+                                                -{change.removed}
+                                            </span>
+                                        )}
+                                    </span>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    };
+
+    return (
+        <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
+            {renderSection('main', t('mtg.analysis.mainDeck', 'Main deck'))}
+            {renderSection('sideboard', t('mtg.analysis.sideboardDeck', 'Sideboard'))}
+        </div>
+    );
+}
+
+DeckComparisonList.propTypes = {
+    sections: PropTypes.shape({
+        main: PropTypes.instanceOf(Map).isRequired,
+        sideboard: PropTypes.instanceOf(Map).isRequired,
+    }).isRequired,
+    changes: PropTypes.shape({
+        main: PropTypes.instanceOf(Map),
+        sideboard: PropTypes.instanceOf(Map),
+    }),
+    t: PropTypes.func.isRequired,
+};
+
+function AccordionSection({ title, count, open, onToggle, children }) {
+    return (
+        <section className="rounded-lg border border-gray-200 bg-gray-50/70 dark:border-gray-700 dark:bg-gray-700/30">
+            <button
+                type="button"
+                onClick={onToggle}
+                className="flex w-full items-center justify-between gap-3 px-3 py-2 text-left transition-colors hover:bg-gray-100 dark:hover:bg-gray-700/60"
+            >
+                <span className="flex min-w-0 items-center gap-2">
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 truncate">
+                        {title}
+                    </span>
+                    {count != null && (
+                        <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-gray-500 ring-1 ring-gray-200 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-600">
+                            {count}
+                        </span>
+                    )}
+                </span>
+                <span className={`text-gray-400 transition-transform ${open ? 'rotate-180' : ''}`} aria-hidden="true">
+                    v
+                </span>
+            </button>
+            {open && (
+                <div className="space-y-2 border-t border-gray-200 p-3 dark:border-gray-700">
+                    {children}
+                </div>
+            )}
+        </section>
+    );
+}
+
+AccordionSection.propTypes = {
+    title: PropTypes.string.isRequired,
+    count: PropTypes.number,
+    open: PropTypes.bool.isRequired,
+    onToggle: PropTypes.func.isRequired,
+    children: PropTypes.node.isRequired,
 };
 
 function RecommendationItem({ rec, t }) {
@@ -181,6 +324,8 @@ export default function AnalysisPanel({ result, loading }) {
     const { t } = useTranslation();
     const [decklistOpen, setDecklistOpen] = useState(false);
     const [comparisonOpen, setComparisonOpen] = useState(false);
+    const [recommendationsOpen, setRecommendationsOpen] = useState(true);
+    const [similarDecksOpen, setSimilarDecksOpen] = useState(true);
 
     if (loading) {
         return (
@@ -227,8 +372,8 @@ export default function AnalysisPanel({ result, loading }) {
         llm_used,
         llm_raw,
     } = result;
-    const suggestedDecklist = raw_decklist
-        ? buildSuggestedDecklist(raw_decklist, recommendations ?? [])
+    const deckComparison = raw_decklist
+        ? buildDeckComparison(raw_decklist, recommendations ?? [])
         : '';
     const showDebug = import.meta.env.DEV;
 
@@ -289,17 +434,18 @@ export default function AnalysisPanel({ result, loading }) {
                         <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
                             {t('mtg.analysis.currentList', 'Lista actual')}
                         </p>
-                        <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words leading-relaxed font-mono max-h-72 overflow-y-auto">
-                            {raw_decklist.trim()}
-                        </pre>
+                        <DeckComparisonList sections={deckComparison.current} t={t} />
                     </div>
                     <div className="rounded-lg border border-purple-200 dark:border-purple-800 bg-purple-50 dark:bg-purple-900/20 p-3">
                         <p className="text-xs font-semibold text-purple-700 dark:text-purple-300 mb-2">
                             {t('mtg.analysis.suggestedList', 'Lista sugerida')}
                         </p>
-                        <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words leading-relaxed font-mono max-h-72 overflow-y-auto">
-                            {suggestedDecklist || raw_decklist.trim()}
-                        </pre>
+                        {(deckComparison.suggestedMainCount > 60 || deckComparison.suggestedSideCount > 15) && (
+                            <p className="mb-2 rounded-md border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs text-amber-700 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-300">
+                                {t('mtg.analysis.suggestedDraftNotice', 'Borrador de cambios: faltan cortes para llegar a una lista final legal.')}
+                            </p>
+                        )}
+                        <DeckComparisonList sections={deckComparison.suggested} changes={deckComparison.changes} t={t} />
                     </div>
                 </div>
             )}
@@ -432,24 +578,28 @@ export default function AnalysisPanel({ result, loading }) {
 
             {/* Recommendations */}
             {recommendations?.length > 0 && (
-                <div>
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        {t('mtg.analysis.recommendations')}
-                    </h3>
+                <AccordionSection
+                    title={t('mtg.analysis.recommendations')}
+                    count={recommendations.length}
+                    open={recommendationsOpen}
+                    onToggle={() => setRecommendationsOpen((open) => !open)}
+                >
                     <div className="space-y-2">
                         {recommendations.map((rec, i) => (
                             <RecommendationItem key={i} rec={rec} t={t} />
                         ))}
                     </div>
-                </div>
+                </AccordionSection>
             )}
 
             {/* Similar meta decks */}
             {similar_meta_decks?.length > 0 && (
-                <div>
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                        {t('mtg.analysis.similarDecks')}
-                    </h3>
+                <AccordionSection
+                    title={t('mtg.analysis.similarDecks')}
+                    count={similar_meta_decks.length}
+                    open={similarDecksOpen}
+                    onToggle={() => setSimilarDecksOpen((open) => !open)}
+                >
                     <div className="space-y-2">
                         {similar_meta_decks.map((d, i) => (
                             <div key={i} className="rounded-lg bg-gray-50 dark:bg-gray-700/40 p-3 text-sm">
@@ -458,13 +608,33 @@ export default function AnalysisPanel({ result, loading }) {
                                         <p className="font-medium text-gray-800 dark:text-gray-200 truncate">
                                             {d.name}
                                         </p>
-                                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                                            {d.archetype}
-                                            {d.source ? ` · ${d.source}` : ''}
-                                        </p>
+                                        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                                                {d.archetype}
+                                                {d.source ? ` · ${d.source}` : ''}
+                                            </span>
+                                            {d.competitive_score != null && (
+                                                <MetaMetricChip
+                                                    label={t('mtg.analysis.competitiveScore', 'Score')}
+                                                    value={Math.round(d.competitive_score)}
+                                                    tooltip={t('mtg.analysis.competitiveScoreTooltip', 'Puntaje interno calculado con resultado del torneo, nivel del evento, presencia en el meta y recencia. Mientras más alto, más fuerte es la referencia competitiva.')}
+                                                />
+                                            )}
+                                            {d.meta_share != null && (
+                                                <MetaMetricChip
+                                                    label={t('mtg.analysis.metaShare', 'Meta')}
+                                                    value={`${d.meta_share}%`}
+                                                    tooltip={t('mtg.analysis.metaShareTooltip', 'Porcentaje aproximado de presencia del arquetipo en la ventana de metajuego importada desde MTGTop8.')}
+                                                />
+                                            )}
+                                        </div>
                                     </div>
-                                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                                        {Math.round(d.similarity * 100)}%
+                                    <span className="inline-flex flex-shrink-0 items-center text-xs font-semibold text-gray-500 dark:text-gray-400">
+                                        {t('mtg.analysis.similarity', 'Similitud')} {Math.round(d.similarity * 100)}%
+                                        <InfoTooltip
+                                            text={t('mtg.analysis.similarityTooltip', 'Qué tanto se parece tu lista a este mazo meta, calculado por cartas compartidas y cantidades.')}
+                                            align="right"
+                                        />
                                     </span>
                                 </div>
                                 {d.missing_main_cards?.length > 0 && (
@@ -475,7 +645,7 @@ export default function AnalysisPanel({ result, loading }) {
                             </div>
                         ))}
                     </div>
-                </div>
+                </AccordionSection>
             )}
 
             {/* Analysis notes */}

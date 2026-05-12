@@ -43,3 +43,4 @@ CNAME
 
 migration/*
 !migration/mtg-meta-decks-seed.sql
+!migration/mtg-meta-importer-upgrade.sql
