@@ -1,6 +1,6 @@
 import { insforge } from '../lib/insforge.js';
 
-const ANALYSIS_CACHE_VERSION = 'mtg-agent-v2-balanced-swaps';
+const ANALYSIS_CACHE_VERSION = 'mtg-agent-v3-market-tooltips';
 
 function normalizeDecklistForHash(rawDecklist, formatSlug) {
     const normalizedLines = rawDecklist
