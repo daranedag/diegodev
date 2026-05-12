@@ -18,6 +18,7 @@ const CORS_HEADERS = {
 };
 
 const VALID_FORMATS = ["standard", "modern", "pauper"] as const;
+const ANALYSIS_CACHE_VERSION = "mtg-agent-v2-balanced-swaps";
 type Format = (typeof VALID_FORMATS)[number];
 
 interface DeckCard {
@@ -50,6 +51,8 @@ interface SimilarMetaDeck {
     name: string;
     archetype: string;
     similarity: number;
+    competitive_score?: number | null;
+    meta_share?: number | null;
     source?: string | null;
     source_url?: string | null;
     shared_cards?: string[];
@@ -146,7 +149,7 @@ function normalizeDecklistForHash(rawDecklist: string, formatSlug: string): stri
         .map((line) => line.trim().replace(/\s+/g, " "))
         .filter(Boolean)
         .join("\n");
-    return `${formatSlug}\n${normalizedLines}`;
+    return `${ANALYSIS_CACHE_VERSION}\n${formatSlug}\n${normalizedLines}`;
 }
 
 async function sha256Hex(value: string): Promise<string> {
@@ -177,6 +180,14 @@ async function dbSelect(
     return Array.isArray(json) ? json : (json?.data ?? []);
 }
 
+function chunkArray<T>(items: T[], size: number): T[][] {
+    const chunks: T[][] = [];
+    for (let i = 0; i < items.length; i += size) {
+        chunks.push(items.slice(i, i + size));
+    }
+    return chunks;
+}
+
 // ── Archetype matching ────────────────────────────────────────────────────────
 interface Archetype {
     id: string;
@@ -196,6 +207,9 @@ interface MetaDeck {
     tournament_name?: string | null;
     player_name?: string | null;
     recorded_at?: string | null;
+    placement?: string | null;
+    competitive_score?: number | null;
+    meta_share?: number | null;
 }
 
 interface MetaDeckCard {
@@ -203,6 +217,7 @@ interface MetaDeckCard {
     card_name: string;
     quantity: number;
     section: "main" | "sideboard";
+    deck_card_score?: number | null;
 }
 
 function matchArchetype(
@@ -293,11 +308,11 @@ async function findSimilarMetaDecks(
     const archetypeById = new Map(archetypes.map((a) => [a.id, a]));
 
     const deckParams: Record<string, string> = {
-        select: "id,archetype_id,format_slug,name,source,source_url,tournament_name,player_name,recorded_at",
+        select: "id,archetype_id,format_slug,name,source,source_url,tournament_name,player_name,recorded_at,placement,competitive_score,meta_share",
         format_slug: `eq.${formatSlug}`,
         is_active: "eq.true",
-        order: "recorded_at.desc",
-        limit: "50",
+        order: "competitive_score.desc",
+        limit: "200",
     };
     if (matchedArchetype?.id) {
         deckParams.archetype_id = `eq.${matchedArchetype.id}`;
@@ -312,11 +327,15 @@ async function findSimilarMetaDecks(
     const metaDeckIds = metaDecks.map((deck) => deck.id).filter(Boolean);
     if (metaDeckIds.length === 0) return { similar: [], recommendations: [] };
 
-    const metaCards = (await dbSelect(baseUrl, anonKey, "mtg_meta_deck_cards", {
-        select: "meta_deck_id,card_name,quantity,section",
-        meta_deck_id: `in.(${metaDeckIds.join(",")})`,
-        limit: "5000",
-    })) as MetaDeckCard[];
+    const metaCards: MetaDeckCard[] = [];
+    for (const ids of chunkArray(metaDeckIds, 25)) {
+        const cards = (await dbSelect(baseUrl, anonKey, "mtg_meta_deck_cards", {
+            select: "meta_deck_id,card_name,quantity,section,deck_card_score",
+            meta_deck_id: `in.(${ids.join(",")})`,
+            limit: "2000",
+        })) as MetaDeckCard[];
+        metaCards.push(...cards);
+    }
 
     const cardsByDeck = new Map<string, MetaDeckCard[]>();
     for (const card of metaCards) {
@@ -329,12 +348,16 @@ async function findSimilarMetaDecks(
     const scored = metaDecks
         .map((deck) => {
             const cards = cardsByDeck.get(deck.id) ?? [];
-            const score = weightedJaccard(userVector, buildWeightedVector(cards));
+            const similarity = weightedJaccard(userVector, buildWeightedVector(cards));
+            const competitiveScore = Number(deck.competitive_score ?? 0);
+            const score = similarity * (1 + Math.min(competitiveScore, 100) / 500);
             const archetype = archetypeById.get(deck.archetype_id);
             return {
                 deck,
                 cards,
                 score,
+                similarity,
+                competitiveScore,
                 archetypeName: archetype?.name ?? "Meta deck",
             };
         })
@@ -345,7 +368,9 @@ async function findSimilarMetaDecks(
     const similar = scored.map((entry) => ({
         name: entry.deck.name,
         archetype: entry.archetypeName,
-        similarity: Math.round(entry.score * 100) / 100,
+        similarity: Math.round(entry.similarity * 100) / 100,
+        competitive_score: entry.deck.competitive_score ?? null,
+        meta_share: entry.deck.meta_share ?? null,
         source: entry.deck.source ?? null,
         source_url: entry.deck.source_url ?? null,
         shared_cards: sharedMainCards(main, entry.cards),
@@ -353,7 +378,7 @@ async function findSimilarMetaDecks(
     }));
 
     const userCounts = new Map(main.map((card) => [normalizeCardName(card.name), card.quantity]));
-    const suggestionCounts = new Map<string, { card_name: string; quantity: number; decks: number }>();
+    const suggestionCounts = new Map<string, { card_name: string; quantity: number; decks: number; score: number }>();
 
     for (const entry of scored.slice(0, 3)) {
         for (const card of entry.cards.filter((c) => c.section === "main")) {
@@ -365,22 +390,24 @@ async function findSimilarMetaDecks(
                 card_name: card.card_name,
                 quantity: 0,
                 decks: 0,
+                score: 0,
             };
             current.quantity = Math.max(current.quantity, card.quantity - currentCount);
             current.decks += 1;
+            current.score += entry.score * (card.deck_card_score ?? entry.competitiveScore ?? 50);
             suggestionCounts.set(key, current);
         }
     }
 
     const recommendations = [...suggestionCounts.values()]
-        .sort((a, b) => b.decks - a.decks || b.quantity - a.quantity)
+        .sort((a, b) => b.score - a.score || b.decks - a.decks || b.quantity - a.quantity)
         .slice(0, 4)
         .map((entry, index) => ({
             action: "add" as const,
             section: "main" as const,
             card_name: entry.card_name,
             quantity_suggested: Math.min(entry.quantity, 4),
-            reason: `Aparece en ${entry.decks} de las listas de metajuego mas parecidas y falta o esta en menos copias en tu main deck.`,
+            reason: `Aparece en ${entry.decks} de las listas competitivas mas parecidas y destaca por score de rendimiento en MTGTop8.`,
             priority: index + 1,
         }));
 
@@ -499,6 +526,8 @@ REGLAS CRÍTICAS:
 - Las razones deben estar en español neutro, ser específicas y mencionar sinergias o debilidades concretas.
 - Las recomendaciones deben ser cartas reales y legales en el formato ${formatSlug}.
 - Sugiere entre 3 y 6 recomendaciones priorizadas.
+- Cada carta que agregues al main deck debe venir balanceada con cortes del main deck si la lista ya tiene 60 o mas cartas. Cada carta que agregues al sideboard debe venir balanceada con cortes del sideboard si supera 15 cartas.
+- Prioriza swaps concretos y accionables: por ejemplo, agregar 4 copias y remover 4 copias de cartas menos eficientes.
 - Reescribe fortalezas y debilidades mencionando cartas concretas del mazo cuando sea posible.
 
 FORMATO DE RESPUESTA (JSON estricto):
@@ -696,6 +725,160 @@ function getCopyViolations(
             return { ...entry, max_allowed: maxAllowed };
         })
         .filter((entry) => Number.isFinite(entry.max_allowed) && entry.count > entry.max_allowed);
+}
+
+function cardIsLand(cardMap: Map<string, CardData>, cardName: string): boolean {
+    const card = cardMap.get(normalizeCardName(cardName));
+    return card?.type_line?.toLowerCase().includes("land") ?? false;
+}
+
+function cardIsBasicLandName(cardName: string): boolean {
+    return ["plains", "island", "swamp", "mountain", "forest", "wastes"].includes(normalizeCardName(cardName));
+}
+
+function sumRecommendationQuantity(
+    recommendations: Recommendation[],
+    section: "main" | "sideboard",
+    action: "add" | "remove",
+    predicate: (rec: Recommendation) => boolean = () => true
+): number {
+    return recommendations
+        .filter((rec) => rec.verified !== false && rec.section === section && rec.action === action && predicate(rec))
+        .reduce((sum, rec) => sum + Math.max(Math.round(rec.quantity_suggested), 0), 0);
+}
+
+function mergeOrAppendRecommendation(recommendations: Recommendation[], recommendation: Recommendation): void {
+    const key = `${recommendation.action}:${recommendation.section}:${normalizeCardName(recommendation.card_name)}`;
+    const existing = recommendations.find((rec) =>
+        `${rec.action}:${rec.section}:${normalizeCardName(rec.card_name)}` === key
+    );
+
+    if (existing) {
+        existing.quantity_suggested += recommendation.quantity_suggested;
+        existing.priority = Math.min(existing.priority, recommendation.priority);
+        existing.reason = recommendation.reason;
+        existing.verified = recommendation.verified;
+        existing.verification_note = recommendation.verification_note;
+        return;
+    }
+
+    recommendations.push(recommendation);
+}
+
+function buildCutCandidates(
+    cards: DeckCard[],
+    recommendations: Recommendation[],
+    section: "main" | "sideboard",
+    cardMap: Map<string, CardData>,
+    protectedNames: Set<string>,
+    preferLands: boolean
+): Array<{ card: DeckCard; available: number; isLand: boolean; protected: boolean }> {
+    const addedNames = new Set(
+        recommendations
+            .filter((rec) => rec.verified !== false && rec.section === section && rec.action === "add")
+            .map((rec) => normalizeCardName(rec.card_name))
+    );
+
+    const alreadyRemoved = new Map<string, number>();
+    for (const rec of recommendations.filter((r) => r.verified !== false && r.section === section && r.action === "remove")) {
+        const key = normalizeCardName(rec.card_name);
+        alreadyRemoved.set(key, (alreadyRemoved.get(key) ?? 0) + Math.max(Math.round(rec.quantity_suggested), 0));
+    }
+
+    return cards
+        .map((card) => {
+            const key = normalizeCardName(card.name);
+            return {
+                card,
+                available: Math.max(card.quantity - (alreadyRemoved.get(key) ?? 0), 0),
+                isLand: cardIsLand(cardMap, card.name),
+                protected: protectedNames.has(key),
+            };
+        })
+        .filter((entry) => entry.available > 0 && !addedNames.has(normalizeCardName(entry.card.name)))
+        .sort((a, b) => {
+            if (preferLands && a.isLand !== b.isLand) return a.isLand ? -1 : 1;
+            if (!preferLands && a.isLand !== b.isLand) return a.isLand ? 1 : -1;
+            if (a.protected !== b.protected) return a.protected ? 1 : -1;
+            if (preferLands && cardIsBasicLandName(a.card.name) !== cardIsBasicLandName(b.card.name)) {
+                return cardIsBasicLandName(a.card.name) ? -1 : 1;
+            }
+            return b.available - a.available || a.card.name.localeCompare(b.card.name);
+        });
+}
+
+function balanceSwapRecommendations(
+    recommendations: Recommendation[],
+    params: {
+        main: DeckCard[];
+        sideboard: DeckCard[];
+        cardMap: Map<string, CardData>;
+        protectedCardNames: Set<string>;
+    }
+): { recommendations: Recommendation[]; autoCuts: number } {
+    const balanced = recommendations.map((rec) => ({ ...rec }));
+    let autoCuts = 0;
+    let nextPriority = Math.max(0, ...balanced.map((rec) => rec.priority ?? 0)) + 1;
+
+    for (const section of ["main", "sideboard"] as const) {
+        const cards = section === "main" ? params.main : params.sideboard;
+        const currentCount = totalCards(cards);
+        const targetCount = section === "main" ? 60 : 15;
+        const added = sumRecommendationQuantity(balanced, section, "add");
+        const removed = sumRecommendationQuantity(balanced, section, "remove");
+        let excess = currentCount + added - removed - targetCount;
+
+        if (excess <= 0) continue;
+
+        const addedLandCount = sumRecommendationQuantity(
+            balanced,
+            section,
+            "add",
+            (rec) => cardIsLand(params.cardMap, rec.card_name)
+        );
+
+        const passes = addedLandCount > 0 ? [true, false] : [false];
+        for (const preferLands of passes) {
+            if (excess <= 0) break;
+            let passBudget = preferLands ? Math.min(excess, addedLandCount) : excess;
+            const candidates = buildCutCandidates(
+                cards,
+                balanced,
+                section,
+                params.cardMap,
+                params.protectedCardNames,
+                preferLands
+            );
+
+            for (const candidate of candidates) {
+                if (excess <= 0 || passBudget <= 0) break;
+                if (preferLands && addedLandCount > 0 && !candidate.isLand) continue;
+                const quantity = Math.min(candidate.available, excess, passBudget);
+                if (quantity <= 0) continue;
+
+                mergeOrAppendRecommendation(balanced, {
+                    action: "remove",
+                    section,
+                    card_name: candidate.card.name,
+                    quantity_suggested: quantity,
+                    reason: section === "main"
+                        ? "Corte sugerido para mantener el main deck en 60 cartas despues de aplicar las mejoras."
+                        : "Corte sugerido para mantener el sideboard en 15 cartas despues de aplicar las mejoras.",
+                    priority: nextPriority++,
+                    verified: true,
+                    verification_note: "Corte balanceado automaticamente desde la lista actual.",
+                });
+                autoCuts += quantity;
+                excess -= quantity;
+                passBudget -= quantity;
+            }
+        }
+    }
+
+    return {
+        recommendations: balanced.sort((a, b) => a.priority - b.priority),
+        autoCuts,
+    };
 }
 
 async function validateRecommendations(
@@ -1116,7 +1299,20 @@ export default async function (req: Request) {
 
         const finalStrengths = llmResult?.strengths?.length ? llmResult.strengths : strengths;
         const finalWeaknesses = llmResult?.weaknesses?.length ? llmResult.weaknesses : weaknesses;
-        const finalRecommendations = validatedRecommendations.recommendations;
+        const protectedCardNames = new Set([
+            ...(archetype?.key_cards ?? []),
+            ...similarMetaDecks.flatMap((deck) => deck.shared_cards ?? []),
+        ].map((name) => normalizeCardName(name)));
+        const balancedRecommendations = balanceSwapRecommendations(validatedRecommendations.recommendations, {
+            main,
+            sideboard,
+            cardMap,
+            protectedCardNames,
+        });
+        if (balancedRecommendations.autoCuts > 0) {
+            analysisNotes += ` Se agregaron ${balancedRecommendations.autoCuts} cortes balanceados para mantener la lista dentro del tamano recomendado.`;
+        }
+        const finalRecommendations = balancedRecommendations.recommendations;
 
         const response: AnalysisResponse = {
             format_slug,

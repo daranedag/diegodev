@@ -1,12 +1,14 @@
 import { insforge } from '../lib/insforge.js';
 
+const ANALYSIS_CACHE_VERSION = 'mtg-agent-v2-balanced-swaps';
+
 function normalizeDecklistForHash(rawDecklist, formatSlug) {
     const normalizedLines = rawDecklist
         .split('\n')
         .map((line) => line.trim().replace(/\s+/g, ' '))
         .filter(Boolean)
         .join('\n');
-    return `${formatSlug}\n${normalizedLines}`;
+    return `${ANALYSIS_CACHE_VERSION}\n${formatSlug}\n${normalizedLines}`;
 }
 
 async function sha256Hex(value) {

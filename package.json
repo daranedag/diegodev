@@ -11,7 +11,8 @@
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "preview": "vite preview",
-        "deploy": "npm run build && gh-pages -d dist"
+        "deploy": "npm run build && gh-pages -d dist",
+        "mtg:import-meta": "node scripts/import-mtgtop8-meta.mjs"
     },
     "dependencies": {
         "@hello-pangea/dnd": "^18.0.1",
