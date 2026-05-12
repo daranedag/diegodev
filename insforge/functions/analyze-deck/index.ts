@@ -18,7 +18,7 @@ const CORS_HEADERS = {
 };
 
 const VALID_FORMATS = ["standard", "modern", "pauper"] as const;
-const ANALYSIS_CACHE_VERSION = "mtg-agent-v2-balanced-swaps";
+const ANALYSIS_CACHE_VERSION = "mtg-agent-v3-market-tooltips";
 type Format = (typeof VALID_FORMATS)[number];
 
 interface DeckCard {
@@ -45,6 +45,19 @@ interface Recommendation {
     priority: number;
     verified?: boolean;
     verification_note?: string;
+    market_data?: RecommendationMarketData | null;
+}
+
+interface RecommendationMarketData {
+    card_name: string;
+    image_uri?: string | null;
+    scryfall_uri?: string | null;
+    cardkingdom_price_usd?: number | null;
+    cardkingdom_url?: string | null;
+    tcgplayer_price_usd?: number | null;
+    tcgplayer_url?: string | null;
+    price_date?: string | null;
+    is_base_nonfoil: true;
 }
 
 interface SimilarMetaDeck {
@@ -188,6 +201,46 @@ function chunkArray<T>(items: T[], size: number): T[][] {
     return chunks;
 }
 
+function quoteForPostgrestIn(value: string): string {
+    return value.includes(",") ? `"${value.replace(/"/g, '\\"')}"` : value;
+}
+
+async function fetchRecommendationMarketData(
+    baseUrl: string,
+    anonKey: string,
+    recommendationNames: string[]
+): Promise<Map<string, RecommendationMarketData>> {
+    const uniqueNames = [...new Set(recommendationNames.map((name) => name.trim()).filter(Boolean))];
+    const byName = new Map<string, RecommendationMarketData>();
+    if (uniqueNames.length === 0) return byName;
+
+    for (const chunk of chunkArray(uniqueNames, 40)) {
+        const inValues = chunk.map((name) => quoteForPostgrestIn(name)).join(",");
+        const rows = (await dbSelect(baseUrl, anonKey, "mtg_card_market_data", {
+            select: "card_name,image_uri,scryfall_uri,cardkingdom_price_usd,cardkingdom_url,tcgplayer_price_usd,tcgplayer_url,price_date",
+            card_name: `in.(${inValues})`,
+            limit: "200",
+        })) as MarketRow[];
+
+        for (const row of rows) {
+            if (!row?.card_name) continue;
+            byName.set(normalizeCardName(row.card_name), {
+                card_name: row.card_name,
+                image_uri: row.image_uri ?? null,
+                scryfall_uri: row.scryfall_uri ?? null,
+                cardkingdom_price_usd: row.cardkingdom_price_usd ?? null,
+                cardkingdom_url: row.cardkingdom_url ?? null,
+                tcgplayer_price_usd: row.tcgplayer_price_usd ?? null,
+                tcgplayer_url: row.tcgplayer_url ?? null,
+                price_date: row.price_date ?? null,
+                is_base_nonfoil: true,
+            });
+        }
+    }
+
+    return byName;
+}
+
 // ── Archetype matching ────────────────────────────────────────────────────────
 interface Archetype {
     id: string;
@@ -218,6 +271,17 @@ interface MetaDeckCard {
     quantity: number;
     section: "main" | "sideboard";
     deck_card_score?: number | null;
+}
+
+interface MarketRow {
+    card_name: string;
+    image_uri?: string | null;
+    scryfall_uri?: string | null;
+    cardkingdom_price_usd?: number | null;
+    cardkingdom_url?: string | null;
+    tcgplayer_price_usd?: number | null;
+    tcgplayer_url?: string | null;
+    price_date?: string | null;
 }
 
 function matchArchetype(
@@ -1314,6 +1378,24 @@ export default async function (req: Request) {
         }
         const finalRecommendations = balancedRecommendations.recommendations;
 
+        let recommendationsWithMarketData = finalRecommendations;
+        try {
+            const marketDataByName = await fetchRecommendationMarketData(
+                INSFORGE_URL,
+                INSFORGE_ANON_KEY,
+                finalRecommendations.map((rec) => rec.card_name)
+            );
+            recommendationsWithMarketData = finalRecommendations.map((rec) => ({
+                ...rec,
+                market_data: marketDataByName.get(normalizeCardName(rec.card_name)) ?? null,
+            }));
+        } catch {
+            recommendationsWithMarketData = finalRecommendations.map((rec) => ({
+                ...rec,
+                market_data: null,
+            }));
+        }
+
         const response: AnalysisResponse = {
             format_slug,
             deck_name: deck_name ?? null,
@@ -1323,7 +1405,7 @@ export default async function (req: Request) {
             confidence_score: Math.round(confidence * 100) / 100,
             strengths: finalStrengths,
             weaknesses: finalWeaknesses,
-            recommendations: finalRecommendations,
+            recommendations: recommendationsWithMarketData,
             similar_meta_decks: similarMetaDecks,
             deck_stats: {
                 main_count: mainCount,

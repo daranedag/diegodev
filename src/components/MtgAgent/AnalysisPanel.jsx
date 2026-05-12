@@ -134,6 +134,110 @@ function InfoTooltip({ text, align = 'center' }) {
 
 InfoTooltip.propTypes = { text: PropTypes.string.isRequired, align: PropTypes.oneOf(['left', 'center', 'right']) };
 
+function formatUsdPrice(value) {
+    if (typeof value !== 'number' || Number.isNaN(value)) return null;
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).format(value);
+}
+
+function CardMarketTooltip({ cardName, marketData, t }) {
+    const [open, setOpen] = useState(false);
+    const hasData = Boolean(marketData);
+    const cardKingdomPrice = formatUsdPrice(marketData?.cardkingdom_price_usd);
+    const tcgPlayerPrice = formatUsdPrice(marketData?.tcgplayer_price_usd);
+
+    return (
+        <span
+            className="relative inline-flex max-w-full"
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+        >
+            <button
+                type="button"
+                onClick={() => setOpen((value) => !value)}
+                className="text-left text-sm font-medium text-gray-900 underline decoration-dotted underline-offset-2 hover:text-purple-700 dark:text-white dark:hover:text-purple-300"
+            >
+                {cardName}
+            </button>
+
+            <div className={`absolute left-0 top-full mt-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-700 shadow-xl transition-opacity z-30 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 ${open ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+                {hasData ? (
+                    <div className="space-y-2">
+                        <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">
+                            {t('mtg.analysis.baseNonFoilLabel', 'Impresion base no-foil')}
+                        </p>
+
+                        {marketData.image_uri ? (
+                            <img
+                                src={marketData.image_uri}
+                                alt={cardName}
+                                className="h-36 w-24 rounded border border-gray-200 object-cover dark:border-gray-600"
+                                loading="lazy"
+                            />
+                        ) : (
+                            <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                                {t('mtg.analysis.marketImageMissing', 'Imagen no disponible')}
+                            </p>
+                        )}
+
+                        <div className="space-y-1.5">
+                            <p className="flex items-center justify-between gap-2">
+                                <span className="font-semibold">CardKingdom</span>
+                                <span>{cardKingdomPrice ?? t('mtg.analysis.marketPriceMissing', 'Sin precio')}</span>
+                            </p>
+                            {marketData.cardkingdom_url && (
+                                <a
+                                    href={marketData.cardkingdom_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-[11px] text-purple-700 underline underline-offset-2 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-200"
+                                >
+                                    {t('mtg.analysis.openStoreLink', 'Abrir tienda')}
+                                </a>
+                            )}
+
+                            <p className="flex items-center justify-between gap-2">
+                                <span className="font-semibold">TCGPlayer</span>
+                                <span>{tcgPlayerPrice ?? t('mtg.analysis.marketPriceMissing', 'Sin precio')}</span>
+                            </p>
+                            {marketData.tcgplayer_url && (
+                                <a
+                                    href={marketData.tcgplayer_url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-[11px] text-purple-700 underline underline-offset-2 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-200"
+                                >
+                                    {t('mtg.analysis.openStoreLink', 'Abrir tienda')}
+                                </a>
+                            )}
+                        </div>
+
+                        {marketData.price_date && (
+                            <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                                {t('mtg.analysis.marketUpdatedLabel', 'Actualizado')}: {marketData.price_date}
+                            </p>
+                        )}
+                    </div>
+                ) : (
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                        {t('mtg.analysis.marketDataMissing', 'Sin datos de mercado todavia')}
+                    </p>
+                )}
+            </div>
+        </span>
+    );
+}
+
+CardMarketTooltip.propTypes = {
+    cardName: PropTypes.string.isRequired,
+    marketData: PropTypes.object,
+    t: PropTypes.func.isRequired,
+};
+
 function StatCell({ label, value, tooltip, tooltipAlign }) {
     return (
         <div className="text-center">
@@ -288,7 +392,8 @@ function RecommendationItem({ rec, t }) {
             <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-1.5">
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {rec.quantity_suggested}× {rec.card_name}
+                        {rec.quantity_suggested}x{' '}
+                        <CardMarketTooltip cardName={rec.card_name} marketData={rec.market_data} t={t} />
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                         ({rec.section === 'main' ? t('mtg.analysis.addToMain') : t('mtg.analysis.addToSide')})

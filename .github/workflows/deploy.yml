@@ -13,6 +13,14 @@ on:
                 options:
                     - 'false'
                     - 'true'
+            import_mtg_market:
+                description: 'Run MTGJSON market importer instead of deploying Pages'
+                required: false
+                default: 'false'
+                type: choice
+                options:
+                    - 'false'
+                    - 'true'
     schedule:
         # Weekly MTGTop8 refresh: Mondays at 08:17 UTC.
         - cron: '17 8 * * 1'
@@ -29,8 +37,8 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    import-mtgtop8-meta:
-        if: github.event_name == 'schedule' || inputs.import_mtg_meta == 'true'
+    import-mtg-data:
+        if: github.event_name == 'schedule' || inputs.import_mtg_meta == 'true' || inputs.import_mtg_market == 'true'
         runs-on: ubuntu-latest
         env:
             INSFORGE_URL: ${{ secrets.INSFORGE_URL || secrets.VITE_INSFORGE_URL }}
@@ -52,10 +60,15 @@ jobs:
               run: npm ci
 
             - name: Import MTGTop8 metagame decks
+              if: github.event_name == 'schedule' || inputs.import_mtg_meta == 'true'
               run: npm run mtg:import-meta
 
+            - name: Import MTGJSON market data
+              if: github.event_name == 'schedule' || inputs.import_mtg_market == 'true'
+              run: npm run mtg:import-market
+
     build:
-        if: github.event_name != 'schedule' && inputs.import_mtg_meta != 'true'
+        if: github.event_name != 'schedule' && inputs.import_mtg_meta != 'true' && inputs.import_mtg_market != 'true'
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
@@ -79,7 +92,7 @@ jobs:
                   path: './dist'
 
     deploy:
-        if: github.event_name != 'schedule' && inputs.import_mtg_meta != 'true'
+        if: github.event_name != 'schedule' && inputs.import_mtg_meta != 'true' && inputs.import_mtg_market != 'true'
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
