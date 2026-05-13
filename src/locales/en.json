@@ -326,6 +326,8 @@
             "similarity": "Similarity",
             "similarityTooltip": "How closely your list matches this meta deck, calculated from shared cards and quantities.",
             "missingFromMeta": "Missing from meta",
+            "openMetaDeckLink": "View deck on MTGTop8",
+            "openSourceLink": "View source",
             "analysisNotes": "Analysis notes"
         },
         "history": {
