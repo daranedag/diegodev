@@ -152,9 +152,9 @@ async function openMtgJsonStream(url, label) {
 async function forEachMtgJsonDataEntry(url, label, onEntry) {
     const source = await openMtgJsonStream(url, label);
     const entryStream = source
-        .pipe(parser())
-        .pipe(pick({ filter: 'data' }))
-        .pipe(streamObject());
+        .pipe(parser.asStream())
+        .pipe(pick.asStream({ filter: 'data' }))
+        .pipe(streamObject.asStream());
 
     for await (const pair of entryStream) {
         await onEntry(String(pair.key), pair.value);
