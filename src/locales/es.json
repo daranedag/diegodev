@@ -328,6 +328,8 @@
             "similarity": "Similitud",
             "similarityTooltip": "Qué tanto se parece tu lista a este mazo meta, calculado por cartas compartidas y cantidades.",
             "missingFromMeta": "Faltan del meta",
+            "openMetaDeckLink": "Ver mazo en MTGTop8",
+            "openSourceLink": "Ver fuente",
             "analysisNotes": "Notas del análisis"
         },
         "history": {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 
@@ -146,25 +146,57 @@ function formatUsdPrice(value) {
 
 function CardMarketTooltip({ cardName, marketData, t }) {
     const [open, setOpen] = useState(false);
+    const closeTimerRef = useRef(null);
     const hasData = Boolean(marketData);
     const cardKingdomPrice = formatUsdPrice(marketData?.cardkingdom_price_usd);
     const tcgPlayerPrice = formatUsdPrice(marketData?.tcgplayer_price_usd);
 
+    const cancelClose = () => {
+        if (closeTimerRef.current) {
+            clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+    };
+
+    const openTooltip = () => {
+        cancelClose();
+        setOpen(true);
+    };
+
+    const scheduleClose = () => {
+        cancelClose();
+        closeTimerRef.current = setTimeout(() => {
+            setOpen(false);
+            closeTimerRef.current = null;
+        }, 140);
+    };
+
+    useEffect(() => () => {
+        if (closeTimerRef.current) {
+            clearTimeout(closeTimerRef.current);
+            closeTimerRef.current = null;
+        }
+    }, []);
+
     return (
-        <span
-            className="relative inline-flex max-w-full"
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-        >
+        <span className="relative inline-flex max-w-full">
             <button
                 type="button"
                 onClick={() => setOpen((value) => !value)}
+                onMouseEnter={openTooltip}
+                onMouseLeave={scheduleClose}
+                onFocus={openTooltip}
+                onBlur={scheduleClose}
                 className="text-left text-sm font-medium text-gray-900 underline decoration-dotted underline-offset-2 hover:text-purple-700 dark:text-white dark:hover:text-purple-300"
             >
                 {cardName}
             </button>
 
-            <div className={`absolute left-0 top-full mt-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-700 shadow-xl transition-opacity z-30 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 ${open ? 'visible opacity-100' : 'invisible opacity-0'}`}>
+            <div
+                onMouseEnter={openTooltip}
+                onMouseLeave={scheduleClose}
+                className={`absolute left-0 top-full mt-2 w-72 rounded-lg border border-gray-200 bg-white p-3 text-xs text-gray-700 shadow-xl transition-opacity z-30 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 ${open ? 'visible opacity-100' : 'invisible opacity-0'}`}
+            >
                 {hasData ? (
                     <div className="space-y-2">
                         <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400">
@@ -746,6 +778,18 @@ export default function AnalysisPanel({ result, loading }) {
                                     <p className="text-xs text-gray-600 dark:text-gray-400 mt-2">
                                         {t('mtg.analysis.missingFromMeta', 'Faltan del meta')}: {d.missing_main_cards.join(', ')}
                                     </p>
+                                )}
+                                {d.source_url && (
+                                    <a
+                                        href={d.source_url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="mt-2 inline-flex text-xs text-purple-700 underline underline-offset-2 hover:text-purple-800 dark:text-purple-300 dark:hover:text-purple-200"
+                                    >
+                                        {d.source?.toLowerCase() === 'mtgtop8'
+                                            ? t('mtg.analysis.openMetaDeckLink', 'Ver mazo en MTGTop8')
+                                            : t('mtg.analysis.openSourceLink', 'Ver fuente')}
+                                    </a>
                                 )}
                             </div>
                         ))}
