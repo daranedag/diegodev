@@ -62,6 +62,9 @@ importers:
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
+      stream-json:
+        specifier: ^2.1.0
+        version: 2.1.0
     devDependencies:
       '@eslint/js':
         specifier: ^9.36.0
@@ -1588,6 +1591,12 @@ packages:
   stackblur-canvas@2.7.0:
     resolution: {integrity: sha512-yf7OENo23AGJhBriGx0QivY5JP6Y1HbrrDI6WLt6C5auYZXlQrheoY8hD4ibekFKz1HOfE48Ww8kMWMnJD/zcQ==}
     engines: {node: '>=0.1.14'}
+
+  stream-chain@3.6.2:
+    resolution: {integrity: sha512-MRUXdH/Fcv2I95WSkPthvpxGsuKeBpr50UXcP5Z3ncWafYxrWelMTVI3G7vJFABCs1ipoTPCN3J13ZcLpymrtA==}
+
+  stream-json@2.1.0:
+    resolution: {integrity: sha512-9gV/ywtebMn3DdKnNKYCb9iESvgR1dHbucNV+bRGvdvy+jV4c9FFgYKmENhpKv58jSwvs90Wk80RhfKk1KxHPg==}
 
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
@@ -3220,6 +3229,12 @@ snapshots:
 
   stackblur-canvas@2.7.0:
     optional: true
+
+  stream-chain@3.6.2: {}
+
+  stream-json@2.1.0:
+    dependencies:
+      stream-chain: 3.6.2
 
   strip-json-comments@3.1.1: {}
 
