@@ -125,14 +125,32 @@ async function fetchJsonPayload(url, label) {
     }
 
     const buffer = Buffer.from(await response.arrayBuffer());
+    const isGzip = buffer.length >= 2 && buffer[0] === 0x1f && buffer[1] === 0x8b;
+    const contentEncoding = response.headers.get('content-encoding')?.toLowerCase() ?? '';
+    const shouldGunzip = isGzip || contentEncoding.includes('gzip');
+
     let text;
-    try {
-        text = gunzipSync(buffer).toString('utf8');
-    } catch {
+    if (shouldGunzip) {
+        try {
+            text = gunzipSync(buffer).toString('utf8');
+        } catch (error) {
+            throw new Error(
+                `Failed to decompress ${label} as gzip (${url}): ${error.message}`
+            );
+        }
+    } else {
         text = buffer.toString('utf8');
     }
 
-    const payload = JSON.parse(text);
+    let payload;
+    try {
+        payload = JSON.parse(text);
+    } catch (error) {
+        const snippet = text.slice(0, 120).replace(/\s+/g, ' ');
+        throw new Error(
+            `Invalid JSON payload for ${label} (${url}): ${error.message}. First bytes: "${snippet}"`
+        );
+    }
     if (payload?.data != null) return payload;
     return { data: payload, meta: null };
 }
