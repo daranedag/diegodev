@@ -54,18 +54,23 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: '20'
-                  cache: 'npm'
+                  cache: 'pnpm'
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
 
             - name: Install dependencies
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
             - name: Import MTGTop8 metagame decks
               if: github.event_name == 'schedule' || inputs.import_mtg_meta == 'true'
-              run: npm run mtg:import-meta
+              run: pnpm run mtg:import-meta
 
             - name: Import MTGJSON market data
               if: github.event_name == 'schedule' || inputs.import_mtg_market == 'true'
-              run: npm run mtg:import-market
+              run: pnpm run mtg:import-market
 
     build:
         if: github.event_name != 'schedule' && inputs.import_mtg_meta != 'true' && inputs.import_mtg_market != 'true'
@@ -78,13 +83,18 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: '18'
-                  cache: 'npm'
+                  cache: 'pnpm'
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
 
             - name: Install dependencies
-              run: npm ci
+              run: pnpm install --frozen-lockfile
 
             - name: Build
-              run: npm run build
+              run: pnpm run build
 
             - name: Upload build artifacts
               uses: actions/upload-pages-artifact@v3
