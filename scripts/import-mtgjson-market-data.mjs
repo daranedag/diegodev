@@ -1,7 +1,15 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { gunzipSync } from 'node:zlib';
+import { Readable } from 'node:stream';
+import { createGunzip } from 'node:zlib';
 import { createClient } from '@insforge/sdk';
+import streamJson from 'stream-json';
+import pickModule from 'stream-json/filters/pick.js';
+import streamObjectModule from 'stream-json/streamers/stream-object.js';
+
+const { parser } = streamJson;
+const { pick } = pickModule;
+const { streamObject } = streamObjectModule;
 
 const MTGJSON_IDENTIFIERS_URL =
     process.env.MTGJSON_IDENTIFIERS_URL ?? 'https://mtgjson.com/api/v5/AllIdentifiers.json.gz';
@@ -112,7 +120,13 @@ function extractProviderPrice(providerData) {
     return { price: null, date: null };
 }
 
-async function fetchJsonPayload(url, label) {
+function shouldGunzipResponse(url, response) {
+    const contentEncoding = response.headers.get('content-encoding')?.toLowerCase() ?? '';
+    if (contentEncoding.includes('gzip')) return true;
+    return /\.gz(?:$|[?#])/i.test(url);
+}
+
+async function openMtgJsonStream(url, label) {
     console.log(`Downloading ${label}: ${url}`);
     const response = await fetch(url, {
         headers: {
@@ -123,36 +137,28 @@ async function fetchJsonPayload(url, label) {
     if (!response.ok) {
         throw new Error(`Failed to download ${label}. HTTP ${response.status}`);
     }
-
-    const buffer = Buffer.from(await response.arrayBuffer());
-    const isGzip = buffer.length >= 2 && buffer[0] === 0x1f && buffer[1] === 0x8b;
-    const contentEncoding = response.headers.get('content-encoding')?.toLowerCase() ?? '';
-    const shouldGunzip = isGzip || contentEncoding.includes('gzip');
-
-    let text;
-    if (shouldGunzip) {
-        try {
-            text = gunzipSync(buffer).toString('utf8');
-        } catch (error) {
-            throw new Error(
-                `Failed to decompress ${label} as gzip (${url}): ${error.message}`
-            );
-        }
-    } else {
-        text = buffer.toString('utf8');
+    if (!response.body) {
+        throw new Error(`Response body missing for ${label}: ${url}`);
     }
 
-    let payload;
-    try {
-        payload = JSON.parse(text);
-    } catch (error) {
-        const snippet = text.slice(0, 120).replace(/\s+/g, ' ');
-        throw new Error(
-            `Invalid JSON payload for ${label} (${url}): ${error.message}. First bytes: "${snippet}"`
-        );
+    const nodeStream = Readable.fromWeb(response.body);
+    if (!shouldGunzipResponse(url, response)) return nodeStream;
+
+    const unzip = createGunzip();
+    nodeStream.on('error', (error) => unzip.destroy(error));
+    return nodeStream.pipe(unzip);
+}
+
+async function forEachMtgJsonDataEntry(url, label, onEntry) {
+    const source = await openMtgJsonStream(url, label);
+    const entryStream = source
+        .pipe(parser())
+        .pipe(pick({ filter: 'data' }))
+        .pipe(streamObject());
+
+    for await (const pair of entryStream) {
+        await onEntry(String(pair.key), pair.value);
     }
-    if (payload?.data != null) return payload;
-    return { data: payload, meta: null };
 }
 
 function extractIdentifiers(entry) {
@@ -194,7 +200,7 @@ function buildIdentifierCard(uuid, card, fallbackReleaseDate = null) {
     };
 }
 
-function buildIdentifierIndexes(allIdentifiersData) {
+function buildIdentifierIndexesFromEntries(entries) {
     const byOracle = new Map();
     const byUuid = new Map();
     let scanned = 0;
@@ -208,22 +214,7 @@ function buildIdentifierIndexes(allIdentifiersData) {
         scanned += 1;
     };
 
-    // Shape A: Set map (setCode -> { releaseDate, cards: [...] })
-    const asSets = Object.values(allIdentifiersData).filter(
-        (value) => value && typeof value === 'object' && Array.isArray(value.cards)
-    );
-    if (asSets.length > 0) {
-        for (const setData of asSets) {
-            const releaseDate = toIsoDateOrNull(setData.releaseDate);
-            for (const card of setData.cards) {
-                append(buildIdentifierCard(card.uuid, card, releaseDate));
-            }
-        }
-        return { byOracle, byUuid, scanned };
-    }
-
-    // Shape B: UUID map (uuid -> card object or identifiers-only object)
-    for (const [uuid, value] of Object.entries(allIdentifiersData)) {
+    for (const [uuid, value] of entries) {
         append(buildIdentifierCard(uuid, value));
     }
     return { byOracle, byUuid, scanned };
@@ -318,20 +309,17 @@ async function fetchAllMtgCards() {
 }
 
 function resolveMarketRows(params) {
-    const { mtgCards, byOracle, byUuid, pricesByUuid, defaultPriceDate } = params;
+    const { mtgCards, baseByOracle, pricesByUuid, defaultPriceDate } = params;
     const rows = [];
 
     for (const card of mtgCards) {
         const oracleId = normalizeOracleId(card.oracle_id);
         if (!oracleId) continue;
 
-        const candidates = byOracle.get(oracleId);
-        if (!candidates || candidates.length === 0) continue;
-
-        const baseCandidate = selectBaseNonFoilCandidate(candidates, byUuid);
+        const baseCandidate = baseByOracle.get(oracleId);
         if (!baseCandidate) continue;
 
-        const priceNode = pricesByUuid[baseCandidate.uuid] ?? null;
+        const priceNode = pricesByUuid.get(baseCandidate.uuid) ?? null;
         const paper = priceNode?.paper ?? {};
 
         const ck = extractProviderPrice(paper.cardkingdom);
@@ -358,6 +346,75 @@ function resolveMarketRows(params) {
     }
 
     return rows;
+}
+
+async function buildTrackedIdentifiers(mtgCards) {
+    const trackedOracleIds = new Set(
+        mtgCards
+            .map((card) => normalizeOracleId(card.oracle_id))
+            .filter(Boolean)
+    );
+    if (trackedOracleIds.size === 0) {
+        return {
+            baseByOracle: new Map(),
+            scannedTracked: 0,
+            scannedAllEntries: 0,
+        };
+    }
+
+    const trackedEntries = [];
+    let scannedAllEntries = 0;
+
+    await forEachMtgJsonDataEntry(
+        MTGJSON_IDENTIFIERS_URL,
+        'AllIdentifiers',
+        async (uuid, value) => {
+            scannedAllEntries += 1;
+            const candidate = buildIdentifierCard(uuid, value);
+            if (!candidate) return;
+            if (!trackedOracleIds.has(candidate.oracle_id)) return;
+            trackedEntries.push([uuid, value]);
+        }
+    );
+
+    const { byOracle, byUuid, scanned } = buildIdentifierIndexesFromEntries(trackedEntries);
+    const baseByOracle = new Map();
+    for (const [oracleId, candidates] of byOracle.entries()) {
+        const base = selectBaseNonFoilCandidate(candidates, byUuid);
+        if (base) baseByOracle.set(oracleId, base);
+    }
+
+    return {
+        baseByOracle,
+        scannedTracked: scanned,
+        scannedAllEntries,
+    };
+}
+
+async function collectPricesForUuids(uuids) {
+    const pricesByUuid = new Map();
+    let defaultPriceDate = null;
+    const requested = new Set(uuids.map((value) => normalizeUuid(value)).filter(Boolean));
+    if (requested.size === 0) return { pricesByUuid, defaultPriceDate };
+
+    await forEachMtgJsonDataEntry(
+        MTGJSON_PRICES_URL,
+        'AllPricesToday',
+        async (uuid, value) => {
+            const normalized = normalizeUuid(uuid);
+            if (!normalized || !requested.has(normalized)) return;
+            pricesByUuid.set(normalized, value);
+
+            if (defaultPriceDate) return;
+            const paper = value?.paper ?? {};
+            const ck = extractProviderPrice(paper.cardkingdom);
+            const tcg = extractProviderPrice(paper.tcgplayer);
+            defaultPriceDate = bestDate(ck.date, tcg.date) ?? defaultPriceDate;
+        }
+    );
+
+    if (!defaultPriceDate) defaultPriceDate = new Date().toISOString().slice(0, 10);
+    return { pricesByUuid, defaultPriceDate };
 }
 
 async function persistRows(rows) {
@@ -426,22 +483,19 @@ async function main() {
         '7. Upsert rows into mtg_card_market_data and log ingestion run.',
     ].join('\n'));
 
-    const [identifiersPayload, pricesPayload] = await Promise.all([
-        fetchJsonPayload(MTGJSON_IDENTIFIERS_URL, 'AllIdentifiers'),
-        fetchJsonPayload(MTGJSON_PRICES_URL, 'AllPricesToday'),
-    ]);
-
-    const { byOracle, byUuid, scanned } = buildIdentifierIndexes(identifiersPayload.data ?? {});
-    const pricesByUuid = pricesPayload.data ?? {};
-    const defaultPriceDate = toIsoDateOrNull(pricesPayload?.meta?.date);
-
-    console.log(`Indexed ${scanned} identifier cards across ${byOracle.size} oracle groups.`);
-
     const mtgCards = db ? await fetchAllMtgCards() : [];
+    const { baseByOracle, scannedTracked, scannedAllEntries } = await buildTrackedIdentifiers(mtgCards);
+    const selectedUuids = [...baseByOracle.values()].map((candidate) => candidate.uuid);
+    const { pricesByUuid, defaultPriceDate } = await collectPricesForUuids(selectedUuids);
+
+    console.log(
+        `Indexed ${scannedTracked} tracked identifier cards from ${scannedAllEntries} total entries across ${baseByOracle.size} oracle groups.`
+    );
+    console.log(`Collected prices for ${pricesByUuid.size} tracked UUIDs.`);
+
     const rows = resolveMarketRows({
         mtgCards,
-        byOracle,
-        byUuid,
+        baseByOracle,
         pricesByUuid,
         defaultPriceDate,
     });
