@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import fotoChilcos from '../../../assets/img/chilcos.png';
 import fotoIdeaGarden from '../../../assets/img/ideaGarden.png';
-import fotoObserva from '../../../assets/img/observa.png';
+import fotoBibleBff from '../../../assets/img/biblebff.png';
 
 const ProjectCard = ({ title, description, link, img, gradient }) => {
+    const hasImage = Boolean(img);
+
     return (
         <div className="group">
             <Link to={link} target="_blank" rel="noopener noreferrer" className="no-underline">
@@ -12,16 +14,18 @@ const ProjectCard = ({ title, description, link, img, gradient }) => {
                     <div className="w-full h-48 relative overflow-hidden">
                         {/* Texto por defecto */}
                         <div
-                            className={`absolute inset-0 w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center transition-opacity duration-600 group-hover:opacity-0`}
+                            className={`absolute inset-0 w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center transition-opacity duration-600 ${hasImage ? 'group-hover:opacity-0' : ''}`}
                         >
                             <span className="text-white font-semibold text-xl">{title}</span>
                         </div>
                         {/* Imagen al hacer hover */}
-                        <img
-                            src={img}
-                            alt={title}
-                            className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-600"
-                        />
+                        {hasImage && (
+                            <img
+                                src={img}
+                                alt={title}
+                                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-600"
+                            />
+                        )}
                     </div>
                 </div>
                 <div className="mt-4">
@@ -53,11 +57,11 @@ const FeaturedWork = () => {
             img: fotoChilcos,
         },
         {
-            title: t('work.observaLosRios.title'),
-            description: t('work.observaLosRios.description'),
-            gradient: 'from-blue-500 to-purple-600',
-            link: 'https://www.observalosrios.cl',
-            img: fotoObserva
+            title: t('work.bibleBff.title'),
+            description: t('work.bibleBff.description'),
+            gradient: 'from-amber-500 via-rose-500 to-purple-600',
+            link: 'https://biblebff.app',
+            img: fotoBibleBff,
         }
     ];
 
