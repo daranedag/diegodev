@@ -1,67 +1,46 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { insforge } from '../lib/insforge'
-import SessionToast from '../components/Auth/SessionToast'
+import { hasPendingInsforgeOAuthCallback, insforge } from '../lib/insforge'
 
 const AuthContext = createContext(null)
 
-const REFRESH_INTERVAL = 10 * 60 * 1000 // 10 minutos
+function hasInsforgeCsrfToken() {
+    return document.cookie
+        .split(';')
+        .some((cookie) => cookie.trim().startsWith('insforge_csrf_token='))
+}
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [sessionStatus, setSessionStatus] = useState('idle') // 'idle' | 'refreshing' | 'expired'
 
     useEffect(() => {
-        const params = new URLSearchParams(window.location.search)
-        const code = params.get('insforge_code')
+        let cancelled = false
 
-        if (code) {
-            // Clean the code from the URL immediately so it's not reused
-            const cleanUrl = window.location.pathname
-            window.history.replaceState({}, '', cleanUrl)
+        async function restoreSession() {
+            // Browser-mode InsForge stores the refresh token in an httpOnly
+            // cookie and leaves this CSRF cookie as the client-side marker.
+            // Without either marker, refresh can only return the expected 401
+            // "No refresh token provided" for an anonymous visitor.
+            if (!hasPendingInsforgeOAuthCallback && !hasInsforgeCsrfToken()) {
+                if (!cancelled) setLoading(false)
+                return
+            }
 
-            insforge.auth.exchangeCodeForSession(code)
-                .then(({ data }) => {
-                    setUser(data?.user ?? null)
-                })
-                .catch(() => {
-                    // If exchange fails, fall back to getCurrentUser
-                    return insforge.auth.getCurrentUser().then(({ data }) => {
-                        setUser(data?.user ?? null)
-                    })
-                })
-                .finally(() => setLoading(false))
-        } else {
-            insforge.auth.getCurrentUser().then(({ data }) => {
+            // The SDK automatically exchanges insforge_code (PKCE) and waits
+            // for that work here. Do not exchange it a second time.
+            const { data } = await insforge.auth.getCurrentUser()
+            if (!cancelled) {
                 setUser(data?.user ?? null)
                 setLoading(false)
-            })
+            }
+        }
+
+        restoreSession()
+
+        return () => {
+            cancelled = true
         }
     }, [])
-
-    // Polling de refresco de sesión cada 10 minutos
-    useEffect(() => {
-        if (!user) return
-
-        const interval = setInterval(async () => {
-            setSessionStatus('refreshing')
-            try {
-                const { data } = await insforge.auth.getCurrentUser()
-                if (data?.user) {
-                    setUser(data.user)
-                    setSessionStatus('idle')
-                } else {
-                    setUser(null)
-                    setSessionStatus('expired')
-                }
-            } catch {
-                setUser(null)
-                setSessionStatus('expired')
-            }
-        }, REFRESH_INTERVAL)
-
-        return () => clearInterval(interval)
-    }, [user])
 
     async function signInWithGoogle() {
         await insforge.auth.signInWithOAuth({
@@ -73,17 +52,11 @@ export function AuthProvider({ children }) {
     async function signOut() {
         await insforge.auth.signOut()
         setUser(null)
-        setSessionStatus('idle')
     }
 
     return (
         <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
             {children}
-            <SessionToast
-                status={sessionStatus}
-                onSignIn={signInWithGoogle}
-                onDismiss={() => setSessionStatus('idle')}
-            />
         </AuthContext.Provider>
     )
 }
