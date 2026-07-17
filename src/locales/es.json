@@ -16,9 +16,9 @@
             "title": "Chilcos",
             "description": "Sitio web para Colegio Waldorf en Valdivia, Chile."
         },
-        "observaLosRios": {
-            "title": "Observa Los Ríos",
-            "description": "Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile."
+        "bibleBff": {
+            "title": "Bible BFF",
+            "description": "App que acompaña la lectura bíblica con una experiencia cercana, guiada y conversacional."
         }
     },
     "home": {
@@ -172,17 +172,14 @@
             ]
         },
         "project3": {
-            "title": "Observa Los Ríos",
-            "description": "Plataforma de monitoreo de políticas públicas en la región de Los Ríos, Chile.",
-            "detailedDescription": "Plataforma web desarrollada para el Centro de Estudios Regionales de la Universidad Austral de Chile. Permite el monitoreo y seguimiento de iniciativas en planes sectoriales de la región de Los Ríos. Incluye sistema de visualización de datos, reportes dinámicos y gestión de indicadores de cumplimiento de políticas públicas.",
+            "title": "Bible BFF",
+            "description": "App que acompaña la lectura bíblica con una experiencia cercana, guiada y conversacional.",
+            "detailedDescription": "Aplicación web enfocada en acompañar la lectura bíblica mediante una experiencia cercana, simple y conversacional. El proyecto prioriza una interfaz clara, accesible y responsive para ayudar a las personas a explorar contenido bíblico de manera más guiada y cotidiana.",
             "githubLink": "",
-            "productionLink": "https://www.observalosrios.cl",
+            "productionLink": "https://biblebff.app",
             "technologies": [
                 "React",
-                "Node.js",
-                "PostgreSQL",
                 "Tailwind CSS",
-                "Python Jupyter",
                 "Javascript"
             ]
         }

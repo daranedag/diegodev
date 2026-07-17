@@ -7,7 +7,7 @@ import ProjectModal from '../components/Portfolio/ProjectModal';
 import PropTypes from 'prop-types';
 import fotoChilcos from '../../assets/img/chilcos.png';
 import fotoIdeaGarden from '../../assets/img/ideaGarden.png';
-import fotoObserva from '../../assets/img/observa.png';
+import fotoBibleBff from '../../assets/img/biblebff.png';
 
 const Portfolio = ({ isDark, toggleTheme }) => {
     const { t } = useTranslation();
@@ -39,7 +39,7 @@ const Portfolio = ({ isDark, toggleTheme }) => {
             title: t('portfolio.project3.title'),
             description: t('portfolio.project3.description'),
             detailedDescription: t('portfolio.project3.detailedDescription'),
-            imageUrl: fotoObserva,
+            imageUrl: fotoBibleBff,
             githubLink: t('portfolio.project3.githubLink'),
             productionLink: t('portfolio.project3.productionLink'),
             technologies: t('portfolio.project3.technologies', { returnObjects: true }),
