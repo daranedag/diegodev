@@ -39,8 +39,12 @@
         "blog": "Blog",
         "games": "Games",
         "gamesEyebrow": "Game lab",
+        "wordle": "Word",
+        "wordleDescription": "A new word every three hours.",
         "arrowCube": "Arrow Cube",
         "arrowCubeDescription": "Free paths spanning multiple faces.",
+        "cryptogram": "Cryptogram",
+        "cryptogramDescription": "Decode phrases by connecting numbers and letters.",
         "mainNavigation": "Main navigation",
         "menuToggle": "Open or close menu",
         "languageToggle": "Change language",
@@ -76,6 +80,83 @@
         "completeTitle": "Cube released!",
         "completeDescription": "You solved a configuration that will never repeat.",
         "nextLevel": "Play next level"
+    },
+    "wordle": {
+        "eyebrow": "Word game · every 3 hours",
+        "titleStart": "Discover the",
+        "titleAccent": "Word",
+        "subtitle": "Five or six letters, six tries, and a new shared Spanish word every three hours.",
+        "gameLabel": "Word game",
+        "round": "Round",
+        "nextWord": "New word in",
+        "rowLabel": "Attempt {{number}}",
+        "keyboardLabel": "Game keyboard",
+        "enterKey": "Enter",
+        "submit": "Submit word",
+        "delete": "Delete letter",
+        "copyResult": "Copy result",
+        "howToPlay": "Type a five- or six-letter Spanish word, as shown by the board, and press Enter or Submit word. Green means the correct position; yellow, a letter in another position; gray, a letter that is not in the word.",
+        "notices": {
+            "incomplete": "Complete all {{count}} letters before submitting.",
+            "copied": "Result copied to your clipboard.",
+            "copyFailed": "The result could not be copied."
+        },
+        "result": {
+            "wonEyebrow": "Word found",
+            "lostEyebrow": "Round over",
+            "won": "Excellent play!",
+            "lost": "You were close",
+            "answer": "The word was"
+        },
+        "stats": {
+            "label": "Game statistics",
+            "played": "Played",
+            "wins": "Wins",
+            "streak": "Streak",
+            "best": "Best streak"
+        }
+    },
+    "cryptogram": {
+        "eyebrow": "Logic game · 3 attempts",
+        "titleStart": "Decode the",
+        "titleAccent": "Cryptogram",
+        "subtitle": "Each number hides a letter. Use the clues and rebuild the phrase before making three mistakes.",
+        "gameLabel": "Cryptogram game",
+        "attemptsLabel": "Available attempts",
+        "attempts": "Attempts",
+        "progress": "Completed",
+        "hint": "Clues",
+        "revealHint": "New clue",
+        "noHints": "No more clues",
+        "fillMode": {
+            "label": "Fill mode",
+            "linked": "All matches",
+            "single": "One by one"
+        },
+        "cellLabel": "Number {{number}}, letter {{letter}}",
+        "emptyCell": "empty",
+        "keyboardLabel": "Cryptogram keyboard",
+        "delete": "Delete",
+        "clear": "Clear",
+        "check": "Check phrase",
+        "newPhrase": "New phrase",
+        "howToPlay": "Choose whether matching numbers fill together or advance one cell at a time. Each letter is checked when selected: a correct answer hides its number, while a wrong answer uses one of your three attempts. You can also reveal more clues.",
+        "notices": {
+            "unsolved": "There are still letters left to solve.",
+            "incorrectLetter_one": "Incorrect letter. You have {{count}} attempt left.",
+            "incorrectLetter_other": "Incorrect letter. You have {{count}} attempts left.",
+            "hintRevealed": "New clue: {{number}} = {{letter}}.",
+            "linkedMode": "Matching numbers will now fill together.",
+            "singleMode": "You will now fill each cell separately."
+        },
+        "result": {
+            "wonEyebrow": "Code solved",
+            "lostEyebrow": "No attempts left",
+            "won": "You decoded the phrase!",
+            "lost": "The code won this time",
+            "author": "Author",
+            "source": "Source"
+        }
     },
     "bio": {
         "aboutTitle": "About Me",

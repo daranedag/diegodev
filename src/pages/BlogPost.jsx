@@ -9,6 +9,36 @@ import Footer from '../components/Footer';
 import BlogService from '../services/BlogService';
 import PropTypes from 'prop-types';
 
+const ALLOWED_IFRAME_HOSTS = new Set([
+    'www.youtube.com',
+    'youtube.com',
+    'player.vimeo.com',
+]);
+
+function sanitizeBlogContent(content) {
+    const sanitized = DOMPurify.sanitize(content || '', {
+        ADD_TAGS: ['iframe'],
+        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    });
+    const documentFragment = new DOMParser().parseFromString(sanitized, 'text/html');
+    documentFragment.querySelectorAll('iframe').forEach((iframe) => {
+        try {
+            const source = new URL(iframe.getAttribute('src') || '', window.location.origin);
+            if (source.protocol !== 'https:' || !ALLOWED_IFRAME_HOSTS.has(source.hostname)) {
+                iframe.remove();
+                return;
+            }
+            iframe.setAttribute('src', source.toString());
+            iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+            iframe.setAttribute('referrerpolicy', 'no-referrer');
+            iframe.setAttribute('loading', 'lazy');
+        } catch {
+            iframe.remove();
+        }
+    });
+    return documentFragment.body.innerHTML;
+}
+
 const BlogPost = ({ isDark, toggleTheme }) => {
     const { slug } = useParams();
     const { t, i18n } = useTranslation();
@@ -142,10 +172,7 @@ const BlogPost = ({ isDark, toggleTheme }) => {
                         <div
                             className="prose prose-lg dark:prose-invert max-w-none blog-content"
                             dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(postTranslation?.content || '', {
-                                    ADD_TAGS: ['iframe'],
-                                    ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
-                                })
+                                __html: sanitizeBlogContent(postTranslation?.content)
                             }}
                         />
 

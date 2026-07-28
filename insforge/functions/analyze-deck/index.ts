@@ -1,6 +1,6 @@
 // InsForge edge function — MTG Deck Analysis
 // Runtime: Deno (compatible with Supabase Edge Functions runtime)
-// Deploy: npx @insforge/cli functions deploy analyze-deck
+// Deploy: pnpm dlx @insforge/cli functions deploy analyze-deck
 //
 // This function:
 //   1. Parses a raw decklist (Arena format or plain text)
@@ -11,11 +11,60 @@
 //
 // NOTE: Global tables have public-read RLS, so the anon key is sufficient here.
 
-const CORS_HEADERS = {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+const DEFAULT_ALLOWED_ORIGINS = [
+    "https://diegui.dev",
+    "https://www.diegui.dev",
+    "http://localhost:5173",
+];
+const MAX_BODY_BYTES = 64 * 1024;
+const MAX_DECKLIST_CHARS = 32_000;
+const MAX_DECK_NAME_CHARS = 120;
+const MAX_DECK_LINES = 250;
+const MAX_UNIQUE_CARDS = 200;
+const MAX_QUANTITY_PER_LINE = 100;
+const MAX_TOTAL_CARDS = 500;
+const CACHE_TTL_MS = 6 * 60 * 60 * 1000;
+const UPSTREAM_TIMEOUT_MS = 8_000;
+
+function allowedOrigins(): Set<string> {
+    const configured = (Deno.env.get("ALLOWED_ORIGINS") ?? "")
+        .split(",")
+        .map((origin) => origin.trim())
+        .filter(Boolean);
+    return new Set(configured.length > 0 ? configured : DEFAULT_ALLOWED_ORIGINS);
+}
+
+function corsHeaders(req: Request): Record<string, string> {
+    const origin = req.headers.get("origin");
+    const headers: Record<string, string> = {
+        "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
+        "Vary": "Origin",
+    };
+    if (origin && allowedOrigins().has(origin)) headers["Access-Control-Allow-Origin"] = origin;
+    return headers;
+}
+
+function jsonResponse(req: Request, body: unknown, status = 200, extraHeaders: Record<string, string> = {}) {
+    return new Response(JSON.stringify(body), {
+        status,
+        headers: { ...corsHeaders(req), ...extraHeaders, "Content-Type": "application/json" },
+    });
+}
+
+async function fetchWithTimeout(
+    input: string | URL,
+    init: RequestInit = {},
+    timeoutMs = UPSTREAM_TIMEOUT_MS
+): Promise<Response> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        return await fetch(input, { ...init, signal: controller.signal });
+    } finally {
+        clearTimeout(timeout);
+    }
+}
 
 const VALID_FORMATS = ["standard", "modern", "pauper"] as const;
 const ANALYSIS_CACHE_VERSION = "mtg-agent-v3-market-tooltips";
@@ -97,7 +146,6 @@ interface AnalysisResponse {
     data_available: boolean;
     llm_used: boolean;
     deck_hash: string;
-    llm_raw?: string;
 }
 
 // ── Deck parser ───────────────────────────────────────────────────────────────
@@ -138,7 +186,7 @@ function parseDecklist(raw: string): { main: DeckCard[]; sideboard: DeckCard[]; 
 
         const quantity = parseInt(match[1], 10);
         const name = cleanCardName(match[2]);
-        if (!quantity || quantity < 1 || !name) {
+        if (!quantity || quantity < 1 || quantity > MAX_QUANTITY_PER_LINE || !name || name.length > 200) {
             ignored_lines.push(line);
             continue;
         }
@@ -153,6 +201,20 @@ function parseDecklist(raw: string): { main: DeckCard[]; sideboard: DeckCard[]; 
 
 function totalCards(cards: DeckCard[]): number {
     return cards.reduce((sum, c) => sum + c.quantity, 0);
+}
+
+function validateDecklistInput(rawDecklist: unknown, deckName: unknown): string | null {
+    if (typeof rawDecklist !== "string" || !rawDecklist.trim()) return "raw_decklist is required";
+    if (rawDecklist.length > MAX_DECKLIST_CHARS) {
+        return `raw_decklist exceeds the ${MAX_DECKLIST_CHARS}-character limit`;
+    }
+    if (rawDecklist.split(/\r?\n/).length > MAX_DECK_LINES) {
+        return `raw_decklist exceeds the ${MAX_DECK_LINES}-line limit`;
+    }
+    if (deckName != null && (typeof deckName !== "string" || deckName.length > MAX_DECK_NAME_CHARS)) {
+        return `deck_name must be a string of at most ${MAX_DECK_NAME_CHARS} characters`;
+    }
+    return null;
 }
 
 // ── REST helper for reading public DB tables ───────────────────────────────────
@@ -181,7 +243,7 @@ async function dbSelect(
 ): Promise<unknown[]> {
     const url = new URL(`${baseUrl}/api/database/records/${table}`);
     for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
-    const res = await fetch(url.toString(), {
+    const res = await fetchWithTimeout(url, {
         headers: {
             apikey: anonKey,
             Authorization: `Bearer ${anonKey}`,
@@ -193,6 +255,84 @@ async function dbSelect(
     return Array.isArray(json) ? json : (json?.data ?? []);
 }
 
+function bearerToken(req: Request): string | null {
+    const authorization = req.headers.get("authorization") ?? "";
+    const match = authorization.match(/^Bearer\s+(.+)$/i);
+    return match?.[1]?.trim() || null;
+}
+
+async function getAuthenticatedUser(
+    baseUrl: string,
+    anonKey: string,
+    accessToken: string
+): Promise<{ id: string } | null> {
+    if (!accessToken || accessToken === anonKey) return null;
+    const res = await fetchWithTimeout(`${baseUrl}/api/auth/sessions/current`, {
+        headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+        },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    return typeof json?.user?.id === "string" ? { id: json.user.id } : null;
+}
+
+async function consumeAnalysisQuota(
+    baseUrl: string,
+    anonKey: string,
+    accessToken: string
+): Promise<{ allowed: boolean; retry_after_seconds: number }> {
+    const res = await fetchWithTimeout(`${baseUrl}/api/database/rpc/mtg_consume_analysis_quota`, {
+        method: "POST",
+        headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+    });
+    if (!res.ok) throw new Error("Analysis quota is unavailable");
+    const json = await res.json();
+    const value = Array.isArray(json) ? json[0] : (json?.data ?? json);
+    return {
+        allowed: value?.allowed === true,
+        retry_after_seconds: Number(value?.retry_after_seconds) || 3600,
+    };
+}
+
+async function getServerCachedAnalysis(
+    baseUrl: string,
+    anonKey: string,
+    accessToken: string,
+    deckHash: string
+): Promise<Record<string, unknown> | null> {
+    const url = new URL(`${baseUrl}/api/database/records/mtg_analysis_runs`);
+    url.searchParams.set("select", "analysis_data,created_at");
+    url.searchParams.set("deck_hash", `eq.${deckHash}`);
+    url.searchParams.set("status", "eq.completed");
+    url.searchParams.set("created_at", `gte.${new Date(Date.now() - CACHE_TTL_MS).toISOString()}`);
+    url.searchParams.set("order", "created_at.desc");
+    url.searchParams.set("limit", "1");
+    const res = await fetchWithTimeout(url, {
+        headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+        },
+    });
+    if (!res.ok) return null;
+    const json = await res.json();
+    const rows = Array.isArray(json) ? json : (json?.data ?? []);
+    const analysis = rows?.[0]?.analysis_data;
+    if (!analysis || typeof analysis !== "object" || Array.isArray(analysis)) return null;
+    const safeAnalysis = { ...analysis };
+    delete safeAnalysis.llm_raw;
+    delete safeAnalysis.raw_decklist;
+    return { ...safeAnalysis, deck_hash: deckHash, cache_hit: true };
+}
+
 function chunkArray<T>(items: T[], size: number): T[][] {
     const chunks: T[][] = [];
     for (let i = 0; i < items.length; i += size) {
@@ -202,7 +342,7 @@ function chunkArray<T>(items: T[], size: number): T[][] {
 }
 
 function quoteForPostgrestIn(value: string): string {
-    return value.includes(",") ? `"${value.replace(/"/g, '\\"')}"` : value;
+    return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
 }
 
 async function fetchRecommendationMarketData(
@@ -529,7 +669,6 @@ interface LLMEnrichment {
     weaknesses: string[];
     recommendations: Recommendation[];
     analysis_notes: string;
-    _raw?: string;
 }
 
 function buildDecklistText(main: DeckCard[], sideboard: DeckCard[]): string {
@@ -544,7 +683,7 @@ function buildDecklistText(main: DeckCard[], sideboard: DeckCard[]): string {
 
 async function callLLM(
     baseUrl: string,
-    anonKey: string,
+    aiKey: string,
     params: {
         main: DeckCard[];
         sideboard: DeckCard[];
@@ -635,12 +774,12 @@ ${similarDeckContext || "Sin listas representativas cargadas"}
 Analiza el mazo y devuelve el JSON con recomendaciones concretas de cartas.`;
 
     try {
-        const res = await fetch(`${baseUrl}/api/ai/chat/completions`, {
+        const res = await fetchWithTimeout(`${baseUrl}/api/ai/chat/completions`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                apikey: anonKey,
-                Authorization: `Bearer ${anonKey}`,
+                apikey: aiKey,
+                Authorization: `Bearer ${aiKey}`,
             },
             body: JSON.stringify({
                 model: LLM_MODEL,
@@ -666,8 +805,27 @@ Analiza el mazo y devuelve el JSON con recomendaciones concretas de cartas.`;
         // Validate minimal shape
         if (!Array.isArray(parsed.recommendations)) return null;
 
-        parsed._raw = raw;
-        return parsed;
+        const safeStrings = (value: unknown, maxItems: number, maxLength: number) =>
+            Array.isArray(value)
+                ? value.filter((item): item is string => typeof item === "string")
+                    .slice(0, maxItems)
+                    .map((item) => item.slice(0, maxLength))
+                : [];
+        const safeRecommendations = parsed.recommendations.slice(0, 12).map((rec) => ({
+            ...rec,
+            card_name: String(rec.card_name ?? "").slice(0, 200),
+            reason: String(rec.reason ?? "").slice(0, 800),
+            quantity_suggested: Math.min(100, Math.max(1, Number(rec.quantity_suggested) || 1)),
+            priority: Math.min(100, Math.max(0, Number(rec.priority) || 0)),
+        }));
+        return {
+            strengths: safeStrings(parsed.strengths, 8, 500),
+            weaknesses: safeStrings(parsed.weaknesses, 8, 500),
+            recommendations: safeRecommendations,
+            analysis_notes: typeof parsed.analysis_notes === "string"
+                ? parsed.analysis_notes.slice(0, 2_000)
+                : "",
+        };
     } catch {
         return null;
     }
@@ -695,7 +853,7 @@ async function fetchScryfallCards(
     for (let i = 0; i < names.length; i += BATCH) {
         const batch = names.slice(i, i + BATCH);
         try {
-            const res = await fetch("https://api.scryfall.com/cards/collection", {
+            const res = await fetchWithTimeout("https://api.scryfall.com/cards/collection", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -1059,13 +1217,17 @@ async function validateRecommendations(
 }
 
 export default async function (req: Request) {
-    if (req.method === "OPTIONS") return new Response("ok", { headers: CORS_HEADERS });
+    const origin = req.headers.get("origin");
+    if (origin && !allowedOrigins().has(origin)) {
+        return jsonResponse(req, { error: "Origin not allowed" }, 403);
+    }
+
+    if (req.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: corsHeaders(req) });
+    }
 
     if (req.method !== "POST") {
-        return new Response(JSON.stringify({ error: "Method not allowed" }), {
-            status: 405,
-            headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-        });
+        return jsonResponse(req, { error: "Method not allowed" }, 405);
     }
 
     try {
@@ -1077,44 +1239,89 @@ export default async function (req: Request) {
             Deno.env.get("ANON_KEY") ??
             Deno.env.get("INSFORGE_ANON_KEY") ??
             Deno.env.get("SUPABASE_ANON_KEY");
+        const INSFORGE_AI_KEY = Deno.env.get("INSFORGE_AI_KEY") ?? Deno.env.get("API_KEY");
 
         if (!INSFORGE_URL || !INSFORGE_ANON_KEY) {
             throw new Error("Missing INSFORGE_URL or INSFORGE_ANON_KEY env vars");
         }
 
-        const body = await req.json();
-        const { raw_decklist, format_slug, deck_name } = body as {
-            raw_decklist: string;
-            format_slug: string;
-            deck_name?: string;
-        };
-        const deckHash = await sha256Hex(normalizeDecklistForHash(raw_decklist, format_slug));
-
-        if (!raw_decklist || typeof raw_decklist !== "string") {
-            return new Response(JSON.stringify({ error: "raw_decklist is required" }), {
-                status: 400,
-                headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-            });
+        const accessToken = bearerToken(req);
+        if (!accessToken) return jsonResponse(req, { error: "Authentication required" }, 401);
+        if (!(await getAuthenticatedUser(INSFORGE_URL, INSFORGE_ANON_KEY, accessToken))) {
+            return jsonResponse(req, { error: "Invalid or expired session" }, 401);
         }
-        if (!VALID_FORMATS.includes(format_slug as Format)) {
-            return new Response(
-                JSON.stringify({ error: `format_slug must be one of: ${VALID_FORMATS.join(", ")}` }),
-                { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
+
+        const quota = await consumeAnalysisQuota(INSFORGE_URL, INSFORGE_ANON_KEY, accessToken);
+        if (!quota.allowed) {
+            return jsonResponse(
+                req,
+                { error: "Analysis quota exceeded. Try again later." },
+                429,
+                { "Retry-After": String(quota.retry_after_seconds) }
             );
         }
 
+        const contentLength = Number(req.headers.get("content-length") ?? 0);
+        if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+            return jsonResponse(req, { error: "Request body is too large" }, 413);
+        }
+        const rawBody = await req.text();
+        if (new TextEncoder().encode(rawBody).byteLength > MAX_BODY_BYTES) {
+            return jsonResponse(req, { error: "Request body is too large" }, 413);
+        }
+
+        let body: unknown;
+        try {
+            body = JSON.parse(rawBody);
+        } catch {
+            return jsonResponse(req, { error: "Request body must be valid JSON" }, 400);
+        }
+        if (!body || typeof body !== "object" || Array.isArray(body)) {
+            return jsonResponse(req, { error: "Request body must be a JSON object" }, 400);
+        }
+        const { raw_decklist, format_slug, deck_name } = body as {
+            raw_decklist?: unknown;
+            format_slug?: unknown;
+            deck_name?: unknown;
+        };
+
+        const inputError = validateDecklistInput(raw_decklist, deck_name);
+        if (inputError) return jsonResponse(req, { error: inputError }, 400);
+        if (!VALID_FORMATS.includes(format_slug as Format)) {
+            return jsonResponse(
+                req,
+                { error: `format_slug must be one of: ${VALID_FORMATS.join(", ")}` },
+                400
+            );
+        }
+        const safeDecklist = (raw_decklist as string).trim();
+        const safeFormat = format_slug as Format;
+        const safeDeckName = typeof deck_name === "string" ? deck_name.trim() || null : null;
+        const deckHash = await sha256Hex(normalizeDecklistForHash(safeDecklist, safeFormat));
+
+        const cachedAnalysis = await getServerCachedAnalysis(
+            INSFORGE_URL,
+            INSFORGE_ANON_KEY,
+            accessToken,
+            deckHash
+        );
+        if (cachedAnalysis) return jsonResponse(req, cachedAnalysis);
+
         // ── Parse ──────────────────────────────────────────────────────────────────
-        const { main, sideboard, ignored_lines: ignoredLines } = parseDecklist(raw_decklist);
+        const { main, sideboard, ignored_lines: ignoredLines } = parseDecklist(safeDecklist);
         const mainCount = totalCards(main);
         const sideCount = totalCards(sideboard);
         const allCards = [...main, ...sideboard];
         const uniqueNames = [...new Set(allCards.map((c) => c.name))];
 
         if (mainCount === 0) {
-            return new Response(
-                JSON.stringify({ error: "No valid main-deck cards were parsed from raw_decklist" }),
-                { status: 400, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
-            );
+            return jsonResponse(req, { error: "No valid main-deck cards were parsed" }, 400);
+        }
+        if (uniqueNames.length > MAX_UNIQUE_CARDS) {
+            return jsonResponse(req, { error: `Deck exceeds the ${MAX_UNIQUE_CARDS}-card-name limit` }, 400);
+        }
+        if (mainCount + sideCount > MAX_TOTAL_CARDS) {
+            return jsonResponse(req, { error: `Deck exceeds the ${MAX_TOTAL_CARDS}-card total limit` }, 400);
         }
 
         // ── Query DB ───────────────────────────────────────────────────────────────
@@ -1126,9 +1333,7 @@ export default async function (req: Request) {
 
         try {
             // Use PostgREST `in` filter — quote names that contain commas
-            const inValues = uniqueNames
-                .map((n) => (n.includes(",") ? `"${n.replace(/"/g, '\\"')}"` : n))
-                .join(",");
+            const inValues = uniqueNames.map(quoteForPostgrestIn).join(",");
 
             const rawCards = await dbSelect(INSFORGE_URL, INSFORGE_ANON_KEY, "mtg_cards", {
                 select: "oracle_id,name,cmc,colors,type_line",
@@ -1149,7 +1354,7 @@ export default async function (req: Request) {
                     {
                         select: "oracle_id,status",
                         oracle_id: `in.(${foundOracleIds})`,
-                        format_slug: `eq.${format_slug}`,
+                        format_slug: `eq.${safeFormat}`,
                         status: "eq.legal",
                         limit: "1000",
                     }
@@ -1163,7 +1368,7 @@ export default async function (req: Request) {
                     "mtg_archetypes",
                     {
                         select: "id,name,strategy,tier,key_cards",
-                        format_slug: `eq.${format_slug}`,
+                        format_slug: `eq.${safeFormat}`,
                         is_active: "eq.true",
                         order: "tier.asc",
                         limit: "50",
@@ -1173,6 +1378,7 @@ export default async function (req: Request) {
             }
         } catch (err) {
             dbError = err instanceof Error ? err.message : String(err);
+            console.warn("MTG database lookup failed", dbError);
             dataAvailable = false;
         }
 
@@ -1184,7 +1390,7 @@ export default async function (req: Request) {
                     "mtg_archetypes",
                     {
                         select: "id,name,strategy,tier,key_cards",
-                        format_slug: `eq.${format_slug}`,
+                        format_slug: `eq.${safeFormat}`,
                         is_active: "eq.true",
                         order: "tier.asc",
                         limit: "50",
@@ -1228,7 +1434,7 @@ export default async function (req: Request) {
                     dbCards.push(entry);
                     cardMap.set(normalizeCardName(sc.name), entry);
                     // Mark as legal if Scryfall confirms it for the target format
-                    if (sc.legalities?.[format_slug] === "legal") {
+                    if (sc.legalities?.[safeFormat] === "legal") {
                         legalOracleIds.add(sc.oracle_id);
                     }
                 }
@@ -1239,7 +1445,7 @@ export default async function (req: Request) {
             // Illegal = in DB (or Scryfall) but not legal in this format,
             // OR genuinely not found anywhere
             const inDbButIllegal = dbCards
-                .filter((c) => !isCardLegal(c, legalOracleIds, format_slug))
+                .filter((c) => !isCardLegal(c, legalOracleIds, safeFormat))
                 .map((c) => c.name);
             illegalCards = [
                 ...inDbButIllegal,
@@ -1247,12 +1453,16 @@ export default async function (req: Request) {
             ];
 
             // Avg CMC across main deck copies
-            const cmcValues = main.flatMap((dc) => {
-                const card = cardMap.get(normalizeCardName(dc.name));
-                return card?.cmc != null ? Array(dc.quantity).fill(Number(card.cmc)) : [];
-            });
-            if (cmcValues.length > 0) {
-                avgCmc = cmcValues.reduce((a, b) => a + b, 0) / cmcValues.length;
+            let cmcTotal = 0;
+            let cmcCardCount = 0;
+            for (const deckCard of main) {
+                const card = cardMap.get(normalizeCardName(deckCard.name));
+                if (card?.cmc == null) continue;
+                cmcTotal += Number(card.cmc) * deckCard.quantity;
+                cmcCardCount += deckCard.quantity;
+            }
+            if (cmcCardCount > 0) {
+                avgCmc = cmcTotal / cmcCardCount;
             }
 
             // Color identity union
@@ -1291,7 +1501,7 @@ export default async function (req: Request) {
 
         try {
             const metaResult = await findSimilarMetaDecks(INSFORGE_URL, INSFORGE_ANON_KEY, {
-                formatSlug: format_slug,
+                formatSlug: safeFormat,
                 main,
                 sideboard,
                 archetypes,
@@ -1305,12 +1515,11 @@ export default async function (req: Request) {
 
         // ── LLM enrichment (best-effort, falls back to rule-based) ────────────────
         let llmResult: LLMEnrichment | null = null;
-        let llmRaw: string | undefined;
-        try {
-            llmResult = await callLLM(INSFORGE_URL, INSFORGE_ANON_KEY, {
+        if (INSFORGE_AI_KEY) try {
+            llmResult = await callLLM(INSFORGE_URL, INSFORGE_AI_KEY, {
                 main,
                 sideboard,
-                formatSlug: format_slug,
+                formatSlug: safeFormat,
                 avgCmc,
                 colorIdentity,
                 archetype: archetype ?? null,
@@ -1324,8 +1533,6 @@ export default async function (req: Request) {
             // LLM failure is non-fatal — fall through to rule-based output
         }
 
-        if (llmResult?._raw) llmRaw = llmResult._raw;
-
         const rawRecommendations = [
             ...recommendations,
             ...(llmResult?.recommendations ?? []),
@@ -1334,7 +1541,7 @@ export default async function (req: Request) {
             ? await validateRecommendations(rawRecommendations, {
                 cardMap,
                 legalOracleIds,
-                formatSlug: format_slug,
+                formatSlug: safeFormat,
                 deckCardNames: new Set(allCards.map((c) => normalizeCardName(c.name))),
             })
             : { recommendations, discarded: 0, unverified: 0 };
@@ -1344,9 +1551,7 @@ export default async function (req: Request) {
         if (llmResult?.analysis_notes) {
             analysisNotes = llmResult.analysis_notes;
         } else if (!dataAvailable) {
-            analysisNotes = dbError
-                ? `Error en la consulta a la base de datos: ${dbError}`
-                : "La base de datos de cartas aún no está poblada. Ejecuta el proceso de ingesta (Scryfall/MTGJSON) para habilitar la detección de arquetipos y las recomendaciones específicas.";
+            analysisNotes = "Los datos de cartas no están disponibles temporalmente. Intenta nuevamente más tarde.";
         } else if (!archetype) {
             analysisNotes =
                 "Ningún arquetipo conocido coincidió con alta confianza. Tu mazo puede ser un híbrido o una construcción propia — ¡sigue refinándolo!";
@@ -1397,8 +1602,8 @@ export default async function (req: Request) {
         }
 
         const response: AnalysisResponse = {
-            format_slug,
-            deck_name: deck_name ?? null,
+            format_slug: safeFormat,
+            deck_name: safeDeckName,
             archetype_detected: archetype?.name ?? null,
             strategy_detected: archetype?.strategy ?? null,
             tier_detected: archetype?.tier ?? null,
@@ -1421,16 +1626,11 @@ export default async function (req: Request) {
             data_available: dataAvailable,
             llm_used: llmResult !== null,
             deck_hash: deckHash,
-            llm_raw: llmRaw,
         };
 
-        return new Response(JSON.stringify(response), {
-            headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-        });
+        return jsonResponse(req, response);
     } catch (err) {
-        return new Response(
-            JSON.stringify({ error: err instanceof Error ? err.message : "Internal server error" }),
-            { status: 500, headers: { ...CORS_HEADERS, "Content-Type": "application/json" } }
-        );
+        console.error("analyze-deck failed", err);
+        return jsonResponse(req, { error: "Internal server error" }, 500);
     }
 }

@@ -12,6 +12,8 @@ const META_WINDOW = process.env.MTGTOP8_META ?? '52';
 const MAX_ARCHETYPES = Number(process.env.MTGTOP8_MAX_ARCHETYPES ?? 10);
 const MAX_DECKS_PER_ARCHETYPE = Number(process.env.MTGTOP8_MAX_DECKS_PER_ARCHETYPE ?? 10);
 const REQUEST_DELAY_MS = Number(process.env.MTGTOP8_REQUEST_DELAY_MS ?? 650);
+const REQUEST_TIMEOUT_MS = Number(process.env.MTGTOP8_REQUEST_TIMEOUT_MS ?? 15000);
+const MAX_HTML_BYTES = Number(process.env.MTGTOP8_MAX_HTML_BYTES ?? 2_000_000);
 const DRY_RUN = process.argv.includes('--dry-run');
 
 const cliFormatArg = process.argv.find((arg) => arg.startsWith('--format='));
@@ -166,13 +168,19 @@ function computeCompetitiveScore({ rank, levelStars, metaShare, recordedAt }) {
 async function fetchHtml(path) {
     const url = path.startsWith('http') ? path : `${BASE_URL}/${path.replace(/^\//, '')}`;
     const response = await fetch(url, {
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
         headers: {
             'user-agent': 'diegodev-mtg-agent/1.0 (+https://github.com/)',
             accept: 'text/html',
         },
     });
     if (!response.ok) throw new Error(`MTGTop8 request failed ${response.status}: ${url}`);
+    const declaredLength = Number(response.headers.get('content-length') ?? 0);
+    if (declaredLength > MAX_HTML_BYTES) throw new Error(`MTGTop8 response is too large: ${url}`);
     const html = await response.text();
+    if (Buffer.byteLength(html, 'utf8') > MAX_HTML_BYTES) {
+        throw new Error(`MTGTop8 response exceeded ${MAX_HTML_BYTES} bytes: ${url}`);
+    }
     await sleep(REQUEST_DELAY_MS);
     return html;
 }

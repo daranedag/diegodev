@@ -5,9 +5,11 @@ import {
     Bars3Icon,
     ChevronDownIcon,
     CubeTransparentIcon,
+    KeyIcon,
     LanguageIcon,
     MoonIcon,
     PuzzlePieceIcon,
+    Squares2X2Icon,
     SunIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -27,10 +29,22 @@ const misLinks = [
 
 const gameLinks = [
     {
+        nombre: 'wordle',
+        descripcion: 'wordleDescription',
+        ruta: '/games/wordle',
+        icon: Squares2X2Icon,
+    },
+    {
         nombre: 'arrowCube',
         descripcion: 'arrowCubeDescription',
         ruta: '/games/arrow-cube',
         icon: CubeTransparentIcon,
+    },
+    {
+        nombre: 'cryptogram',
+        descripcion: 'cryptogramDescription',
+        ruta: '/games/cryptogram',
+        icon: KeyIcon,
     },
 ];
 

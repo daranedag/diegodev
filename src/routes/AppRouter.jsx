@@ -9,6 +9,8 @@ import Kanban from '../pages/Kanban';
 import Places from '../pages/Places';
 import MtgAgent from '../pages/MtgAgent';
 import ArrowCube from '../pages/ArrowCube';
+import Wordle from '../pages/Wordle';
+import Cryptogram from '../pages/Cryptogram';
 import NotFound from '../pages/NotFound';
 import PropTypes from 'prop-types';
 
@@ -25,6 +27,8 @@ const AppRouter = ({ isDark, toggleTheme }) => {
             <Route path="/places" element={<Places isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="/mtg" element={<MtgAgent isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="/games/arrow-cube" element={<ArrowCube isDark={isDark} toggleTheme={toggleTheme} />} />
+            <Route path="/games/wordle" element={<Wordle isDark={isDark} toggleTheme={toggleTheme} />} />
+            <Route path="/games/cryptogram" element={<Cryptogram isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="*" element={<NotFound isDark={isDark} toggleTheme={toggleTheme} />} />
         </Routes>
     );

@@ -55,6 +55,9 @@ export class MtgAgentService {
      * @param {string|null} deckId  - Optional linked user deck id
      */
     static async saveAnalysisRun(userId, formatSlug, analysisData, deckId = null) {
+        const persistedAnalysis = { ...analysisData };
+        delete persistedAnalysis.raw_decklist;
+        delete persistedAnalysis.llm_raw;
         const { data, error } = await insforge.database
             .from('mtg_analysis_runs')
             .insert([{
@@ -68,7 +71,7 @@ export class MtgAgentService {
                 confidence_score: analysisData.confidence_score,
                 strengths: analysisData.strengths,
                 weaknesses: analysisData.weaknesses,
-                analysis_data: analysisData,
+                analysis_data: persistedAnalysis,
                 deck_hash: analysisData.deck_hash,
             }])
             .select()

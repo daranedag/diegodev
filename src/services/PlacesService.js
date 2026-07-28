@@ -12,6 +12,15 @@ export class PlacesService {
         return data || []
     }
 
+    static async getPlacesWithItemCounts() {
+        const { data, error } = await insforge.database.rpc('places_with_item_counts')
+        if (error) throw error
+        return (data || []).map(place => ({
+            ...place,
+            item_count: Number(place.item_count || 0),
+        }))
+    }
+
     static async createPlace(fields) {
         const { data, error } = await insforge.database
             .from('places')

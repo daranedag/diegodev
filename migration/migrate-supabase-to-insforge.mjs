@@ -1,13 +1,17 @@
 // migration/migrate-supabase-to-insforge.mjs
 // Exporta datos de Supabase y genera SQL para importar en InsForge via CLI
 // Ejecutar con: node migration/migrate-supabase-to-insforge.mjs
-// Luego: npx @insforge/cli db import migration/data-export.sql -y
+// Luego: pnpm dlx @insforge/cli db import migration/data-export.sql -y
 
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { writeFileSync } from 'fs'
 
-const SUPABASE_URL = 'https://ajesmsnzzwzokqiqbxii.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqZXNtc256end6b2txaXFieGlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNDQ2NTMsImV4cCI6MjA3NTYyMDY1M30.joiE-JK2Y6Pn4flxBd42rMfbG3zaXZ12k3ftpi0Gje8'
+const SUPABASE_URL = process.env.LEGACY_SUPABASE_URL
+const SUPABASE_ANON_KEY = process.env.LEGACY_SUPABASE_ANON_KEY
+
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw new Error('Missing LEGACY_SUPABASE_URL or LEGACY_SUPABASE_ANON_KEY')
+}
 
 const supabase = createSupabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 

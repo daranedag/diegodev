@@ -39,17 +39,9 @@ export default function Places({ isDark, toggleTheme }) {
     async function loadPlaces() {
         setLoadingPlaces(true)
         try {
-            const data = await PlacesService.getPlaces()
+            const data = await PlacesService.getPlacesWithItemCounts()
             setPlaces(data)
-            // Fetch item counts for each place in parallel
-            const counts = await Promise.all(
-                data.map(async p => {
-                    const items = await PlacesService.getPlaceItems(p.id)
-                    return { id: p.id, count: items.length }
-                })
-            )
-            const countsMap = {}
-            counts.forEach(({ id, count }) => { countsMap[id] = count })
+            const countsMap = Object.fromEntries(data.map(place => [place.id, place.item_count]))
             setItemCounts(countsMap)
         } catch (err) {
             console.error(err)
@@ -73,11 +65,17 @@ export default function Places({ isDark, toggleTheme }) {
         setIsDetailOpen(true)
     }
 
-    function closeDetail() {
+    async function closeDetail() {
+        const placeId = selectedPlace?.id
         setIsDetailOpen(false)
         setSelectedPlace(null)
-        // Refresh counts in case items were added/removed inside the modal
-        loadPlaces()
+        if (!placeId) return
+        try {
+            const items = await PlacesService.getPlaceItems(placeId)
+            setItemCounts(prev => ({ ...prev, [placeId]: items.length }))
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     async function handleSavePlace(payload) {

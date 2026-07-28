@@ -39,8 +39,12 @@
         "blog": "Blog",
         "games": "Juegos",
         "gamesEyebrow": "Laboratorio de juegos",
+        "wordle": "Palabra",
+        "wordleDescription": "Una palabra nueva cada tres horas.",
         "arrowCube": "Cubo de Flechas",
         "arrowCubeDescription": "Libera rutas que recorren varias caras.",
+        "cryptogram": "Criptograma",
+        "cryptogramDescription": "Descifra frases conectando números y letras.",
         "mainNavigation": "Navegación principal",
         "menuToggle": "Abrir o cerrar menú",
         "languageToggle": "Cambiar idioma",
@@ -76,6 +80,83 @@
         "completeTitle": "¡Cubo liberado!",
         "completeDescription": "Resolviste una configuración que no volverá a repetirse.",
         "nextLevel": "Jugar siguiente nivel"
+    },
+    "wordle": {
+        "eyebrow": "Juego de palabras · cada 3 horas",
+        "titleStart": "Descubre la",
+        "titleAccent": "Palabra",
+        "subtitle": "Cinco o seis letras, seis intentos y una nueva palabra compartida cada tres horas.",
+        "gameLabel": "Juego Palabra",
+        "round": "Ronda",
+        "nextWord": "Nueva palabra en",
+        "rowLabel": "Intento {{number}}",
+        "keyboardLabel": "Teclado del juego",
+        "enterKey": "Entrar",
+        "submit": "Ingresar palabra",
+        "delete": "Borrar letra",
+        "copyResult": "Copiar resultado",
+        "howToPlay": "Escribe una palabra de cinco o seis letras, según el tablero, y presiona Enter o Ingresar palabra. Verde indica posición correcta; amarillo, una letra presente en otra posición; gris, una letra que no aparece.",
+        "notices": {
+            "incomplete": "Completa las {{count}} letras antes de ingresar.",
+            "copied": "Resultado copiado al portapapeles.",
+            "copyFailed": "No se pudo copiar el resultado."
+        },
+        "result": {
+            "wonEyebrow": "Palabra encontrada",
+            "lostEyebrow": "Ronda terminada",
+            "won": "¡Excelente jugada!",
+            "lost": "Estuviste cerca",
+            "answer": "La palabra era"
+        },
+        "stats": {
+            "label": "Estadísticas del juego",
+            "played": "Jugadas",
+            "wins": "Victorias",
+            "streak": "Racha",
+            "best": "Mejor racha"
+        }
+    },
+    "cryptogram": {
+        "eyebrow": "Juego de lógica · 3 intentos",
+        "titleStart": "Descifra el",
+        "titleAccent": "Criptograma",
+        "subtitle": "Cada número esconde una letra. Usa las pistas y reconstruye la frase antes de cometer tres errores.",
+        "gameLabel": "Juego de criptograma",
+        "attemptsLabel": "Intentos disponibles",
+        "attempts": "Intentos",
+        "progress": "Completado",
+        "hint": "Pistas",
+        "revealHint": "Nueva pista",
+        "noHints": "Sin más pistas",
+        "fillMode": {
+            "label": "Modo de rellenado",
+            "linked": "Todas iguales",
+            "single": "Una por una"
+        },
+        "cellLabel": "Número {{number}}, letra {{letter}}",
+        "emptyCell": "vacía",
+        "keyboardLabel": "Teclado del criptograma",
+        "delete": "Borrar",
+        "clear": "Limpiar",
+        "check": "Comprobar frase",
+        "newPhrase": "Nueva frase",
+        "howToPlay": "Elige si quieres completar a la vez todos los números iguales o avanzar casilla por casilla. Cada letra se comprueba al seleccionarla: si es correcta, su número desaparece; si es incorrecta, pierdes uno de tus tres intentos. También puedes revelar nuevas pistas.",
+        "notices": {
+            "unsolved": "Todavía quedan letras por resolver.",
+            "incorrectLetter_one": "Letra incorrecta. Te queda {{count}} intento.",
+            "incorrectLetter_other": "Letra incorrecta. Te quedan {{count}} intentos.",
+            "hintRevealed": "Nueva pista: {{number}} = {{letter}}.",
+            "linkedMode": "Los números iguales se completarán juntos.",
+            "singleMode": "Ahora completarás cada casilla por separado."
+        },
+        "result": {
+            "wonEyebrow": "Código resuelto",
+            "lostEyebrow": "Intentos agotados",
+            "won": "¡Descifraste la frase!",
+            "lost": "El código se resistió esta vez",
+            "author": "Autor",
+            "source": "Fuente"
+        }
     },
     "bio": {
         "aboutTitle": "Sobre mí",

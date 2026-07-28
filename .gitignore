@@ -42,7 +42,11 @@ CNAME
 .windsurf
 
 migration/*
+!migration/20260728-security-hardening.sql
+!migration/blog-rls.sql
 !migration/mtg-meta-decks-seed.sql
 !migration/mtg-meta-importer-upgrade.sql
 
 .env
+.env.*
+!.env.example

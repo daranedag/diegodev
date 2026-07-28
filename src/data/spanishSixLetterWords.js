@@ -1,0 +1,45 @@
+// Palabras comunes en español, sin tildes para que puedan escribirse con el teclado del juego.
+// La lista se normaliza al exportar para garantizar las seis letras y admitir la ñ.
+const dictionaryCandidates = [
+    'abismo', 'abuelo', 'acento', 'actriz', 'adorno', 'afuera', 'agosto', 'agotar',
+    'alegre', 'aliento', 'alivio', 'altura', 'amable', 'amargo', 'amigos', 'anclaje',
+    'animal', 'anotar', 'apelar', 'apenas', 'apoyar', 'arboles', 'archivo', 'ardiente',
+    'arena', 'armado', 'aromas', 'arroyo', 'asador', 'asunto', 'ataque', 'atento',
+    'avance', 'azucar', 'balcon', 'bancos', 'barrio', 'baston', 'batido', 'bebida',
+    'besito', 'blanco', 'bloque', 'bolsos', 'bonito', 'bosque', 'botella', 'brillo',
+    'buscar', 'cabina', 'cadena', 'cajero', 'calido', 'calmar', 'camino', 'camisa',
+    'campo', 'canela', 'cantar', 'cariño', 'carton', 'casino', 'celoso', 'centro',
+    'cereal', 'cereza', 'cerrar', 'chicos', 'ciclos', 'ciento', 'ciudad', 'clases',
+    'cobrar', 'cocina', 'codigo', 'colina', 'cometa', 'comida', 'comodo', 'compra',
+    'contar', 'copiar', 'correo', 'cortes', 'crecer', 'crisis', 'cuadro', 'cuando',
+    'cuarto', 'cubrir', 'cuidar', 'cultivo', 'cumple', 'danza', 'darnos', 'debate',
+    'decir', 'dentro', 'deseo', 'diario', 'dibujo', 'dinero', 'doctor', 'dorado',
+    'dormir', 'dulces', 'elegir', 'encima', 'enorme', 'entrar', 'equipo', 'escala',
+    'esfera', 'espuma', 'estado', 'eterno', 'evento', 'examen', 'existe', 'factor',
+    'falda', 'famoso', 'felino', 'fiesta', 'figura', 'flores', 'fondo', 'forma',
+    'frases', 'fresco', 'frutas', 'fuerte', 'futuro', 'ganado', 'ganar', 'garaje',
+    'gastos', 'grande', 'granos', 'gritar', 'grupos', 'guardar', 'guitarra', 'hablar',
+    'herida', 'hervir', 'hombre', 'honesto', 'huella', 'huesos', 'humano', 'humedo',
+    'idioma', 'iguales', 'imagen', 'inicio', 'invierno', 'islas', 'jardin', 'juegos',
+    'juntar', 'labios', 'lados', 'laguna', 'lanzar', 'lector', 'lengua', 'lentes',
+    'libros', 'limite', 'limpio', 'llamar', 'llaves', 'llegar', 'llevar', 'lluvia',
+    'lograr', 'luchar', 'lugares', 'maduro', 'madera', 'madres', 'mancha', 'mandar',
+    'manera', 'mapas', 'marino', 'martes', 'medida', 'mejor', 'mentir', 'mesas',
+    'mirada', 'modelo', 'moreno', 'motivo', 'muchos', 'mujer', 'mundo', 'musica',
+    'nacion', 'naranja', 'nativo', 'negocio', 'nevar', 'nombre', 'norte', 'nubes',
+    'nuevo', 'objeto', 'oculto', 'oficio', 'olvido', 'opcion', 'origen', 'pactar',
+    'padres', 'pagar', 'palmas', 'parece', 'pared', 'pasado', 'paseo', 'patio',
+    'pelota', 'pensar', 'perder', 'perfil', 'perros', 'pesado', 'piedra', 'piezas',
+    'pintar', 'piscina', 'planes', 'planta', 'platos', 'plumas', 'pobre', 'poder',
+    'precio', 'prenda', 'pronto', 'puerta', 'puesto', 'puntos', 'quedar', 'querer',
+    'receta', 'regalo', 'reloj', 'repetir', 'resina', 'ritmos', 'rodilla', 'romper',
+    'rostro', 'ruidos', 'sabado', 'sabor', 'saltar', 'salvar', 'semana', 'sentir',
+    'señora', 'simple', 'sitios', 'sobre', 'sonido', 'suerte', 'sueños', 'tareas',
+    'tejido', 'templo', 'tiempo', 'tienda', 'tierra', 'tomate', 'trabajo', 'tratar',
+    'triste', 'ultimo', 'unidos', 'vacuna', 'valido', 'vender', 'ventana', 'verano',
+    'verdad', 'viajar', 'viento', 'viernes', 'vistas', 'volver', 'vuelo', 'zapato',
+];
+
+const spanishSixLetterWords = dictionaryCandidates.filter((word) => [...word].length === 6);
+
+export default spanishSixLetterWords;

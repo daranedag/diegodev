@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { Readable } from 'node:stream';
+import { Readable, Transform } from 'node:stream';
 import { createGunzip } from 'node:zlib';
 import { createClient } from '@insforge/sdk';
 import streamJson from 'stream-json';
@@ -17,6 +17,9 @@ const MTGJSON_PRICES_URL =
     process.env.MTGJSON_PRICES_URL ?? 'https://mtgjson.com/api/v5/AllPricesToday.json.gz';
 const UPSERT_CHUNK_SIZE = Number(process.env.MTGJSON_MARKET_UPSERT_CHUNK_SIZE ?? 500);
 const CARD_PAGE_SIZE = Number(process.env.MTGJSON_MARKET_CARD_PAGE_SIZE ?? 1000);
+const DOWNLOAD_TIMEOUT_MS = Number(process.env.MTGJSON_DOWNLOAD_TIMEOUT_MS ?? 600000);
+const MAX_DOWNLOAD_BYTES = Number(process.env.MTGJSON_MAX_DOWNLOAD_BYTES ?? 1_500_000_000);
+const MAX_DECOMPRESSED_BYTES = Number(process.env.MTGJSON_MAX_DECOMPRESSED_BYTES ?? 8_000_000_000);
 const DRY_RUN = process.argv.includes('--dry-run');
 
 function loadDotEnv() {
@@ -126,9 +129,24 @@ function shouldGunzipResponse(url, response) {
     return /\.gz(?:$|[?#])/i.test(url);
 }
 
+function byteLimit(maxBytes, label) {
+    let total = 0;
+    return new Transform({
+        transform(chunk, _encoding, callback) {
+            total += chunk.length;
+            if (total > maxBytes) {
+                callback(new Error(`${label} exceeded ${maxBytes} bytes`));
+                return;
+            }
+            callback(null, chunk);
+        },
+    });
+}
+
 async function openMtgJsonStream(url, label) {
     console.log(`Downloading ${label}: ${url}`);
     const response = await fetch(url, {
+        signal: AbortSignal.timeout(DOWNLOAD_TIMEOUT_MS),
         headers: {
             'user-agent': 'diegodev-mtg-agent/1.0 (+github actions)',
             accept: 'application/json',
@@ -140,13 +158,21 @@ async function openMtgJsonStream(url, label) {
     if (!response.body) {
         throw new Error(`Response body missing for ${label}: ${url}`);
     }
+    const declaredLength = Number(response.headers.get('content-length') ?? 0);
+    if (declaredLength > MAX_DOWNLOAD_BYTES) {
+        throw new Error(`${label} declared ${declaredLength} bytes, above the configured limit`);
+    }
 
-    const nodeStream = Readable.fromWeb(response.body);
-    if (!shouldGunzipResponse(url, response)) return nodeStream;
+    const nodeStream = Readable.fromWeb(response.body).pipe(byteLimit(MAX_DOWNLOAD_BYTES, label));
+    if (!shouldGunzipResponse(url, response)) {
+        return nodeStream.pipe(byteLimit(MAX_DECOMPRESSED_BYTES, `${label} decoded payload`));
+    }
 
     const unzip = createGunzip();
     nodeStream.on('error', (error) => unzip.destroy(error));
-    return nodeStream.pipe(unzip);
+    return nodeStream
+        .pipe(unzip)
+        .pipe(byteLimit(MAX_DECOMPRESSED_BYTES, `${label} decompressed payload`));
 }
 
 async function forEachMtgJsonDataEntry(url, label, onEntry) {

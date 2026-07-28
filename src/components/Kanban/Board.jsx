@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react'
 import { DragDropContext } from '@hello-pangea/dnd'
+import { useRef } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { insforge } from '../../lib/insforge'
 import Column from './Column'
@@ -11,6 +12,7 @@ export default function Board({ boardId, onDeleteBoard }) {
     const [columns, setColumns] = useState([])
     // cards grouped by column id: { [colId]: Card[] }
     const [cards, setCards] = useState({})
+    const reorderInFlight = useRef(false)
     const [newColTitle, setNewColTitle] = useState('')
     const [addingCol, setAddingCol] = useState(false)
 
@@ -49,7 +51,8 @@ export default function Board({ boardId, onDeleteBoard }) {
     }
 
     async function handleDragEnd(result) {
-        const { source, destination, draggableId } = result
+        if (reorderInFlight.current) return
+        const { source, destination } = result
         if (!destination) return
         if (source.droppableId === destination.droppableId && source.index === destination.index) return
 
@@ -58,30 +61,36 @@ export default function Board({ boardId, onDeleteBoard }) {
         const srcCards = Array.from(cards[srcId] || [])
         const [moved] = srcCards.splice(source.index, 1)
 
-        if (srcId === dstId) {
-            srcCards.splice(destination.index, 0, moved)
-            setCards(prev => ({ ...prev, [srcId]: srcCards }))
-            await Promise.all(
-                srcCards.map((c, i) =>
-                    insforge.database.from('kanban_cards').update({ position: i }).eq('id', c.id)
-                )
-            )
-        } else {
-            const dstCards = Array.from(cards[dstId] || [])
-            dstCards.splice(destination.index, 0, { ...moved, column_id: dstId })
-            setCards(prev => ({ ...prev, [srcId]: srcCards, [dstId]: dstCards }))
-            await insforge.database
-                .from('kanban_cards')
-                .update({ column_id: dstId, position: destination.index })
-                .eq('id', draggableId)
-            await Promise.all([
-                ...srcCards.map((c, i) =>
-                    insforge.database.from('kanban_cards').update({ position: i }).eq('id', c.id)
-                ),
-                ...dstCards.map((c, i) =>
-                    insforge.database.from('kanban_cards').update({ position: i }).eq('id', c.id)
-                ),
-            ])
+        reorderInFlight.current = true
+        try {
+            let updates
+            if (srcId === dstId) {
+                srcCards.splice(destination.index, 0, moved)
+                setCards(prev => ({ ...prev, [srcId]: srcCards }))
+                updates = srcCards.map((card, position) => ({
+                    id: card.id,
+                    column_id: srcId,
+                    position,
+                }))
+            } else {
+                const dstCards = Array.from(cards[dstId] || [])
+                dstCards.splice(destination.index, 0, { ...moved, column_id: dstId })
+                setCards(prev => ({ ...prev, [srcId]: srcCards, [dstId]: dstCards }))
+                updates = [
+                    ...srcCards.map((card, position) => ({ id: card.id, column_id: srcId, position })),
+                    ...dstCards.map((card, position) => ({ id: card.id, column_id: dstId, position })),
+                ]
+            }
+
+            const { error } = await insforge.database.rpc('kanban_reorder_cards', {
+                p_updates: updates,
+            })
+            if (error) throw error
+        } catch (error) {
+            console.error('Failed to reorder cards:', error)
+            await loadAll()
+        } finally {
+            reorderInFlight.current = false
         }
     }
 

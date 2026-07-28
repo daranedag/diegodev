@@ -1,0 +1,638 @@
+.cryptogram-shell {
+    overflow: hidden;
+    border: 1px solid rgb(139 92 246 / 18%);
+    border-radius: 2rem;
+    background:
+        radial-gradient(circle at 15% 10%, rgb(139 92 246 / 12%), transparent 28%),
+        linear-gradient(145deg, rgb(255 255 255 / 96%), rgb(250 245 255 / 90%));
+    box-shadow: 0 28px 80px rgb(76 29 149 / 12%);
+}
+
+.dark .cryptogram-shell {
+    border-color: rgb(167 139 250 / 20%);
+    background:
+        radial-gradient(circle at 15% 10%, rgb(124 58 237 / 18%), transparent 30%),
+        linear-gradient(145deg, rgb(17 24 39 / 98%), rgb(28 18 52 / 94%));
+    box-shadow: 0 28px 90px rgb(0 0 0 / 34%);
+}
+
+.cryptogram-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgb(139 92 246 / 12%);
+}
+
+.dark .cryptogram-topbar {
+    border-color: rgb(167 139 250 / 14%);
+}
+
+.cryptogram-attempts,
+.cryptogram-progress {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.cryptogram-attempts > span,
+.cryptogram-progress span {
+    color: #9ca3af;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.cryptogram-attempts > div {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.cryptogram-attempts i {
+    width: 0.65rem;
+    height: 0.65rem;
+    border: 1px solid rgb(139 92 246 / 35%);
+    border-radius: 50%;
+    background: transparent;
+    transition: background 180ms ease, transform 180ms ease;
+}
+
+.cryptogram-attempts i.is-available {
+    border-color: #8b5cf6;
+    background: #8b5cf6;
+    box-shadow: 0 0 0 4px rgb(139 92 246 / 10%);
+}
+
+.cryptogram-progress strong {
+    color: #6d28d9;
+    font-size: 0.95rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.dark .cryptogram-progress strong {
+    color: #c4b5fd;
+}
+
+.cryptogram-toolbar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem 0;
+}
+
+.cryptogram-mode {
+    display: inline-flex;
+    width: fit-content;
+    padding: 0.2rem;
+    border: 1px solid rgb(139 92 246 / 18%);
+    border-radius: 0.85rem;
+    background: rgb(255 255 255 / 62%);
+}
+
+.dark .cryptogram-mode {
+    border-color: rgb(167 139 250 / 20%);
+    background: rgb(31 41 55 / 55%);
+}
+
+.cryptogram-mode button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.7rem;
+    border-radius: 0.65rem;
+    color: #6b7280;
+    font-size: 0.7rem;
+    font-weight: 800;
+    transition: color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+
+.cryptogram-mode button.is-active {
+    color: #6d28d9;
+    background: #fff;
+    box-shadow: 0 4px 12px rgb(76 29 149 / 12%);
+}
+
+.dark .cryptogram-mode button {
+    color: #9ca3af;
+}
+
+.dark .cryptogram-mode button.is-active {
+    color: #ddd6fe;
+    background: rgb(124 58 237 / 25%);
+}
+
+.cryptogram-mode svg,
+.cryptogram-hint-button svg {
+    width: 1rem;
+}
+
+.cryptogram-hints {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.65rem;
+}
+
+.cryptogram-hint-list {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid rgb(245 158 11 / 24%);
+    border-radius: 999px;
+    color: #92400e;
+    background: rgb(254 243 199 / 70%);
+    font-size: 0.75rem;
+}
+
+.dark .cryptogram-hint-list {
+    border-color: rgb(251 191 36 / 22%);
+    color: #fde68a;
+    background: rgb(120 53 15 / 25%);
+}
+
+.cryptogram-hint-list svg {
+    width: 1rem;
+    flex: none;
+}
+
+.cryptogram-hint-list strong {
+    padding-left: 0.5rem;
+    border-left: 1px solid rgb(245 158 11 / 28%);
+    color: #b45309;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+}
+
+.dark .cryptogram-hint-list strong {
+    color: #fbbf24;
+}
+
+.cryptogram-hint-button {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.62rem 0.8rem;
+    border-radius: 0.75rem;
+    color: #fff;
+    background: #d97706;
+    font-size: 0.72rem;
+    font-weight: 800;
+    box-shadow: 0 8px 18px rgb(217 119 6 / 18%);
+    transition: transform 150ms ease, background 150ms ease, opacity 150ms ease;
+}
+
+.cryptogram-hint-button:hover:not(:disabled) {
+    background: #b45309;
+    transform: translateY(-1px);
+}
+
+.cryptogram-hint-button:disabled,
+.cryptogram-mode button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.cryptogram-board {
+    display: flex;
+    min-height: 250px;
+    align-content: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem 1.35rem;
+    padding: 2.2rem clamp(1rem, 4vw, 3.5rem) 1.25rem;
+}
+
+.cryptogram-word {
+    display: inline-flex;
+    align-items: end;
+    gap: 0.18rem;
+    white-space: nowrap;
+}
+
+.cryptogram-cell {
+    position: relative;
+    display: grid;
+    width: 2.45rem;
+    height: 3.45rem;
+    grid-template-rows: 1fr auto;
+    place-items: center;
+    border-bottom: 2px solid #c4b5fd;
+    border-radius: 0.5rem 0.5rem 0.15rem 0.15rem;
+    color: #312e81;
+    background: rgb(255 255 255 / 70%);
+    transition: border-color 150ms ease, background 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+
+.cryptogram-cell:hover {
+    border-color: #8b5cf6;
+    background: #fff;
+    transform: translateY(-1px);
+}
+
+.dark .cryptogram-cell {
+    border-color: #5b4b8a;
+    color: #ede9fe;
+    background: rgb(31 41 55 / 62%);
+}
+
+.dark .cryptogram-cell:hover {
+    border-color: #a78bfa;
+    background: rgb(55 48 90 / 72%);
+}
+
+.cryptogram-cell.is-selected {
+    border-color: #7c3aed;
+    background: #f5f3ff;
+    box-shadow: 0 0 0 3px rgb(139 92 246 / 18%);
+    transform: translateY(-2px);
+}
+
+.dark .cryptogram-cell.is-selected {
+    border-color: #c4b5fd;
+    background: rgb(124 58 237 / 20%);
+}
+
+.cryptogram-cell.is-hint {
+    border-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.dark .cryptogram-cell.is-hint {
+    border-color: #fbbf24;
+    background: rgb(120 53 15 / 24%);
+}
+
+.cryptogram-cell.is-solved {
+    border-color: #10b981;
+}
+
+.cryptogram-board.is-revealed .cryptogram-cell.is-solved {
+    border-color: #f59e0b;
+}
+
+.cryptogram-cell > span {
+    align-self: end;
+    font-size: 1.3rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.cryptogram-cell > small {
+    align-self: end;
+    padding-bottom: 0.28rem;
+    color: #8b5cf6;
+    font-size: 0.62rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.cryptogram-cell > small.is-hidden {
+    visibility: hidden;
+}
+
+.dark .cryptogram-cell > small {
+    color: #a78bfa;
+}
+
+.cryptogram-punctuation {
+    padding-bottom: 0.7rem;
+    color: #6b7280;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.cryptogram-notice {
+    min-height: 2rem;
+    padding: 0 1rem 0.75rem;
+    color: transparent;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    transition: color 160ms ease;
+}
+
+.cryptogram-notice.is-visible {
+    color: #dc2626;
+}
+
+.dark .cryptogram-notice.is-visible {
+    color: #fca5a5;
+}
+
+.cryptogram-controls {
+    display: grid;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-top: 1px solid rgb(139 92 246 / 12%);
+    background: rgb(255 255 255 / 32%);
+}
+
+.dark .cryptogram-controls {
+    border-color: rgb(167 139 250 / 14%);
+    background: rgb(17 24 39 / 25%);
+}
+
+.cryptogram-keyboard {
+    display: grid;
+    gap: 0.4rem;
+}
+
+.cryptogram-keyboard > div {
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.18rem, 0.8vw, 0.38rem);
+}
+
+.cryptogram-keyboard button {
+    display: grid;
+    width: clamp(1.8rem, 7.5vw, 2.8rem);
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid rgb(139 92 246 / 16%);
+    border-radius: 0.65rem;
+    color: #4c1d95;
+    background: rgb(255 255 255 / 85%);
+    font-size: 0.82rem;
+    font-weight: 800;
+    box-shadow: 0 3px 0 rgb(109 40 217 / 10%);
+    transition: transform 100ms ease, background 150ms ease, opacity 150ms ease;
+}
+
+.cryptogram-keyboard button:hover:not(:disabled) {
+    background: #f5f3ff;
+    transform: translateY(-1px);
+}
+
+.cryptogram-keyboard button:active:not(:disabled) {
+    transform: translateY(2px);
+}
+
+.cryptogram-keyboard button.is-assigned {
+    color: #6b7280;
+    background: #e5e7eb;
+    opacity: 0.55;
+}
+
+.dark .cryptogram-keyboard button {
+    border-color: rgb(167 139 250 / 17%);
+    color: #ede9fe;
+    background: rgb(55 65 81 / 80%);
+    box-shadow: 0 3px 0 rgb(0 0 0 / 20%);
+}
+
+.dark .cryptogram-keyboard button.is-assigned {
+    color: #9ca3af;
+    background: #1f2937;
+}
+
+.cryptogram-keyboard button:disabled,
+.cryptogram-actions button:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.cryptogram-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.65rem;
+}
+
+.cryptogram-actions button,
+.cryptogram-result > button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    border-radius: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.75rem;
+    font-weight: 800;
+    transition: transform 150ms ease, background 150ms ease;
+}
+
+.cryptogram-actions svg,
+.cryptogram-result > button svg {
+    width: 1rem;
+}
+
+.cryptogram-clear {
+    color: #6d28d9;
+    background: rgb(139 92 246 / 9%);
+}
+
+.dark .cryptogram-clear {
+    color: #ddd6fe;
+    background: rgb(139 92 246 / 14%);
+}
+
+.cryptogram-submit {
+    min-width: 8.5rem;
+    color: #fff;
+    background: #7c3aed;
+    box-shadow: 0 10px 24px rgb(109 40 217 / 22%);
+}
+
+.cryptogram-submit:hover:not(:disabled),
+.cryptogram-result > button:hover {
+    background: #6d28d9;
+    transform: translateY(-1px);
+}
+
+.cryptogram-result {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.9rem;
+    margin: 0 1.25rem 1.25rem;
+    padding: 1rem;
+    border: 1px solid rgb(16 185 129 / 24%);
+    border-radius: 1rem;
+    color: #065f46;
+    background: rgb(236 253 245 / 82%);
+    animation: cryptogram-result-in 260ms ease both;
+}
+
+.cryptogram-result.is-lost {
+    border-color: rgb(245 158 11 / 24%);
+    color: #92400e;
+    background: rgb(255 251 235 / 85%);
+}
+
+.dark .cryptogram-result {
+    color: #a7f3d0;
+    background: rgb(6 78 59 / 24%);
+}
+
+.dark .cryptogram-result.is-lost {
+    color: #fde68a;
+    background: rgb(120 53 15 / 24%);
+}
+
+.cryptogram-result > svg {
+    width: 2rem;
+}
+
+.cryptogram-result span {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.cryptogram-result strong {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: 1rem;
+}
+
+.cryptogram-result p {
+    margin-top: 0.25rem;
+    color: #6b7280;
+    font-size: 0.78rem;
+}
+
+.cryptogram-result .cryptogram-result-attribution {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.45rem;
+    color: #047857;
+}
+
+.cryptogram-result.is-lost .cryptogram-result-attribution {
+    color: #b45309;
+}
+
+.dark .cryptogram-result .cryptogram-result-attribution {
+    color: #6ee7b7;
+}
+
+.cryptogram-result-attribution b {
+    font-weight: 800;
+}
+
+.cryptogram-result-attribution cite {
+    font-style: normal;
+}
+
+.cryptogram-result > button {
+    color: #fff;
+    background: #7c3aed;
+}
+
+@keyframes cryptogram-result-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+@media (max-width: 640px) {
+    .cryptogram-shell {
+        border-radius: 1.4rem;
+    }
+
+    .cryptogram-topbar {
+        padding: 0.85rem;
+    }
+
+    .cryptogram-toolbar {
+        grid-template-columns: 1fr;
+        gap: 0.7rem;
+        padding: 0.85rem 0.75rem 0;
+    }
+
+    .cryptogram-mode {
+        width: 100%;
+    }
+
+    .cryptogram-mode button {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .cryptogram-hints {
+        align-items: stretch;
+    }
+
+    .cryptogram-hint-list {
+        flex: 1;
+        justify-content: flex-start;
+        border-radius: 0.85rem;
+    }
+
+    .cryptogram-hint-button {
+        justify-content: center;
+    }
+
+    .cryptogram-board {
+        min-height: 220px;
+        gap: 0.85rem 1rem;
+        padding: 1.7rem 0.75rem 1rem;
+    }
+
+    .cryptogram-word {
+        gap: 0.12rem;
+    }
+
+    .cryptogram-cell {
+        width: 2rem;
+        height: 3.1rem;
+    }
+
+    .cryptogram-cell > span {
+        font-size: 1.08rem;
+    }
+
+    .cryptogram-cell > small {
+        font-size: 0.55rem;
+    }
+
+    .cryptogram-controls {
+        padding: 0.9rem 0.65rem 1rem;
+    }
+
+    .cryptogram-keyboard button {
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.72rem;
+    }
+
+    .cryptogram-actions {
+        flex-wrap: wrap;
+    }
+
+    .cryptogram-actions button {
+        padding: 0.65rem 0.75rem;
+    }
+
+    .cryptogram-submit {
+        flex: 1 1 100%;
+    }
+
+    .cryptogram-result {
+        grid-template-columns: auto 1fr;
+        margin: 0 0.85rem 0.85rem;
+    }
+
+    .cryptogram-result > button {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cryptogram-result {
+        animation: none;
+    }
+}

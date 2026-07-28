@@ -507,7 +507,6 @@ export default function AnalysisPanel({ result, loading }) {
         data_available,
         cache_hit,
         llm_used,
-        llm_raw,
     } = result;
     const deckComparison = raw_decklist
         ? buildDeckComparison(raw_decklist, recommendations ?? [])
@@ -817,16 +816,9 @@ export default function AnalysisPanel({ result, loading }) {
                         <p className="text-xs text-gray-500 dark:text-gray-400">
                             <span className="font-medium">llm_used:</span> {String(llm_used ?? false)}
                         </p>
-                        {llm_raw ? (
-                            <div>
-                                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">llm_raw (respuesta JSON del modelo):</p>
-                                <pre className="text-xs text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700/60 rounded p-2 whitespace-pre-wrap break-words max-h-64 overflow-y-auto font-mono leading-relaxed">
-                                    {llm_raw}
-                                </pre>
-                            </div>
-                        ) : (
-                            <p className="text-xs text-gray-400 dark:text-gray-500 italic">Sin respuesta cruda del LLM.</p>
-                        )}
+                        <p className="text-xs text-gray-400 dark:text-gray-500 italic">
+                            La respuesta cruda del modelo no se expone ni se persiste.
+                        </p>
                     </div>
                 </details>
             )}
