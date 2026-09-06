@@ -19,9 +19,16 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
                 <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden">
                     {/* Header */}
                     <div className="flex items-start justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white pr-8">
-                            {project.title}
-                        </h2>
+                        <div className="pr-8">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                {project.title}
+                            </h2>
+                            {project.statusLabel && (
+                                <span className="mt-2 inline-flex rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-900 dark:bg-amber-400/20 dark:text-amber-200">
+                                    {project.statusLabel}
+                                </span>
+                            )}
+                        </div>
                         <button
                             onClick={onClose}
                             className="flex-shrink-0 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -108,6 +115,7 @@ ProjectModal.propTypes = {
         githubLink: PropTypes.string,
         productionLink: PropTypes.string,
         technologies: PropTypes.array,
+        statusLabel: PropTypes.string,
     }),
 };
 

@@ -44,6 +44,24 @@ const Portfolio = ({ isDark, toggleTheme }) => {
             productionLink: t('portfolio.project3.productionLink'),
             technologies: t('portfolio.project3.technologies', { returnObjects: true }),
             type: 'fullstack'
+        },
+        {
+            title: t('portfolio.project4.title'),
+            description: t('portfolio.project4.description'),
+            detailedDescription: t('portfolio.project4.detailedDescription'),
+            githubLink: t('portfolio.project4.githubLink'),
+            productionLink: t('portfolio.project4.productionLink'),
+            technologies: t('portfolio.project4.technologies', { returnObjects: true }),
+            statusLabel: t('portfolio.status.inConstruction')
+        },
+        {
+            title: t('portfolio.project5.title'),
+            description: t('portfolio.project5.description'),
+            detailedDescription: t('portfolio.project5.detailedDescription'),
+            githubLink: t('portfolio.project5.githubLink'),
+            productionLink: t('portfolio.project5.productionLink'),
+            technologies: t('portfolio.project5.technologies', { returnObjects: true }),
+            statusLabel: t('portfolio.status.inConstruction')
         }
     ];
 
@@ -75,6 +93,7 @@ const Portfolio = ({ isDark, toggleTheme }) => {
                                     imageUrl={project.imageUrl}
                                     onClick={() => handleOpenModal(project)}
                                     type={project.type}
+                                    statusLabel={project.statusLabel}
                                 />
                             ))}
                         </div>

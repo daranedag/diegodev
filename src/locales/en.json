@@ -261,6 +261,9 @@
     "portfolio": {
         "title": "Portfolio",
         "description": "Here is a selection of some of my recent projects. To learn more details, you can click on each project.",
+        "status": {
+            "inConstruction": "Under construction"
+        },
         "project1": {
             "title": "Idea Garden Backend",
             "description": "Backend for iOS/Android mobile applications for a US-based startup.",
@@ -298,6 +301,22 @@
                 "Tailwind CSS",
                 "Javascript"
             ]
+        },
+        "project4": {
+            "title": "Simbionte Joyas",
+            "description": "Website for Simbionte Joyas, currently under construction.",
+            "detailedDescription": "Web project for Simbionte Joyas. The website is currently under construction and will be available soon.",
+            "githubLink": "",
+            "productionLink": "https://simbiontejoyas.cl",
+            "technologies": []
+        },
+        "project5": {
+            "title": "Posada del Hechicero",
+            "description": "Website for Posada del Hechicero, currently under construction.",
+            "detailedDescription": "Web project for Posada del Hechicero. The website is currently under construction and will be available soon.",
+            "githubLink": "",
+            "productionLink": "https://posadadelhechicero.cl",
+            "technologies": []
         }
     },
     "blog": {
