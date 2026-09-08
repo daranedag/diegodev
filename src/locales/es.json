@@ -311,13 +311,23 @@
     "portfolio": {
         "title": "Portafolio",
         "description": "Aquí hay una selección de algunos de mis proyectos recientes. Para conocer más detalles, puedes hacer click en cada proyecto.",
+        "status": {
+            "inConstruction": "En construcción"
+        },
         "project1": {
             "title": "Backend Idea Garden",
             "description": "Backend para aplicaciones móviles en iOS/Android de una startup con base en EE.UU.",
             "detailedDescription": "Desarrollo completo del backend para aplicaciones móviles multiplataforma utilizando Node.js y arquitectura cloud. El proyecto incluye integración con servicios de GCP y Firebase para gestión de datos en tiempo real, autenticación de usuarios y notificaciones push. Implementación de APIs RESTful escalables y sistema de permisos basado en roles.",
             "githubLink": "",
             "productionLink": "https://www.idea-garden.xyz/",
-            "technologies": ["Node.js", "Firebase", "GCP", "Express", "PostgreSQL", "Javascript"]
+            "technologies": [
+                "Node.js",
+                "Firebase",
+                "GCP",
+                "Express",
+                "PostgreSQL",
+                "Javascript"
+            ]
         },
         "project2": {
             "title": "Chilcos - Colegio Waldorf",
@@ -325,7 +335,11 @@
             "detailedDescription": "Diseño y desarrollo de sitio web institucional para colegio con pedagogía Waldorf. Incluye sistema de gestión de contenidos para noticias y eventos, galería de fotos, información sobre metodología educativa y formulario de contacto. Diseño responsive y optimizado para SEO.",
             "githubLink": "",
             "productionLink": "https://www.chilcos.org",
-            "technologies": ["HTML", "Custom CSS", "Javascript"]
+            "technologies": [
+                "HTML",
+                "Custom CSS",
+                "Javascript"
+            ]
         },
         "project3": {
             "title": "Bible BFF",
@@ -333,7 +347,27 @@
             "detailedDescription": "Aplicación web enfocada en acompañar la lectura bíblica mediante una experiencia cercana, simple y conversacional. El proyecto prioriza una interfaz clara, accesible y responsive para ayudar a las personas a explorar contenido bíblico de manera más guiada y cotidiana.",
             "githubLink": "",
             "productionLink": "https://biblebff.app",
-            "technologies": ["React", "Tailwind CSS", "Javascript"]
+            "technologies": [
+                "React",
+                "Tailwind CSS",
+                "Javascript"
+            ]
+        },
+        "project4": {
+            "title": "Simbionte Joyas",
+            "description": "Sitio web para Simbionte Joyas, actualmente en construcción.",
+            "detailedDescription": "Proyecto web para Simbionte Joyas. El sitio se encuentra actualmente en construcción y estará disponible próximamente.",
+            "githubLink": "",
+            "productionLink": "https://simbiontejoyas.cl",
+            "technologies": []
+        },
+        "project5": {
+            "title": "Posada del Hechicero",
+            "description": "Sitio web para Posada del Hechicero, actualmente en construcción.",
+            "detailedDescription": "Proyecto web para Posada del Hechicero. El sitio se encuentra actualmente en construcción y estará disponible próximamente.",
+            "githubLink": "",
+            "productionLink": "https://posadadelhechicero.cl",
+            "technologies": []
         }
     },
     "blog": {

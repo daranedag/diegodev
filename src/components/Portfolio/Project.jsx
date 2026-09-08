@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const Project = ({ title, description, imageUrl, onClick, type }) => {
+const Project = ({ title, description, imageUrl, onClick, type, statusLabel }) => {
     // Determinar los badges a mostrar según el tipo
     const badges = [];
     if (type === 'frontend' || type === 'fullstack') {
@@ -15,8 +15,21 @@ const Project = ({ title, description, imageUrl, onClick, type }) => {
             className="group relative overflow-hidden rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
             onClick={onClick}
         >
-            <div className="aspect-[9/3] w-full overflow-hidden">
-                <div className="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-105" style={{ backgroundImage: `url("${imageUrl}")` }}></div>
+            <div className="relative aspect-[9/3] w-full overflow-hidden">
+                {imageUrl ? (
+                    <div className="w-full h-full bg-cover bg-center transition-transform duration-300 group-hover:scale-105" style={{ backgroundImage: `url("${imageUrl}")` }}></div>
+                ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-purple-700 via-fuchsia-600 to-amber-500 px-6 transition-transform duration-300 group-hover:scale-105">
+                        <span className="text-center text-xl font-semibold tracking-wide text-white drop-shadow-sm">
+                            {title}
+                        </span>
+                    </div>
+                )}
+                {statusLabel && (
+                    <span className="absolute right-3 top-3 rounded-full bg-amber-100/95 px-3 py-1 text-xs font-semibold text-amber-900 shadow-sm">
+                        {statusLabel}
+                    </span>
+                )}
             </div>
             <div className="p-6 relative">
                 <h3 className="text-lg font-semibold text-text-light dark:text-text-dark">{title}</h3>
@@ -41,8 +54,8 @@ const Project = ({ title, description, imageUrl, onClick, type }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 Project.propTypes = {
     title: PropTypes.string.isRequired,
@@ -50,6 +63,7 @@ Project.propTypes = {
     imageUrl: PropTypes.string,
     onClick: PropTypes.func.isRequired,
     type: PropTypes.oneOf(['frontend', 'backend', 'fullstack']),
+    statusLabel: PropTypes.string,
 };
 
 export default Project;
