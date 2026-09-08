@@ -1,30 +1,20 @@
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import fotoChilcos from '../../../assets/img/chilcos.png';
-import fotoIdeaGarden from '../../../assets/img/ideaGarden.png';
-import fotoBibleBff from '../../../assets/img/biblebff.png';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import WebsitePreview from '../Portfolio/WebsitePreview';
 
-const ProjectCard = ({ title, description, link, img, gradient }) => {
-    const hasImage = Boolean(img);
-
+const ProjectCard = ({ title, description, link, previewTitle, gradient }) => {
     return (
         <div className="group">
             <Link to={link} target="_blank" rel="noopener noreferrer" className="no-underline">
                 <div className="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-800 shadow-md hover:shadow-xl transition-shadow duration-300">
                     <div className="w-full h-48 relative overflow-hidden">
-                        {/* Texto por defecto */}
                         <div
-                            className={`absolute inset-0 w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center transition-opacity duration-600 ${hasImage ? 'group-hover:opacity-0' : ''}`}
+                            className={`absolute inset-0 w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center`}
                         >
                             <span className="text-white font-semibold text-xl">{title}</span>
                         </div>
-                        {/* Imagen al hacer hover */}
-                        {hasImage && (
-                            <img
-                                src={img}
-                                alt={title}
-                                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-600"
-                            />
+                        {link && (
+                            <WebsitePreview url={link} title={previewTitle} variant="featured" />
                         )}
                     </div>
                 </div>
@@ -43,26 +33,23 @@ const FeaturedWork = () => {
     const { t } = useTranslation();
     const projects = [
         {
-            title: t('work.backendIdeaGarden.title'),
-            description: t('work.backendIdeaGarden.description'),
+            title: t('work.ideaGarden.title'),
+            description: t('work.ideaGarden.description'),
             gradient: 'from-purple-700 to-blue-500',
             link: 'https://www.idea-garden.xyz/',
-            img: fotoIdeaGarden
         },
         {
             title: t('work.chilcos.title'),
             description: t('work.chilcos.description'),
             gradient: 'from-purple-500 to-purple-700',
             link: 'https://www.chilcos.org',
-            img: fotoChilcos,
         },
         {
             title: t('work.bibleBff.title'),
             description: t('work.bibleBff.description'),
             gradient: 'from-amber-500 via-rose-500 to-purple-600',
             link: 'https://biblebff.app',
-            img: fotoBibleBff,
-        }
+        },
     ];
 
     return (
@@ -78,7 +65,7 @@ const FeaturedWork = () => {
                         description={project.description}
                         gradient={project.gradient}
                         link={project.link}
-                        img={project.img}
+                        previewTitle={t('portfolio.previewTitle', { title: project.title })}
                     />
                 ))}
             </div>

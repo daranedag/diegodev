@@ -8,9 +8,9 @@
     },
     "work": {
         "title": "Featured Work",
-        "backendIdeaGarden": {
-            "title": "Backend Idea Garden",
-            "description": "Backend for iOS/Android mobile applications of a US-based startup."
+        "ideaGarden": {
+            "title": "Idea Garden",
+            "description": "Corporate website for a US-based mobile app studio."
         },
         "chilcos": {
             "title": "Chilcos",
@@ -311,22 +311,14 @@
     "portfolio": {
         "title": "Portfolio",
         "description": "Here is a selection of some of my recent projects. To learn more details, you can click on each project.",
-        "status": {
-            "inConstruction": "Under construction"
-        },
+        "previewTitle": "Live preview of {{title}}",
         "project1": {
-            "title": "Idea Garden Backend",
-            "description": "Backend for iOS/Android mobile applications for a US-based startup.",
-            "detailedDescription": "Complete backend development for cross-platform mobile applications using Node.js and cloud architecture. The project includes integration with GCP and Firebase services for real-time data management, user authentication, and push notifications. Implementation of scalable RESTful APIs and role-based permissions system.",
+            "title": "Idea Garden",
+            "description": "Corporate website for a US-based mobile app studio.",
+            "detailedDescription": "Design and development of the Idea Garden LLC website for a small studio that turns early ideas into practical, human-friendly, polished mobile applications. The experience presents its value proposition and products through a clear, responsive interface focused on communicating the brand identity.",
             "githubLink": "",
             "productionLink": "https://www.idea-garden.xyz/",
-            "technologies": [
-                "Node.js",
-                "Firebase",
-                "GCP",
-                "Express",
-                "MongoDB"
-            ]
+            "technologies": ["React", "Vite", "Custom CSS", "Vercel"]
         },
         "project2": {
             "title": "Chilcos - Waldorf School",
@@ -334,11 +326,7 @@
             "detailedDescription": "Design and development of institutional website for a school with Waldorf pedagogy. Includes content management system for news and events, photo gallery, information about educational methodology, and contact form. Responsive design and SEO optimized.",
             "githubLink": "",
             "productionLink": "https://www.chilcos.org",
-            "technologies": [
-                "React",
-                "Tailwind CSS",
-                "Vercel"
-            ]
+            "technologies": ["React", "Tailwind CSS", "Vercel"]
         },
         "project3": {
             "title": "Bible BFF",
@@ -346,27 +334,23 @@
             "detailedDescription": "Web app focused on supporting Bible reading through a warm, simple, conversational experience. The project prioritizes a clear, accessible, responsive interface that helps people explore biblical content in a more guided everyday way.",
             "githubLink": "",
             "productionLink": "https://biblebff.app",
-            "technologies": [
-                "React",
-                "Tailwind CSS",
-                "Javascript"
-            ]
+            "technologies": ["React", "Tailwind CSS", "Javascript"]
         },
         "project4": {
             "title": "Simbionte Joyas",
-            "description": "Website for Simbionte Joyas, currently under construction.",
-            "detailedDescription": "Web project for Simbionte Joyas. The website is currently under construction and will be available soon.",
+            "description": "Editorial website for an author jewelry brand inspired by lichens and the landscapes of the Valdivian forest.",
+            "detailedDescription": "Design and development of a digital experience that presents the identity of Simbionte Joyas, its handmade pieces, and the creative process connecting jewelry, nature, and place. It includes a responsive visual concept, brand storytelling, collection showcases, and direct access to contact and social channels.",
             "githubLink": "",
             "productionLink": "https://simbiontejoyas.cl",
-            "technologies": []
+            "technologies": ["Next.js", "React", "Responsive Design", "Vercel"]
         },
         "project5": {
             "title": "Posada del Hechicero",
-            "description": "Website for Posada del Hechicero, currently under construction.",
-            "detailedDescription": "Web project for Posada del Hechicero. The website is currently under construction and will be available soon.",
+            "description": "Website for a board game and TCG store and community in Valdivia.",
+            "detailedDescription": "A website designed to connect the store with its community through news and events, location and opening hours, contact channels, and game requests. It includes a flow for registering decks and decklists for Magic: The Gathering tournaments, as well as responsive design and light or dark theme support.",
             "githubLink": "",
             "productionLink": "https://posadadelhechicero.cl",
-            "technologies": []
+            "technologies": ["Next.js", "React", "Tailwind CSS", "Vercel"]
         }
     },
     "blog": {
