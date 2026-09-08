@@ -11,6 +11,7 @@ import MtgAgent from '../pages/MtgAgent';
 import ArrowCube from '../pages/ArrowCube';
 import Wordle from '../pages/Wordle';
 import Cryptogram from '../pages/Cryptogram';
+import Tantrix from '../pages/Tantrix';
 import NotFound from '../pages/NotFound';
 import PropTypes from 'prop-types';
 
@@ -18,17 +19,45 @@ const AppRouter = ({ isDark, toggleTheme }) => {
     return (
         <Routes>
             <Route path="/" element={<Home isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/Bio.jsx" element={<Bio isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/CV.jsx" element={<CV isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/Portfolio.jsx" element={<Portfolio isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/Blog.jsx" element={<Blog isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/pages/blog/:slug" element={<BlogPost isDark={isDark} toggleTheme={toggleTheme} />} />
+            <Route
+                path="/pages/Bio.jsx"
+                element={<Bio isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/pages/CV.jsx"
+                element={<CV isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/pages/Portfolio.jsx"
+                element={<Portfolio isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/pages/Blog.jsx"
+                element={<Blog isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/pages/blog/:slug"
+                element={<BlogPost isDark={isDark} toggleTheme={toggleTheme} />}
+            />
             <Route path="/kanban" element={<Kanban isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="/places" element={<Places isDark={isDark} toggleTheme={toggleTheme} />} />
             <Route path="/mtg" element={<MtgAgent isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/games/arrow-cube" element={<ArrowCube isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/games/wordle" element={<Wordle isDark={isDark} toggleTheme={toggleTheme} />} />
-            <Route path="/games/cryptogram" element={<Cryptogram isDark={isDark} toggleTheme={toggleTheme} />} />
+            <Route
+                path="/games/arrow-cube"
+                element={<ArrowCube isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/games/wordle"
+                element={<Wordle isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/games/cryptogram"
+                element={<Cryptogram isDark={isDark} toggleTheme={toggleTheme} />}
+            />
+            <Route
+                path="/games/tantrix"
+                element={<Tantrix isDark={isDark} toggleTheme={toggleTheme} />}
+            />
             <Route path="*" element={<NotFound isDark={isDark} toggleTheme={toggleTheme} />} />
         </Routes>
     );

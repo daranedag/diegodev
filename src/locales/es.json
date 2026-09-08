@@ -45,6 +45,8 @@
         "arrowCubeDescription": "Libera rutas que recorren varias caras.",
         "cryptogram": "Criptograma",
         "cryptogramDescription": "Descifra frases conectando números y letras.",
+        "tantrix": "Tantrix Discovery",
+        "tantrixDescription": "Construye circuitos de color con fichas hexagonales.",
         "mainNavigation": "Navegación principal",
         "menuToggle": "Abrir o cerrar menú",
         "languageToggle": "Cambiar idioma",
@@ -80,6 +82,54 @@
         "completeTitle": "¡Cubo liberado!",
         "completeDescription": "Resolviste una configuración que no volverá a repetirse.",
         "nextLevel": "Jugar siguiente nivel"
+    },
+    "tantrix": {
+        "eyebrow": "Puzle espacial · 10 desafíos",
+        "titleStart": "Descubre",
+        "titleAccent": "Tantrix",
+        "subtitle": "Gira y conecta fichas hexagonales hasta cerrar un circuito que atraviese todas las piezas.",
+        "gameLabel": "Tantrix Discovery",
+        "challenge": "Desafío",
+        "tiles": "fichas",
+        "time": "Tiempo",
+        "moves": "Movimientos",
+        "reference": "Referencia",
+        "chooseChallenge": "Elegir desafío",
+        "interactionMode": "Método de interacción",
+        "dragMode": "Arrastrar",
+        "selectMode": "Seleccionar",
+        "dragInstruction": "Arrastra una ficha hasta el tablero. Un toque o clic sin moverla la gira.",
+        "selectInstruction": "Selecciona una ficha y luego una casilla. Tócala nuevamente para girarla.",
+        "boardLabel": "Tablero hexagonal de Tantrix",
+        "tileLabel": "Ficha {{number}}, rotación {{rotation}} de 6",
+        "tray": "Tus fichas",
+        "remaining": "disponibles",
+        "trayHint": "Devuelve aquí una ficha para retirarla del tablero.",
+        "allPlaced": "Todas las fichas están en el tablero. Ahora cierra el circuito y comprueba la solución.",
+        "restart": "Reiniciar",
+        "check": "Comprobar",
+        "nextChallenge": "Siguiente desafío",
+        "completeEyebrow": "Circuito cerrado",
+        "completeTitle": "¡Desafío resuelto!",
+        "completeDescription": "Conectaste las {{count}} fichas en un circuito {{color}} válido.",
+        "howToPlay": "Usa las fichas desde la 1 hasta el número del desafío. El circuito del color indicado debe pasar por todas y cerrarse; además, cualquier otro color que quede en contacto también debe coincidir.",
+        "colors": {
+            "yellow": "amarillo",
+            "red": "rojo",
+            "blue": "azul"
+        },
+        "notices": {
+            "occupied": "Esa casilla ya está ocupada.",
+            "selected": "Ficha {{number}} seleccionada. Elige una casilla libre o tócala de nuevo para girarla.",
+            "dragMode": "Modo arrastrar activado.",
+            "selectMode": "Modo seleccionar activado.",
+            "incomplete": "Todavía debes colocar {{remaining}} fichas.",
+            "disconnected": "Todas las fichas deben formar un único grupo conectado.",
+            "mismatch": "Hay {{count}} conexiones cuyos colores no coinciden.",
+            "openLoop": "El circuito principal todavía tiene extremos abiertos.",
+            "multipleLoops": "El color objetivo no forma un único circuito que pase por todas las fichas.",
+            "success": "Circuito correcto."
+        }
     },
     "wordle": {
         "eyebrow": "Juego de palabras · cada 3 horas",
@@ -267,14 +317,7 @@
             "detailedDescription": "Desarrollo completo del backend para aplicaciones móviles multiplataforma utilizando Node.js y arquitectura cloud. El proyecto incluye integración con servicios de GCP y Firebase para gestión de datos en tiempo real, autenticación de usuarios y notificaciones push. Implementación de APIs RESTful escalables y sistema de permisos basado en roles.",
             "githubLink": "",
             "productionLink": "https://www.idea-garden.xyz/",
-            "technologies": [
-                "Node.js",
-                "Firebase",
-                "GCP",
-                "Express",
-                "PostgreSQL",
-                "Javascript"
-            ]
+            "technologies": ["Node.js", "Firebase", "GCP", "Express", "PostgreSQL", "Javascript"]
         },
         "project2": {
             "title": "Chilcos - Colegio Waldorf",
@@ -282,11 +325,7 @@
             "detailedDescription": "Diseño y desarrollo de sitio web institucional para colegio con pedagogía Waldorf. Incluye sistema de gestión de contenidos para noticias y eventos, galería de fotos, información sobre metodología educativa y formulario de contacto. Diseño responsive y optimizado para SEO.",
             "githubLink": "",
             "productionLink": "https://www.chilcos.org",
-            "technologies": [
-                "HTML",
-                "Custom CSS",
-                "Javascript"
-            ]
+            "technologies": ["HTML", "Custom CSS", "Javascript"]
         },
         "project3": {
             "title": "Bible BFF",
@@ -294,11 +333,7 @@
             "detailedDescription": "Aplicación web enfocada en acompañar la lectura bíblica mediante una experiencia cercana, simple y conversacional. El proyecto prioriza una interfaz clara, accesible y responsive para ayudar a las personas a explorar contenido bíblico de manera más guiada y cotidiana.",
             "githubLink": "",
             "productionLink": "https://biblebff.app",
-            "technologies": [
-                "React",
-                "Tailwind CSS",
-                "Javascript"
-            ]
+            "technologies": ["React", "Tailwind CSS", "Javascript"]
         }
     },
     "blog": {

@@ -1,0 +1,651 @@
+.tantrix-game {
+    --tantrix-panel: #ffffff;
+    --tantrix-panel-soft: #f8fafc;
+    --tantrix-ink: #111827;
+    --tantrix-muted: #64748b;
+    --tantrix-border: #e2e8f0;
+    --tantrix-board: #e9eef5;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--tantrix-border);
+    border-radius: 28px;
+    background: var(--tantrix-panel);
+    color: var(--tantrix-ink);
+    box-shadow: 0 24px 70px -42px rgba(15, 23, 42, 0.55);
+}
+
+.dark .tantrix-game {
+    --tantrix-panel: #111827;
+    --tantrix-panel-soft: #182235;
+    --tantrix-ink: #f8fafc;
+    --tantrix-muted: #94a3b8;
+    --tantrix-border: #293548;
+    --tantrix-board: #0b1220;
+}
+
+.tantrix-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--tantrix-border);
+    background:
+        linear-gradient(135deg, rgba(245, 158, 11, 0.08), transparent 42%), var(--tantrix-panel);
+}
+
+.tantrix-challenge-summary,
+.tantrix-challenge-summary strong,
+.tantrix-target,
+.tantrix-stats div {
+    display: flex;
+    align-items: center;
+}
+
+.tantrix-challenge-summary {
+    flex-wrap: wrap;
+    gap: 8px 12px;
+}
+
+.tantrix-challenge-summary > span:first-child,
+.tantrix-stats span,
+.tantrix-tray-heading span {
+    color: var(--tantrix-muted);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.tantrix-challenge-summary strong {
+    font-size: 20px;
+    font-weight: 900;
+}
+
+.tantrix-target {
+    gap: 7px;
+    border: 1px solid color-mix(in srgb, var(--target-color), transparent 55%);
+    border-radius: 999px;
+    padding: 5px 10px;
+    background: color-mix(in srgb, var(--target-color), transparent 88%);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.tantrix-target i,
+.tantrix-challenge-picker i {
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: var(--target-color);
+}
+
+.tantrix-stats {
+    display: flex;
+    gap: 10px;
+}
+
+.tantrix-stats div {
+    min-width: 74px;
+    flex-direction: column;
+    gap: 2px;
+    border-left: 1px solid var(--tantrix-border);
+    padding-left: 12px;
+}
+
+.tantrix-stats strong {
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+}
+
+.tantrix-challenge-picker {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 14px 24px 3px;
+    scrollbar-width: thin;
+}
+
+.tantrix-challenge-picker button {
+    display: flex;
+    min-width: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid var(--tantrix-border);
+    border-radius: 12px;
+    padding: 8px 10px;
+    background: var(--tantrix-panel-soft);
+    color: var(--tantrix-muted);
+    font-size: 13px;
+    font-weight: 900;
+    transition: 160ms ease;
+}
+
+.tantrix-challenge-picker button:hover,
+.tantrix-challenge-picker button.is-active {
+    border-color: #8b5cf6;
+    color: var(--tantrix-ink);
+    transform: translateY(-1px);
+}
+
+.tantrix-challenge-picker button.is-active {
+    background: rgba(139, 92, 246, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.2);
+}
+
+.tantrix-challenge-picker i {
+    width: 7px;
+    height: 7px;
+    background: var(--challenge-color);
+}
+
+.tantrix-mode-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 12px 24px 14px;
+}
+
+.tantrix-mode-row p {
+    margin: 0;
+    color: var(--tantrix-muted);
+    font-size: 12px;
+    text-align: right;
+}
+
+.tantrix-mode-switch {
+    display: inline-flex;
+    flex-shrink: 0;
+    gap: 4px;
+    border: 1px solid var(--tantrix-border);
+    border-radius: 14px;
+    padding: 4px;
+    background: var(--tantrix-panel-soft);
+}
+
+.tantrix-mode-switch button {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    border-radius: 10px;
+    padding: 8px 11px;
+    color: var(--tantrix-muted);
+    font-size: 12px;
+    font-weight: 800;
+    transition: 160ms ease;
+}
+
+.tantrix-mode-switch button.is-active {
+    background: var(--tantrix-panel);
+    color: #7c3aed;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.1);
+}
+
+.tantrix-mode-switch svg,
+.tantrix-actions svg,
+.tantrix-complete button svg {
+    width: 17px;
+    height: 17px;
+}
+
+.tantrix-play-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    gap: 14px;
+    padding: 0 14px;
+}
+
+.tantrix-board-wrap {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--tantrix-border);
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 50% 45%, rgba(139, 92, 246, 0.11), transparent 36%),
+        var(--tantrix-board);
+}
+
+.tantrix-board {
+    display: block;
+    width: 100%;
+    min-height: 430px;
+    max-height: 620px;
+    touch-action: none;
+    user-select: none;
+}
+
+.tantrix-cell-shape {
+    fill: rgba(148, 163, 184, 0.025);
+    stroke: rgba(100, 116, 139, 0.2);
+    stroke-width: 1;
+    transition: 150ms ease;
+}
+
+.tantrix-cell.can-place {
+    cursor: pointer;
+}
+
+.tantrix-cell.can-place:hover .tantrix-cell-shape {
+    fill: rgba(139, 92, 246, 0.14);
+    stroke: #8b5cf6;
+    stroke-width: 2;
+}
+
+.tantrix-board-tile,
+.tantrix-tray-tile {
+    cursor: grab;
+    outline: none;
+    touch-action: none;
+}
+
+.tantrix-board-tile:active,
+.tantrix-tray-tile:active {
+    cursor: grabbing;
+}
+
+.tantrix-tile-art {
+    filter: drop-shadow(0 5px 5px rgba(2, 6, 23, 0.28));
+    transition: opacity 120ms ease;
+}
+
+.tantrix-tile-rotation {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+.tantrix-tile-art.is-dragging {
+    opacity: 0.35;
+}
+
+.tantrix-tile-face {
+    fill: #111827;
+    stroke: #020617;
+    stroke-width: 2;
+}
+
+.tantrix-selection-ring {
+    fill: none;
+    stroke: #a78bfa;
+    stroke-width: 7;
+    stroke-linejoin: round;
+}
+
+.tantrix-path-outline,
+.tantrix-color-path {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.tantrix-path-outline {
+    stroke: #020617;
+    stroke-width: 13;
+}
+
+.tantrix-color-path {
+    stroke-width: 8;
+}
+
+.tantrix-tile-number-bg {
+    fill: rgba(15, 23, 42, 0.9);
+    stroke: rgba(255, 255, 255, 0.22);
+    stroke-width: 1;
+}
+
+.tantrix-tile-number {
+    fill: #ffffff;
+    font-size: 11px;
+    font-weight: 900;
+    text-anchor: middle;
+    user-select: none;
+}
+
+.tantrix-tray {
+    min-height: 430px;
+    border: 1px solid var(--tantrix-border);
+    border-radius: 22px;
+    padding: 14px;
+    background: var(--tantrix-panel-soft);
+    transition: 160ms ease;
+}
+
+.tantrix-tray.can-return {
+    border-color: #8b5cf6;
+    box-shadow: inset 0 0 0 2px rgba(139, 92, 246, 0.12);
+    cursor: pointer;
+}
+
+.tantrix-tray-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 2px 2px 12px;
+}
+
+.tantrix-tray-heading > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tantrix-tray-heading strong {
+    font-size: 15px;
+}
+
+.tantrix-tray-heading small {
+    color: var(--tantrix-muted);
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.tantrix-tray-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.tantrix-tray-tile {
+    aspect-ratio: 1;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    padding: 2px;
+    background: transparent;
+    transition: 150ms ease;
+}
+
+.tantrix-tray-tile:hover,
+.tantrix-tray-tile.is-selected {
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+.tantrix-tray-tile svg {
+    display: block;
+    width: 100%;
+}
+
+.tantrix-empty-tray {
+    margin: 42px 4px;
+    color: var(--tantrix-muted);
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.tantrix-footer-row {
+    display: flex;
+    min-height: 77px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 18px 18px;
+}
+
+.tantrix-notice {
+    max-width: 620px;
+    color: var(--tantrix-muted);
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0;
+    transition: opacity 150ms ease;
+}
+
+.tantrix-notice.is-visible {
+    opacity: 1;
+}
+
+.tantrix-actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 9px;
+}
+
+.tantrix-actions button,
+.tantrix-complete button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 900;
+    transition: 160ms ease;
+}
+
+.tantrix-reset {
+    border: 1px solid var(--tantrix-border);
+    color: var(--tantrix-muted);
+}
+
+.tantrix-check,
+.tantrix-complete button {
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    color: #ffffff;
+    box-shadow: 0 10px 25px -12px rgba(124, 58, 237, 0.85);
+}
+
+.tantrix-actions button:hover,
+.tantrix-complete button:hover {
+    transform: translateY(-1px);
+}
+
+.tantrix-complete {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 32px;
+    background: color-mix(in srgb, var(--tantrix-board), transparent 8%);
+    text-align: center;
+    backdrop-filter: blur(8px);
+    animation: tantrix-appear 260ms ease both;
+}
+
+.tantrix-complete > svg {
+    width: 44px;
+    height: 44px;
+    color: #f59e0b;
+}
+
+.tantrix-complete p {
+    margin: 14px 0 4px;
+    color: #8b5cf6;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.tantrix-complete h2 {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 40px);
+    font-weight: 950;
+    letter-spacing: -0.04em;
+}
+
+.tantrix-complete > span {
+    max-width: 460px;
+    margin-top: 8px;
+    color: var(--tantrix-muted);
+    font-size: 14px;
+}
+
+.tantrix-complete-stats {
+    display: flex;
+    gap: 12px;
+    margin: 22px 0;
+}
+
+.tantrix-complete-stats div {
+    display: flex;
+    min-width: 95px;
+    flex-direction: column;
+    border: 1px solid var(--tantrix-border);
+    border-radius: 14px;
+    padding: 10px 16px;
+    background: var(--tantrix-panel);
+}
+
+.tantrix-complete-stats strong {
+    font-size: 18px;
+}
+
+.tantrix-complete-stats span {
+    color: var(--tantrix-muted);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.tantrix-drag-ghost {
+    position: fixed;
+    z-index: 100;
+    width: 94px;
+    height: 94px;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(1.06);
+    filter: drop-shadow(0 12px 16px rgba(2, 6, 23, 0.35));
+}
+
+.tantrix-drag-ghost svg {
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes tantrix-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 820px) {
+    .tantrix-play-area {
+        grid-template-columns: 1fr;
+    }
+
+    .tantrix-tray {
+        min-height: 0;
+    }
+
+    .tantrix-tray-heading {
+        flex-direction: row;
+        align-items: end;
+        justify-content: space-between;
+    }
+
+    .tantrix-tray-heading small {
+        max-width: 250px;
+        text-align: right;
+    }
+
+    .tantrix-tray-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .tantrix-game {
+        border-radius: 20px;
+    }
+
+    .tantrix-topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .tantrix-stats {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .tantrix-stats div {
+        min-width: 0;
+        flex: 1;
+        padding: 0;
+        border: 0;
+    }
+
+    .tantrix-challenge-picker {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .tantrix-mode-row {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 12px 14px;
+    }
+
+    .tantrix-mode-switch,
+    .tantrix-mode-switch button {
+        flex: 1;
+    }
+
+    .tantrix-mode-switch button {
+        justify-content: center;
+    }
+
+    .tantrix-mode-row p {
+        text-align: left;
+    }
+
+    .tantrix-play-area {
+        padding: 0 8px;
+    }
+
+    .tantrix-board {
+        width: 760px;
+        max-width: none;
+        min-height: 0;
+        transform: translateX(calc((100vw - 790px) / 2));
+    }
+
+    .tantrix-board-wrap {
+        height: min(72vh, 520px);
+    }
+
+    .tantrix-tray-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .tantrix-footer-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .tantrix-notice {
+        min-height: 36px;
+    }
+
+    .tantrix-actions button {
+        flex: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tantrix-game *,
+    .tantrix-game *::before,
+    .tantrix-game *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

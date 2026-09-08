@@ -45,6 +45,8 @@
         "arrowCubeDescription": "Free paths spanning multiple faces.",
         "cryptogram": "Cryptogram",
         "cryptogramDescription": "Decode phrases by connecting numbers and letters.",
+        "tantrix": "Tantrix Discovery",
+        "tantrixDescription": "Build colour loops with hexagonal tiles.",
         "mainNavigation": "Main navigation",
         "menuToggle": "Open or close menu",
         "languageToggle": "Change language",
@@ -80,6 +82,54 @@
         "completeTitle": "Cube released!",
         "completeDescription": "You solved a configuration that will never repeat.",
         "nextLevel": "Play next level"
+    },
+    "tantrix": {
+        "eyebrow": "Spatial puzzle · 10 challenges",
+        "titleStart": "Discover",
+        "titleAccent": "Tantrix",
+        "subtitle": "Rotate and connect hexagonal tiles until one closed loop runs through every piece.",
+        "gameLabel": "Tantrix Discovery",
+        "challenge": "Challenge",
+        "tiles": "tiles",
+        "time": "Time",
+        "moves": "Moves",
+        "reference": "Reference",
+        "chooseChallenge": "Choose a challenge",
+        "interactionMode": "Interaction method",
+        "dragMode": "Drag",
+        "selectMode": "Select",
+        "dragInstruction": "Drag a tile onto the board. Tap or click without moving to rotate it.",
+        "selectInstruction": "Select a tile, then choose a cell. Tap it again to rotate it.",
+        "boardLabel": "Tantrix hexagonal board",
+        "tileLabel": "Tile {{number}}, rotation {{rotation}} of 6",
+        "tray": "Your tiles",
+        "remaining": "available",
+        "trayHint": "Return a tile here to remove it from the board.",
+        "allPlaced": "Every tile is on the board. Close the loop and check your solution.",
+        "restart": "Restart",
+        "check": "Check",
+        "nextChallenge": "Next challenge",
+        "completeEyebrow": "Loop closed",
+        "completeTitle": "Challenge solved!",
+        "completeDescription": "You connected all {{count}} tiles in a valid {{color}} loop.",
+        "howToPlay": "Use every tile from 1 up to the challenge number. The indicated colour must make one closed loop through them all, and every other pair of touching colours must match too.",
+        "colors": {
+            "yellow": "yellow",
+            "red": "red",
+            "blue": "blue"
+        },
+        "notices": {
+            "occupied": "That cell is already occupied.",
+            "selected": "Tile {{number}} selected. Choose an empty cell or tap it again to rotate it.",
+            "dragMode": "Drag mode enabled.",
+            "selectMode": "Select mode enabled.",
+            "incomplete": "You still need to place {{remaining}} tiles.",
+            "disconnected": "All tiles must form one connected group.",
+            "mismatch": "There are {{count}} connections whose colours do not match.",
+            "openLoop": "The main loop still has open ends.",
+            "multipleLoops": "The target colour does not form one loop through every tile.",
+            "success": "The loop is correct."
+        }
     },
     "wordle": {
         "eyebrow": "Word game · every 3 hours",
@@ -267,13 +317,7 @@
             "detailedDescription": "Complete backend development for cross-platform mobile applications using Node.js and cloud architecture. The project includes integration with GCP and Firebase services for real-time data management, user authentication, and push notifications. Implementation of scalable RESTful APIs and role-based permissions system.",
             "githubLink": "",
             "productionLink": "https://www.idea-garden.xyz/",
-            "technologies": [
-                "Node.js",
-                "Firebase",
-                "GCP",
-                "Express",
-                "MongoDB"
-            ]
+            "technologies": ["Node.js", "Firebase", "GCP", "Express", "MongoDB"]
         },
         "project2": {
             "title": "Chilcos - Waldorf School",
@@ -281,11 +325,7 @@
             "detailedDescription": "Design and development of institutional website for a school with Waldorf pedagogy. Includes content management system for news and events, photo gallery, information about educational methodology, and contact form. Responsive design and SEO optimized.",
             "githubLink": "",
             "productionLink": "https://www.chilcos.org",
-            "technologies": [
-                "React",
-                "Tailwind CSS",
-                "Vercel"
-            ]
+            "technologies": ["React", "Tailwind CSS", "Vercel"]
         },
         "project3": {
             "title": "Bible BFF",
@@ -293,11 +333,7 @@
             "detailedDescription": "Web app focused on supporting Bible reading through a warm, simple, conversational experience. The project prioritizes a clear, accessible, responsive interface that helps people explore biblical content in a more guided everyday way.",
             "githubLink": "",
             "productionLink": "https://biblebff.app",
-            "technologies": [
-                "React",
-                "Tailwind CSS",
-                "Javascript"
-            ]
+            "technologies": ["React", "Tailwind CSS", "Javascript"]
         }
     },
     "blog": {
