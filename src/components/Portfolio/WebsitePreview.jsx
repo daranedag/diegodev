@@ -1,13 +1,21 @@
 import { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
+const previewImages = {
+    'simbiontejoyas.cl': `${import.meta.env.BASE_URL}previews/simbionte-joyas.jpg`,
+    'www.simbiontejoyas.cl': `${import.meta.env.BASE_URL}previews/simbionte-joyas.jpg`,
+};
+
 const WebsitePreview = ({ url, title, variant = 'card' }) => {
     const isDetail = variant === 'detail';
     const [hasError, setHasError] = useState(false);
-    const screenshotUrl = useMemo(
-        () => `https://v1.screenshot.11ty.dev/${encodeURIComponent(url)}/opengraph/`,
-        [url]
-    );
+    const screenshotUrl = useMemo(() => {
+        const hostname = new URL(url).hostname;
+        return (
+            previewImages[hostname] ||
+            `https://v1.screenshot.11ty.dev/${encodeURIComponent(url)}/opengraph/`
+        );
+    }, [url]);
 
     return (
         <div className="relative h-full w-full overflow-hidden bg-gradient-to-br from-purple-700 via-fuchsia-600 to-amber-500">

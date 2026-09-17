@@ -5,59 +5,14 @@ import Footer from '../components/Footer';
 import Project from '../components/Portfolio/Project';
 import ProjectModal from '../components/Portfolio/ProjectModal';
 import PropTypes from 'prop-types';
+import { getProjects } from '../data/projects';
 
 const Portfolio = ({ isDark, toggleTheme }) => {
     const { t } = useTranslation();
     const [selectedProject, setSelectedProject] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const projects = [
-        {
-            title: t('portfolio.project1.title'),
-            description: t('portfolio.project1.description'),
-            detailedDescription: t('portfolio.project1.detailedDescription'),
-            githubLink: t('portfolio.project1.githubLink'),
-            productionLink: t('portfolio.project1.productionLink'),
-            technologies: t('portfolio.project1.technologies', { returnObjects: true }),
-            type: 'frontend',
-        },
-        {
-            title: t('portfolio.project2.title'),
-            description: t('portfolio.project2.description'),
-            detailedDescription: t('portfolio.project2.detailedDescription'),
-            githubLink: t('portfolio.project2.githubLink'),
-            productionLink: t('portfolio.project2.productionLink'),
-            technologies: t('portfolio.project2.technologies', { returnObjects: true }),
-            type: 'frontend',
-        },
-        {
-            title: t('portfolio.project3.title'),
-            description: t('portfolio.project3.description'),
-            detailedDescription: t('portfolio.project3.detailedDescription'),
-            githubLink: t('portfolio.project3.githubLink'),
-            productionLink: t('portfolio.project3.productionLink'),
-            technologies: t('portfolio.project3.technologies', { returnObjects: true }),
-            type: 'fullstack',
-        },
-        {
-            title: t('portfolio.project4.title'),
-            description: t('portfolio.project4.description'),
-            detailedDescription: t('portfolio.project4.detailedDescription'),
-            githubLink: t('portfolio.project4.githubLink'),
-            productionLink: t('portfolio.project4.productionLink'),
-            technologies: t('portfolio.project4.technologies', { returnObjects: true }),
-            type: 'frontend',
-        },
-        {
-            title: t('portfolio.project5.title'),
-            description: t('portfolio.project5.description'),
-            detailedDescription: t('portfolio.project5.detailedDescription'),
-            githubLink: t('portfolio.project5.githubLink'),
-            productionLink: t('portfolio.project5.productionLink'),
-            technologies: t('portfolio.project5.technologies', { returnObjects: true }),
-            type: 'fullstack',
-        },
-    ];
+    const projects = getProjects(t);
 
     const handleOpenModal = project => {
         setSelectedProject(project);
@@ -83,9 +38,9 @@ const Portfolio = ({ isDark, toggleTheme }) => {
                             </p>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {projects.map((project, index) => (
+                            {projects.map(project => (
                                 <Project
-                                    key={index}
+                                    key={project.id}
                                     title={project.title}
                                     description={project.description}
                                     websiteUrl={project.productionLink}

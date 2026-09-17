@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import WebsitePreview from '../Portfolio/WebsitePreview';
+import { getProjects } from '../../data/projects';
 
 const ProjectCard = ({ title, description, link, previewTitle, gradient }) => {
     return (
@@ -31,26 +32,7 @@ const ProjectCard = ({ title, description, link, previewTitle, gradient }) => {
 
 const FeaturedWork = () => {
     const { t } = useTranslation();
-    const projects = [
-        {
-            title: t('work.ideaGarden.title'),
-            description: t('work.ideaGarden.description'),
-            gradient: 'from-purple-700 to-blue-500',
-            link: 'https://www.idea-garden.xyz/',
-        },
-        {
-            title: t('work.chilcos.title'),
-            description: t('work.chilcos.description'),
-            gradient: 'from-purple-500 to-purple-700',
-            link: 'https://www.chilcos.org',
-        },
-        {
-            title: t('work.bibleBff.title'),
-            description: t('work.bibleBff.description'),
-            gradient: 'from-amber-500 via-rose-500 to-purple-600',
-            link: 'https://biblebff.app',
-        },
-    ];
+    const projects = getProjects(t).slice(0, 5);
 
     return (
         <section className="mt-24" id="work">
@@ -58,13 +40,13 @@ const FeaturedWork = () => {
                 {t('work.title')}
             </h2>
             <div className="mt-12 grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3">
-                {projects.map((project, index) => (
+                {projects.map(project => (
                     <ProjectCard
-                        key={index}
+                        key={project.id}
                         title={project.title}
                         description={project.description}
                         gradient={project.gradient}
-                        link={project.link}
+                        link={project.productionLink}
                         previewTitle={t('portfolio.previewTitle', { title: project.title })}
                     />
                 ))}
