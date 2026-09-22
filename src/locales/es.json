@@ -30,6 +30,9 @@
         "description": "Siempre estoy dispuesto a nuevas oportunidades y colaboraciones.<br/>No dudes en contactarme!"
     },
     "footer": {
+        "legal": "Información legal",
+        "privacy": "Privacidad de Instagram",
+        "dataDeletion": "Eliminación de datos",
         "copyright": "© {{year}} DieGui DeV. Todos los derechos reservados."
     },
     "header": {

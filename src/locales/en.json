@@ -30,6 +30,9 @@
         "description": "I'm always open to new opportunities and collaborations.<br/>Feel free to reach out!"
     },
     "footer": {
+        "legal": "Legal information",
+        "privacy": "Instagram privacy (Spanish)",
+        "dataDeletion": "Data deletion (Spanish)",
         "copyright": "© {{year}} DieGui DeV. All rights reserved."
     },
     "header": {
