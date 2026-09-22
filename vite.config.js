@@ -6,7 +6,9 @@ const serveLegalPages = server => {
     server.middlewares.use((req, _res, next) => {
         if (req.method === 'GET' || req.method === 'HEAD') {
             const [pathname, query] = (req.url || '').split(/\?(.*)/s);
-            const page = pathname.match(/^\/(privacidad|eliminacion-de-datos)\/?$/);
+            const page = pathname.match(
+                /^\/(privacidad|eliminacion-de-datos|condiciones-del-servicio)\/?$/
+            );
 
             if (page) {
                 req.url = `/${page[1]}/index.html${query === undefined ? '' : `?${query}`}`;

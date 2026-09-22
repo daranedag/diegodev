@@ -20,6 +20,12 @@ const Footer = () => {
                         {t('footer.privacy')}
                     </a>
                     <a
+                        href="/condiciones-del-servicio/"
+                        className="underline underline-offset-4 hover:text-purple-600 dark:hover:text-purple-300"
+                    >
+                        {t('footer.terms')}
+                    </a>
+                    <a
                         href="/eliminacion-de-datos/"
                         className="underline underline-offset-4 hover:text-purple-600 dark:hover:text-purple-300"
                     >

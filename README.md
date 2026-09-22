@@ -1,17 +1,18 @@
 # React + Vite
 
-## Política de privacidad de Instagram
+## Páginas legales de la integración de Instagram
 
 La app **Diegui Dev Profile Display** dispone de páginas HTML públicas, sin autenticación ni dependencia de JavaScript, copiadas por Vite al build de GitHub Pages:
 
 - Política de privacidad: `https://diegui.dev/privacidad/`
+- Condiciones del servicio: `https://diegui.dev/condiciones-del-servicio/`
 - Instrucciones de eliminación: `https://diegui.dev/eliminacion-de-datos/`
 
-Los archivos fuente están en `public/privacidad/index.html` y `public/eliminacion-de-datos/index.html`; comparten `public/legal.css`. El pie del sitio enlaza a ambas páginas mediante navegación completa para servir su HTML directamente.
+Los archivos fuente están en `public/privacidad/index.html` , `public/condiciones-del-servicio/index.html` y `public/eliminacion-de-datos/index.html`; comparten `public/legal.css`. El pie del sitio enlaza a las tres páginas mediante navegación completa para servir su HTML directamente.
 
-En desarrollo y en la vista previa, `vite.config.js` sirve estas dos rutas (con o sin barra final) desde sus archivos HTML antes del fallback de React. Esto reproduce el comportamiento de los índices de directorio de GitHub Pages y evita la página 404 de la aplicación.
+En desarrollo y en la vista previa, `vite.config.js` sirve estas tres rutas (con o sin barra final) desde sus archivos HTML antes del fallback de React. Esto reproduce el comportamiento de los índices de directorio de GitHub Pages y evita la página 404 de la aplicación.
 
-Antes de enviar las URLs a Meta, desplegar el sitio y comprobar que ambas devuelven HTTP 200 sin iniciar sesión. La segunda URL corresponde al campo de **instrucciones de eliminación**, no a un callback automatizado. Las solicitudes se atienden manualmente en `daranedag@gmail.com`.
+Antes de enviar las URLs a Meta, desplegar el sitio y comprobar que las tres devuelven HTTP 200 sin iniciar sesión. La URL de eliminación corresponde al campo de **instrucciones de eliminación**, no a un callback automatizado. Las solicitudes se atienden manualmente en `daranedag@gmail.com`.
 
 La política refleja el alcance indicado por el responsable: consulta de publicaciones sin almacenarlas y tokens configurados por cliente como variables de entorno. Los tokens deben permanecer en el servidor: una variable incluida en el bundle del navegador (por ejemplo, mediante el prefijo `VITE_`) no es secreta. Confirmar la configuración real de cada integración y sus proveedores antes de publicar. No se implementa aquí la integración ni la eliminación automatizada de credenciales. Mantener el texto actualizado si cambian los datos tratados, la conservación o las funciones del servicio.
 
