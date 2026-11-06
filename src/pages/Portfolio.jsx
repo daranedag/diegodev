@@ -49,6 +49,7 @@ const Portfolio = ({ isDark, toggleTheme }) => {
                                     })}
                                     onClick={() => handleOpenModal(project)}
                                     type={project.type}
+                                    badge={project.badge}
                                 />
                             ))}
                         </div>

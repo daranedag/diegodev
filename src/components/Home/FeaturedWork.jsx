@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import WebsitePreview from '../Portfolio/WebsitePreview';
+import ProjectBadge from '../Portfolio/ProjectBadge';
 import { getProjects } from '../../data/projects';
 
-const ProjectCard = ({ title, description, link, previewTitle, gradient }) => {
+const ProjectCard = ({ title, description, link, previewTitle, gradient, badge }) => {
     return (
         <div className="group">
             <Link to={link} target="_blank" rel="noopener noreferrer" className="no-underline">
@@ -23,6 +24,11 @@ const ProjectCard = ({ title, description, link, previewTitle, gradient }) => {
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                         {title}
                     </h3>
+                    {badge && (
+                        <div className="mt-2">
+                            <ProjectBadge label={badge} />
+                        </div>
+                    )}
                     <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{description}</p>
                 </div>
             </Link>
@@ -32,7 +38,7 @@ const ProjectCard = ({ title, description, link, previewTitle, gradient }) => {
 
 const FeaturedWork = () => {
     const { t } = useTranslation();
-    const projects = getProjects(t).slice(0, 5);
+    const projects = getProjects(t);
 
     return (
         <section className="mt-24" id="work">
@@ -46,6 +52,7 @@ const FeaturedWork = () => {
                         title={project.title}
                         description={project.description}
                         gradient={project.gradient}
+                        badge={project.badge}
                         link={project.productionLink}
                         previewTitle={t('portfolio.previewTitle', { title: project.title })}
                     />

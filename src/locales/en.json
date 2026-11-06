@@ -316,6 +316,17 @@
         "title": "Portfolio",
         "description": "Here is a selection of some of my recent projects. To learn more details, you can click on each project.",
         "previewTitle": "Live preview of {{title}}",
+        "badges": {
+            "firstProfessionalSaas": "My first professional SaaS"
+        },
+        "project6": {
+            "title": "MenuPro",
+            "description": "My first professionally launched SaaS product: a new milestone in my journey as a developer.",
+            "detailedDescription": "MenuPro is my first professionally launched software as a service (SaaS) product. This project marks the step from developing digital solutions to launching my own product, available at www.menupro.cl.",
+            "githubLink": "",
+            "productionLink": "https://www.menupro.cl",
+            "technologies": []
+        },
         "project1": {
             "title": "Idea Garden",
             "description": "Corporate website for a US-based mobile app studio.",

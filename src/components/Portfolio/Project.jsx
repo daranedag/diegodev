@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import WebsitePreview from './WebsitePreview';
+import ProjectBadge from './ProjectBadge';
 
-const Project = ({ title, description, websiteUrl, previewTitle, onClick, type }) => {
+const Project = ({ title, description, websiteUrl, previewTitle, onClick, type, badge }) => {
     // Determinar los badges a mostrar según el tipo
     const badges = [];
     if (type === 'frontend' || type === 'fullstack') {
@@ -31,6 +32,11 @@ const Project = ({ title, description, websiteUrl, previewTitle, onClick, type }
                 <h3 className="text-lg font-semibold text-text-light dark:text-text-dark">
                     {title}
                 </h3>
+                {badge && (
+                    <div className="mt-2">
+                        <ProjectBadge label={badge} />
+                    </div>
+                )}
                 <p className="mt-2 text-sm text-text-light/70 dark:text-text-dark/70">
                     {description}
                 </p>
@@ -64,6 +70,7 @@ Project.propTypes = {
     previewTitle: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
     type: PropTypes.oneOf(['frontend', 'backend', 'fullstack']),
+    badge: PropTypes.string,
 };
 
 export default Project;

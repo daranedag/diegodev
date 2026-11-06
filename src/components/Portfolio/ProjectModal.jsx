@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import Table from './Table';
 import WebsitePreview from './WebsitePreview';
+import ProjectBadge from './ProjectBadge';
 
 const ProjectModal = ({ isOpen, onClose, project }) => {
     if (!isOpen || !project) return null;
@@ -24,6 +25,11 @@ const ProjectModal = ({ isOpen, onClose, project }) => {
                             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                                 {project.title}
                             </h2>
+                            {project.badge && (
+                                <div className="mt-2">
+                                    <ProjectBadge label={project.badge} />
+                                </div>
+                            )}
                         </div>
                         <button
                             onClick={onClose}
@@ -124,6 +130,7 @@ ProjectModal.propTypes = {
         githubLink: PropTypes.string,
         productionLink: PropTypes.string,
         technologies: PropTypes.array,
+        badge: PropTypes.string,
     }),
 };
 

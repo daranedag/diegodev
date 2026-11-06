@@ -1,4 +1,10 @@
 const projectDefinitions = [
+    {
+        id: 'project6',
+        type: 'fullstack',
+        gradient: 'from-amber-500 via-orange-600 to-rose-600',
+        milestone: 'firstProfessionalSaas',
+    },
     { id: 'project1', type: 'frontend', gradient: 'from-purple-700 to-blue-500' },
     { id: 'project2', type: 'frontend', gradient: 'from-purple-500 to-purple-700' },
     { id: 'project3', type: 'fullstack', gradient: 'from-amber-500 via-rose-500 to-purple-600' },
@@ -9,6 +15,7 @@ const projectDefinitions = [
 export const getProjects = t =>
     projectDefinitions.map(project => ({
         ...project,
+        badge: project.milestone ? t(`portfolio.badges.${project.milestone}`) : null,
         title: t(`portfolio.${project.id}.title`),
         description: t(`portfolio.${project.id}.description`),
         detailedDescription: t(`portfolio.${project.id}.detailedDescription`),
