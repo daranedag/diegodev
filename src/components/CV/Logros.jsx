@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { TrophyIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 
 const Logros = () => {
@@ -7,7 +8,7 @@ const Logros = () => {
     return (
         <section>
             <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-xl">military_tech</span>
+                <TrophyIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
                 {t('cv.achievementsTitle')}
             </h3>
             <ul className="space-y-3 list-disc list-inside text-slate-600 dark:text-slate-400 text-sm pl-2">

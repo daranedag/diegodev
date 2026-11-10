@@ -1,4 +1,5 @@
 import React from 'react';
+import { BriefcaseIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 
 const Experiencia = () => {
@@ -8,7 +9,7 @@ const Experiencia = () => {
     return (
         <section>
             <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-xl">work</span>
+                <BriefcaseIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
                 {t('cv.experienceTitle')}
             </h3>
             <div className="space-y-6 border-l-2 border-slate-200 dark:border-slate-800 pl-6 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-700 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent hover:scrollbar-thumb-slate-400 dark:hover:scrollbar-thumb-slate-600">

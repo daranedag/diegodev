@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { StarIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 
 const Skills = () => {
@@ -6,7 +7,7 @@ const Skills = () => {
     return (
         <section>
             <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-xl">star</span>
+                <StarIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
                 {t('cv.skillsTitle')}
             </h3>
             <div className="flex flex-wrap gap-2">

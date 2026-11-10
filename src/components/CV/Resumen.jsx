@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { UserIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 
 const Resumen = () => {
@@ -21,7 +22,7 @@ const Resumen = () => {
     return (
         <section>
             <h3 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
-                <span className="material-symbols-outlined text-xl">person</span>
+                <UserIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
                 {t("cv.resumenTitle")}
             </h3>
             <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm text-justify">

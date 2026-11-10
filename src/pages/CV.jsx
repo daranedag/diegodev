@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { ArrowDownTrayIcon, EnvelopeIcon, EyeIcon, GlobeAltIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import Educacion from '../components/CV/Educacion';
 import Skills from '../components/CV/Skills';
 import Experiencia from '../components/CV/Experiencia';
@@ -208,7 +209,7 @@ const CV = ({ isDark, toggleTheme }) => {
                                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 text-white text-sm font-medium hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all"
                                     title="Vista previa del PDF en nueva pestaña"
                                 >
-                                    <span className="material-symbols-outlined text-base">visibility</span>
+                                    <EyeIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                                     <span className="hidden sm:inline">{t('cv.preview')}</span>
                                 </button>
                                 <button
@@ -216,7 +217,7 @@ const CV = ({ isDark, toggleTheme }) => {
                                     className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary/50 transition-all"
                                     title="Descargar PDF directamente"
                                 >
-                                    <span className="material-symbols-outlined text-base">download</span>
+                                    <ArrowDownTrayIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                                     <span className="hidden sm:inline">{t('cv.download')}</span>
                                 </button>
                             </div>
@@ -227,19 +228,19 @@ const CV = ({ isDark, toggleTheme }) => {
                                 <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-4">Diego Araneda Geldres</h1>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm text-slate-600 dark:text-slate-400">
                                     <div className="flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-base">phone</span>
+                                        <PhoneIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                                         <span>+56 9 6760 3803</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-base">mail</span>
+                                        <EnvelopeIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                                         <span>daranedag@gmail.com</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-base">language</span>
+                                        <GlobeAltIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                                         <span>diegui.dev</span>
                                     </div>
                                     <div className="flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-base">location_on</span>
+                                        <MapPinIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
                                         <span>Valdivia, Chile</span>
                                     </div>
                                 </div>
