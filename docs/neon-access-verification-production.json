@@ -1,0 +1,12 @@
+{
+  "branch": "production",
+  "verifiedAt": "2026-11-10T17:37:58.516Z",
+  "checks": [
+    "Anonymous blog and card reads; private and ingestion access denied",
+    "Two disposable Auth accounts, persisted sessions, JWTs, application profiles",
+    "Owner CRUD; cross-user reads, updates, and forged ownership blocked",
+    "Places and analysis quota RPCs accept Neon identity",
+    "Analysis handler rejects missing/invalid tokens and analyzes a deck using Neon data",
+    "Sign-out clears both sessions"
+  ]
+}

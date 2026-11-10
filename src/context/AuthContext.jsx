@@ -1,66 +1,81 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { hasPendingInsforgeOAuthCallback, insforge } from '../lib/insforge'
+import { createContext, useContext, useEffect, useState } from 'react';
+import { neon } from '../lib/neon';
 
-const AuthContext = createContext(null)
-
-function hasInsforgeCsrfToken() {
-    return document.cookie
-        .split(';')
-        .some((cookie) => cookie.trim().startsWith('insforge_csrf_token='))
-}
+const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [authError, setAuthError] = useState(null);
 
     useEffect(() => {
-        let cancelled = false
-
+        let cancelled = false;
         async function restoreSession() {
-            // Browser-mode InsForge stores the refresh token in an httpOnly
-            // cookie and leaves this CSRF cookie as the client-side marker.
-            // Without either marker, refresh can only return the expected 401
-            // "No refresh token provided" for an anonymous visitor.
-            if (!hasPendingInsforgeOAuthCallback && !hasInsforgeCsrfToken()) {
-                if (!cancelled) setLoading(false)
-                return
-            }
-
-            // The SDK automatically exchanges insforge_code (PKCE) and waits
-            // for that work here. Do not exchange it a second time.
-            const { data } = await insforge.auth.getCurrentUser()
-            if (!cancelled) {
-                setUser(data?.user ?? null)
-                setLoading(false)
+            try {
+                const { data, error } = await neon.auth.getSession();
+                if (error) throw error;
+                if (data?.user) {
+                    const result = await neon.rpc('ensure_app_user');
+                    if (result.error) throw result.error;
+                    if (!cancelled) setUser(result.data);
+                } else if (!cancelled) {
+                    setUser(null);
+                }
+            } catch (error) {
+                if (!cancelled) {
+                    setUser(null);
+                    setAuthError(error.message || 'No se pudo recuperar tu sesión.');
+                }
+            } finally {
+                if (!cancelled) setLoading(false);
             }
         }
-
-        restoreSession()
-
+        restoreSession();
+        const refresh = () => restoreSession();
+        window.addEventListener('focus', refresh);
         return () => {
-            cancelled = true
-        }
-    }, [])
+            cancelled = true;
+            window.removeEventListener('focus', refresh);
+        };
+    }, []);
 
     async function signInWithGoogle() {
-        await insforge.auth.signInWithOAuth({
-            provider: 'google',
-            redirectTo: window.location.origin + '/kanban',
-        })
+        setAuthError(null);
+        try {
+            const { error } = await neon.auth.signIn.social({
+                provider: 'google',
+                callbackURL: window.location.origin + '/kanban',
+            });
+            if (error) throw error;
+        } catch (error) {
+            setAuthError(error.message || 'No se pudo iniciar sesión con Google.');
+        }
     }
 
     async function signOut() {
-        await insforge.auth.signOut()
-        setUser(null)
+        try {
+            const { error } = await neon.auth.signOut();
+            if (error) throw error;
+            setUser(null);
+            setAuthError(null);
+        } catch (error) {
+            setAuthError(error.message || 'No se pudo cerrar la sesión.');
+        }
     }
 
     return (
-        <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
+        <AuthContext.Provider value={{ user, loading, authError, signInWithGoogle, signOut }}>
             {children}
+            {authError && (
+                <div role="alert" className="fixed bottom-5 right-5 z-50 max-w-sm rounded-xl border border-red-300 bg-white p-4 text-sm text-red-700 shadow-lg dark:bg-gray-800 dark:text-red-300">
+                    {authError}
+                    <button type="button" onClick={() => setAuthError(null)} className="ml-3 underline">Cerrar</button>
+                </div>
+            )}
         </AuthContext.Provider>
-    )
+    );
 }
 
 export function useAuth() {
-    return useContext(AuthContext)
+    return useContext(AuthContext);
 }

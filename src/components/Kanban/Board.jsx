@@ -1,8 +1,8 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { DragDropContext } from '@hello-pangea/dnd'
 import { useRef } from 'react'
 import { useAuth } from '../../context/AuthContext'
-import { insforge } from '../../lib/insforge'
+import { neon } from '../../lib/neon'
 import Column from './Column'
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import PropTypes from 'prop-types'
@@ -21,7 +21,7 @@ export default function Board({ boardId, onDeleteBoard }) {
     }, [boardId])
 
     async function loadAll() {
-        const { data: cols } = await insforge.database
+        const { data: cols } = await neon
             .from('kanban_columns')
             .select('id, title, position, color')
             .eq('board_id', boardId)
@@ -36,7 +36,7 @@ export default function Board({ boardId, onDeleteBoard }) {
         }
 
         const colIds = loadedCols.map(c => c.id)
-        const { data: allCards } = await insforge.database
+        const { data: allCards } = await neon
             .from('kanban_cards')
             .select('id, title, description, position, due_date, priority, column_id')
             .in('column_id', colIds)
@@ -82,7 +82,7 @@ export default function Board({ boardId, onDeleteBoard }) {
                 ]
             }
 
-            const { error } = await insforge.database.rpc('kanban_reorder_cards', {
+            const { error } = await neon.rpc('kanban_reorder_cards', {
                 p_updates: updates,
             })
             if (error) throw error
@@ -115,7 +115,7 @@ export default function Board({ boardId, onDeleteBoard }) {
         e.preventDefault()
         if (!newColTitle.trim()) return
         setAddingCol(true)
-        const { data } = await insforge.database
+        const { data } = await neon
             .from('kanban_columns')
             .insert([{ board_id: boardId, user_id: user.id, title: newColTitle.trim(), position: columns.length }])
             .select()
@@ -128,13 +128,13 @@ export default function Board({ boardId, onDeleteBoard }) {
     }
 
     async function deleteColumn(colId) {
-        await insforge.database.from('kanban_columns').delete().eq('id', colId)
+        await neon.from('kanban_columns').delete().eq('id', colId)
         setColumns(prev => prev.filter(c => c.id !== colId))
         setCards(prev => { const n = { ...prev }; delete n[colId]; return n })
     }
 
     async function updateColumnTitle(colId, title) {
-        await insforge.database.from('kanban_columns').update({ title }).eq('id', colId)
+        await neon.from('kanban_columns').update({ title }).eq('id', colId)
         setColumns(prev => prev.map(c => c.id === colId ? { ...c, title } : c))
     }
 

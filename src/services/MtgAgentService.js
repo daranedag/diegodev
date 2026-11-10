@@ -1,4 +1,4 @@
-import { insforge } from '../lib/insforge.js';
+import { neon } from '../lib/neon.js';
 
 const ANALYSIS_CACHE_VERSION = 'mtg-agent-v3-market-tooltips';
 
@@ -35,14 +35,22 @@ export class MtgAgentService {
      * @param {string|null} deckName - Optional deck label
      */
     static async analyzeDecklist(rawDecklist, formatSlug, deckName = null) {
-        const { data, error } = await insforge.functions.invoke('analyze-deck', {
-            body: {
+        const { data: session, error } = await neon.auth.token();
+        if (error || !session?.token) throw new Error('Inicia sesión para analizar tu mazo.');
+        const response = await fetch(import.meta.env.VITE_ANALYZE_DECK_URL, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${session.token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
                 raw_decklist: rawDecklist,
                 format_slug: formatSlug,
                 deck_name: deckName,
-            },
+            }),
         });
-        if (error) throw new Error(error.message ?? 'Analysis failed');
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error ?? 'Analysis failed');
         return data;
     }
 
@@ -58,7 +66,7 @@ export class MtgAgentService {
         const persistedAnalysis = { ...analysisData };
         delete persistedAnalysis.raw_decklist;
         delete persistedAnalysis.llm_raw;
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('mtg_analysis_runs')
             .insert([{
                 user_id: userId,
@@ -86,7 +94,7 @@ export class MtgAgentService {
      * @param {number} limit
      */
     static async getAnalysisHistory(limit = 12) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('mtg_analysis_runs')
             .select(
                 'id, format_slug, archetype_detected, strategy_detected, tier_detected, confidence_score, analysis_data, deck_id, created_at, mtg_user_decks(name)'
@@ -101,7 +109,7 @@ export class MtgAgentService {
      * Returns a cached completed analysis for the current user and deck hash.
      */
     static async getCachedAnalysisRun(deckHash, userId) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('mtg_analysis_runs')
             .select('id, analysis_data, created_at')
             .eq('user_id', userId)
@@ -122,7 +130,7 @@ export class MtgAgentService {
      * Saves a deck to the user's library (optional, tied to an analysis).
      */
     static async saveDeck(userId, name, formatSlug, rawDecklist) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('mtg_user_decks')
             .insert([{ user_id: userId, name, format_slug: formatSlug, raw_decklist: rawDecklist }])
             .select()
@@ -135,7 +143,7 @@ export class MtgAgentService {
      * Deletes a single analysis run by id.
      */
     static async deleteAnalysisRun(id) {
-        const { error } = await insforge.database
+        const { error } = await neon
             .from('mtg_analysis_runs')
             .delete()
             .eq('id', id);

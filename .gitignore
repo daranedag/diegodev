@@ -46,7 +46,11 @@ migration/*
 !migration/blog-rls.sql
 !migration/mtg-meta-decks-seed.sql
 !migration/mtg-meta-importer-upgrade.sql
+!migration/20261110-neon-roles.sql
+!migration/20261110-neon-auth.sql
 
 .env
 .env.*
 !.env.example
+.neon
+*.sql.gz

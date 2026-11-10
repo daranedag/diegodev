@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { insforge } from '../../lib/insforge'
+import { neon } from '../../lib/neon'
 import { XMarkIcon, TrashIcon } from '@heroicons/react/24/outline'
 import PropTypes from 'prop-types'
 
@@ -19,7 +19,7 @@ export default function CardModal({ card, onClose, onUpdate, onDelete }) {
             priority,
             due_date: dueDate || null,
         }
-        const { data } = await insforge.database
+        const { data } = await neon
             .from('kanban_cards')
             .update(updates)
             .eq('id', card.id)

@@ -1,4 +1,4 @@
-import { insforge } from '../lib/insforge.js'
+import { neon } from '../lib/neon.js'
 
 export class BlogService {
     static async getPosts({
@@ -12,7 +12,7 @@ export class BlogService {
             // Normalizar el código de idioma (es-CL -> es, en-US -> en)
             const normalizedLanguage = language.split('-')[0];
 
-            let query = insforge.database
+            let query = neon
                 .from('blog_posts')
                 .select(`
                     id,
@@ -62,7 +62,7 @@ export class BlogService {
         try {
             const normalizedLanguage = language.split('-')[0];
 
-            const { data, error } = await insforge.database
+            const { data, error } = await neon
                 .from('blog_posts')
                 .select(`
                     id,
@@ -96,7 +96,7 @@ export class BlogService {
         try {
             const normalizedLanguage = language.split('-')[0];
 
-            const { data, error } = await insforge.database
+            const { data, error } = await neon
                 .from('blog_posts')
                 .select(`
                     id,

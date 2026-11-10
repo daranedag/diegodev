@@ -1,6 +1,6 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { Droppable, Draggable } from '@hello-pangea/dnd'
-import { insforge } from '../../lib/insforge'
+import { neon } from '../../lib/neon'
 import Card from './Card'
 import CardModal from './CardModal'
 import { PlusIcon, TrashIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline'
@@ -17,7 +17,7 @@ export default function Column({ column, userId, cards, onDelete, onUpdateTitle,
         e.preventDefault()
         if (!newCardTitle.trim()) return
         setAddingCard(true)
-        const { data } = await insforge.database
+        const { data } = await neon
             .from('kanban_cards')
             .insert([{
                 column_id: column.id,
@@ -32,7 +32,7 @@ export default function Column({ column, userId, cards, onDelete, onUpdateTitle,
     }
 
     async function deleteCard(cardId) {
-        await insforge.database.from('kanban_cards').delete().eq('id', cardId)
+        await neon.from('kanban_cards').delete().eq('id', cardId)
         onCardDeleted(cardId)
     }
 

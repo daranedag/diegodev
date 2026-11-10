@@ -1,0 +1,12 @@
+[
+  {
+    "branch": "migration-insforge-20261109",
+    "removedTestProfiles": 12,
+    "remainingTestProfiles": 0
+  },
+  {
+    "branch": "production",
+    "removedTestProfiles": 2,
+    "remainingTestProfiles": 0
+  }
+]

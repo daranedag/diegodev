@@ -1,7 +1,7 @@
-﻿import { useState, useEffect, useRef, Fragment } from 'react'
+import { useState, useEffect, useRef, Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { insforge } from '../lib/insforge'
+import { neon } from '../lib/neon'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Board from '../components/Kanban/Board'
@@ -65,7 +65,7 @@ export default function Kanban({ isDark, toggleTheme }) {
     }, [user])
 
     async function loadBoards() {
-        const { data } = await insforge.database
+        const { data } = await neon
             .from('kanban_boards')
             .select('id, title, color, created_at')
             .order('created_at', { ascending: true })
@@ -80,7 +80,7 @@ export default function Kanban({ isDark, toggleTheme }) {
         e.preventDefault()
         if (!newBoardTitle.trim()) return
         setCreatingBoard(true)
-        const { data } = await insforge.database
+        const { data } = await neon
             .from('kanban_boards')
             .insert([{ title: newBoardTitle.trim(), user_id: user.id, color: '#7c3aed' }])
             .select()
@@ -93,7 +93,7 @@ export default function Kanban({ isDark, toggleTheme }) {
     }
 
     async function deleteBoard(boardId) {
-        await insforge.database.from('kanban_boards').delete().eq('id', boardId)
+        await neon.from('kanban_boards').delete().eq('id', boardId)
         const remaining = boards.filter(b => b.id !== boardId)
         setBoards(remaining)
         setActiveBoardId(remaining[0]?.id ?? null)
@@ -111,7 +111,7 @@ export default function Kanban({ isDark, toggleTheme }) {
             setEditingBoardId(null)
             return
         }
-        await insforge.database
+        await neon
             .from('kanban_boards')
             .update({ title: editingBoardTitle.trim() })
             .eq('id', editingBoardId)
@@ -127,7 +127,7 @@ export default function Kanban({ isDark, toggleTheme }) {
 
     async function saveBoardColor(boardId, color) {
         setColorPicker(null)
-        await insforge.database.from('kanban_boards').update({ color }).eq('id', boardId)
+        await neon.from('kanban_boards').update({ color }).eq('id', boardId)
         setBoards(prev => prev.map(b => b.id === boardId ? { ...b, color } : b))
     }
 

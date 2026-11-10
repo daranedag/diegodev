@@ -1,6 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { createClient } from '@insforge/sdk';
+import { createImportDatabase } from './lib/neon-import-database.mjs';
 
 const BASE_URL = 'https://mtgtop8.com';
 const DEFAULT_FORMATS = [
@@ -25,64 +23,7 @@ const FORMATS = requestedFormats.length
     ? DEFAULT_FORMATS.filter((format) => requestedFormats.includes(format.slug))
     : DEFAULT_FORMATS;
 
-function loadDotEnv() {
-    const envPath = resolve(process.cwd(), '.env');
-    if (!existsSync(envPath)) return;
-
-    for (const line of readFileSync(envPath, 'utf8').split(/\r?\n/)) {
-        const trimmed = line.trim();
-        if (!trimmed || trimmed.startsWith('#')) continue;
-
-        const match = trimmed.match(/^([A-Za-z_][A-Za-z0-9_]*)=(.*)$/);
-        if (!match) continue;
-
-        const [, key, rawValue] = match;
-        if (process.env[key] != null) continue;
-
-        process.env[key] = rawValue
-            .trim()
-            .replace(/^['"]|['"]$/g, '');
-    }
-}
-
-function readLocalProjectConfig() {
-    const projectPath = resolve(process.cwd(), '.insforge', 'project.json');
-    if (!existsSync(projectPath)) return {};
-
-    try {
-        return JSON.parse(readFileSync(projectPath, 'utf8'));
-    } catch {
-        return {};
-    }
-}
-
-function requireEnv(name, fallbackName) {
-    const value = process.env[name] ?? (fallbackName ? process.env[fallbackName] : undefined);
-    if (!value && !DRY_RUN) throw new Error(`Missing required env var: ${name}`);
-    return value;
-}
-
-loadDotEnv();
-const localProject = readLocalProjectConfig();
-
-const INSFORGE_URL = requireEnv('INSFORGE_URL', 'VITE_INSFORGE_URL');
-const INSFORGE_API_KEY =
-    process.env.INSFORGE_API_KEY ??
-    process.env.INSFORGE_SERVICE_ROLE_KEY ??
-    localProject.api_key;
-if (!INSFORGE_API_KEY && !DRY_RUN) throw new Error('Missing required env var: INSFORGE_API_KEY');
-
-const db = INSFORGE_URL && INSFORGE_API_KEY
-    ? createClient({
-        baseUrl: INSFORGE_URL,
-        anonKey: INSFORGE_API_KEY,
-        headers: {
-            apikey: INSFORGE_API_KEY,
-        },
-        timeout: 60000,
-        retryCount: 3,
-    }).database
-    : null;
+const db = createImportDatabase({ dryRun: DRY_RUN });
 
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -475,7 +416,7 @@ async function main() {
         '4. Fetch recent competitive deck rows per archetype.',
         '5. Fetch each deck page and parse main/sideboard cards.',
         '6. Compute popularity, performance and competitive scores.',
-        '7. Upsert archetypes, decks and cards into InsForge tables.',
+        '7. Upsert archetypes, decks and cards into Neon tables.',
     ].join('\n'));
 
     let totalDecks = 0;
@@ -490,4 +431,4 @@ async function main() {
 main().catch((error) => {
     console.error(error);
     process.exitCode = 1;
-});
+}).finally(() => db?.end());

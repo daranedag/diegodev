@@ -69,15 +69,13 @@ jobs:
               if: github.event_name == 'schedule' || inputs.import_mtg_meta == 'true'
               run: pnpm run mtg:import-meta
               env:
-                  INSFORGE_URL: ${{ secrets.INSFORGE_URL || secrets.VITE_INSFORGE_URL }}
-                  INSFORGE_API_KEY: ${{ secrets.INSFORGE_API_KEY || secrets.INSFORGE_SERVICE_ROLE_KEY }}
+                  DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
 
             - name: Import MTGJSON market data
               if: inputs.import_mtg_market == 'true'
               run: pnpm run mtg:import-market
               env:
-                  INSFORGE_URL: ${{ secrets.INSFORGE_URL || secrets.VITE_INSFORGE_URL }}
-                  INSFORGE_API_KEY: ${{ secrets.INSFORGE_API_KEY || secrets.INSFORGE_SERVICE_ROLE_KEY }}
+                  DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
 
     build:
         if: github.event_name != 'schedule' && inputs.import_mtg_meta != 'true' && inputs.import_mtg_market != 'true'
@@ -87,8 +85,9 @@ jobs:
         permissions:
             contents: read
         env:
-            VITE_INSFORGE_URL: ${{ vars.VITE_INSFORGE_URL || secrets.VITE_INSFORGE_URL }}
-            VITE_INSFORGE_ANON_KEY: ${{ vars.VITE_INSFORGE_ANON_KEY || secrets.VITE_INSFORGE_ANON_KEY }}
+            VITE_NEON_AUTH_URL: ${{ vars.VITE_NEON_AUTH_URL || 'https://ep-gentle-dust-b6l5zsae.neonauth.c-2.sa-east-1.aws.neon.tech/neondb/auth' }}
+            VITE_NEON_DATA_API_URL: ${{ vars.VITE_NEON_DATA_API_URL || 'https://ep-gentle-dust-b6l5zsae.apirest.c-2.sa-east-1.aws.neon.tech/neondb/rest/v1' }}
+            VITE_ANALYZE_DECK_URL: ${{ vars.VITE_ANALYZE_DECK_URL || 'https://diegodev-api.vercel.app/api/analyze-deck' }}
         steps:
             - name: Checkout
               uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4

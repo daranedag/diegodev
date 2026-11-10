@@ -1,10 +1,10 @@
-import { insforge } from '../lib/insforge.js'
+import { neon } from '../lib/neon.js'
 
 export class PlacesService {
     // ── Places ────────────────────────────────────────────────────────────────
 
     static async getPlaces() {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('places')
             .select('id, name, type, google_maps_url, phone, instagram, website, notes, created_at, updated_at')
             .order('created_at', { ascending: false })
@@ -13,7 +13,7 @@ export class PlacesService {
     }
 
     static async getPlacesWithItemCounts() {
-        const { data, error } = await insforge.database.rpc('places_with_item_counts')
+        const { data, error } = await neon.rpc('places_with_item_counts')
         if (error) throw error
         return (data || []).map(place => ({
             ...place,
@@ -22,7 +22,7 @@ export class PlacesService {
     }
 
     static async createPlace(fields) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('places')
             .insert([fields])
             .select()
@@ -31,7 +31,7 @@ export class PlacesService {
     }
 
     static async updatePlace(id, fields) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('places')
             .update(fields)
             .eq('id', id)
@@ -41,7 +41,7 @@ export class PlacesService {
     }
 
     static async deletePlace(id) {
-        const { error } = await insforge.database
+        const { error } = await neon
             .from('places')
             .delete()
             .eq('id', id)
@@ -51,7 +51,7 @@ export class PlacesService {
     // ── Place Items ───────────────────────────────────────────────────────────
 
     static async getPlaceItems(placeId) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('place_items')
             .select('id, name, price, notes, visited_date, created_at')
             .eq('place_id', placeId)
@@ -61,7 +61,7 @@ export class PlacesService {
     }
 
     static async createPlaceItem(fields) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('place_items')
             .insert([fields])
             .select()
@@ -70,7 +70,7 @@ export class PlacesService {
     }
 
     static async updatePlaceItem(id, fields) {
-        const { data, error } = await insforge.database
+        const { data, error } = await neon
             .from('place_items')
             .update(fields)
             .eq('id', id)
@@ -80,7 +80,7 @@ export class PlacesService {
     }
 
     static async deletePlaceItem(id) {
-        const { error } = await insforge.database
+        const { error } = await neon
             .from('place_items')
             .delete()
             .eq('id', id)
